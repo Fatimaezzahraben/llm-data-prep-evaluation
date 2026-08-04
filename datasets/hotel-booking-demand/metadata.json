@@ -1,0 +1,154 @@
+{
+  "dataset": "hotel_bookings",
+  "n_rows": 119390,
+  "n_cols": 32,
+  "levels": {
+    "low": {
+      "total_errors": 21486,
+      "error_rate_global": 0.0056,
+      "errors_by_family": {
+        "missing_values": 7162,
+        "typos": 7162,
+        "format_errors": 5969,
+        "outliers": 1193
+      },
+      "config": {
+        "missing": {
+          "rate": 0.03,
+          "columns": [
+            "country",
+            "meal"
+          ]
+        },
+        "format": {
+          "rate": 0.05,
+          "columns": [
+            "reservation_status_date"
+          ]
+        },
+        "outliers": {
+          "rate": 0.01,
+          "columns": [
+            "adr"
+          ]
+        },
+        "typos_text": {
+          "rate": 0.03,
+          "columns": [
+            "hotel"
+          ]
+        },
+        "typos_numeric": {
+          "rate": 0.03,
+          "columns": [
+            "lead_time"
+          ]
+        }
+      }
+    },
+    "medium": {
+      "total_errors": 134906,
+      "error_rate_global": 0.0353,
+      "errors_by_family": {
+        "missing_values": 59695,
+        "typos": 47755,
+        "format_errors": 17908,
+        "outliers": 9548
+      },
+      "config": {
+        "missing": {
+          "rate": 0.1,
+          "columns": [
+            "country",
+            "agent",
+            "children",
+            "market_segment",
+            "meal"
+          ]
+        },
+        "format": {
+          "rate": 0.15,
+          "columns": [
+            "reservation_status_date"
+          ]
+        },
+        "outliers": {
+          "rate": 0.02,
+          "columns": [
+            "adr",
+            "babies",
+            "stays_in_week_nights",
+            "days_in_waiting_list"
+          ]
+        },
+        "typos_text": {
+          "rate": 0.08,
+          "columns": [
+            "hotel",
+            "deposit_type",
+            "customer_type"
+          ]
+        },
+        "typos_numeric": {
+          "rate": 0.08,
+          "columns": [
+            "lead_time",
+            "adults"
+          ]
+        }
+      }
+    },
+    "high": {
+      "total_errors": 268623,
+      "error_rate_global": 0.0703,
+      "errors_by_family": {
+        "missing_values": 119390,
+        "typos": 89540,
+        "format_errors": 35817,
+        "outliers": 23876
+      },
+      "config": {
+        "missing": {
+          "rate": 0.2,
+          "columns": [
+            "country",
+            "agent",
+            "children",
+            "market_segment",
+            "meal"
+          ]
+        },
+        "format": {
+          "rate": 0.3,
+          "columns": [
+            "reservation_status_date"
+          ]
+        },
+        "outliers": {
+          "rate": 0.05,
+          "columns": [
+            "adr",
+            "babies",
+            "stays_in_week_nights",
+            "days_in_waiting_list"
+          ]
+        },
+        "typos_text": {
+          "rate": 0.15,
+          "columns": [
+            "hotel",
+            "deposit_type",
+            "customer_type"
+          ]
+        },
+        "typos_numeric": {
+          "rate": 0.15,
+          "columns": [
+            "lead_time",
+            "adults"
+          ]
+        }
+      }
+    }
+  }
+}
