@@ -1,0 +1,50 @@
+{
+  "dataset": "titanic",
+  "n_rows": 891,
+  "n_cols": 12,
+  "levels": {
+    "medium": {
+      "total_errors": 602,
+      "error_rate_global": 0.0563,
+      "errors_by_family": {
+        "missing_values": 267,
+        "typos": 267,
+        "outliers": 68
+      },
+      "config": {
+        "missing": {
+          "rate": 0.1,
+          "columns": [
+            "Age",
+            "Embarked",
+            "Cabin"
+          ]
+        },
+        "outliers": {
+          "rate": 0.02,
+          "columns": [
+            "Age",
+            "Fare",
+            "SibSp",
+            "Parch"
+          ]
+        },
+        "typos_text": {
+          "rate": 0.08,
+          "columns": [
+            "Sex",
+            "Embarked"
+          ]
+        },
+        "typos_numeric": {
+          "rate": 0.08,
+          "columns": [
+            "Fare",
+            "Age"
+          ]
+        }
+      }
+    }
+  },
+  "note": "Pas de famille 'format_errors' : titanic n'a pas de colonne date. Niveaux low/high non générés pour l'instant."
+}

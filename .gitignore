@@ -8,16 +8,6 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 .env
-workflows/generated/
-workflows/executed/
-workflows/failed/
-results/cleaned_datasets/
-results/generated_workflows/
-results/execution_logs/
-results/metrics/
-results/figures/
-results/traceability/
-results/reproducibility/
-results/comparisons/
+
 .DS_Store
 Thumbs.db

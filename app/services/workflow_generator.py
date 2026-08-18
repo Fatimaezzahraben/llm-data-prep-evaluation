@@ -7,12 +7,11 @@ Python du texte retourné, et sauvegarde le script généré dans workflows/gene
 """
 
 import re
-import time
 from pathlib import Path
 
 import pandas as pd
 
-from app.services.prompt_builder import build_prompt
+from app.services.prompt_builder import build_prompt_split
 from app.services.llm import call_llm
 
 GENERATED_DIR = Path("workflows/generated")
@@ -40,7 +39,7 @@ def generate_workflow(dataset_path: str, dataset_name: str, prompt_type: str,
     dataset_path : str
         Chemin du CSV bruité à faire nettoyer par le LLM (ex: noisy_medium.csv).
     dataset_name : str
-        Nom du dataset pour le prompt (ex: "hotel_bookings").
+        Nom du dataset pour le prompt (ex: "hotel-booking-demand").
     prompt_type : str
         "simple", "schema" ou "profile".
     provider : str or None
@@ -54,25 +53,27 @@ def generate_workflow(dataset_path: str, dataset_name: str, prompt_type: str,
                 saved_path (ou None si save=False)
     """
     df = pd.read_csv(dataset_path, low_memory=False)
-    prompt_text = build_prompt(prompt_type, df, dataset_name)
+    system_prompt, user_prompt = build_prompt_split(prompt_type, df, dataset_name)
 
-    llm_result = call_llm(prompt_text, provider=provider)
+    llm_result = call_llm(user_prompt, provider=provider, system_prompt=system_prompt)
     generated_code = extract_python_code(llm_result["text"])
 
     result = {
         "dataset_name": dataset_name,
         "prompt_type": prompt_type,
-        "prompt_text": prompt_text,
+        "prompt_text": system_prompt + "\n\n" + user_prompt,
         "generated_code": generated_code,
         "latency_seconds": llm_result["latency_seconds"],
-        "provider": llm_result["provider"],
+        "provider": llm_result["provider"],   # provider RÉSOLU (jamais None ici)
         "model": llm_result["model"],
         "saved_path": None,
     }
 
     if save:
         GENERATED_DIR.mkdir(parents=True, exist_ok=True)
-        filename = f"workflow_{dataset_name}_{prompt_type}.py"
+        # Le nom de fichier inclut maintenant le provider : un run Ollama et un run
+        # Mistral API sur le même (dataset, prompt_type) ne s'écrasent plus jamais.
+        filename = f"workflow_{dataset_name}_{prompt_type}_{llm_result['provider']}.py"
         out_path = GENERATED_DIR / filename
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(generated_code)

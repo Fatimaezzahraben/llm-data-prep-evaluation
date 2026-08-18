@@ -25,16 +25,21 @@ def build_traceability_table(df_clean: pd.DataFrame, df_cleaned: pd.DataFrame,
     Construit une table détaillée : une ligne par erreur injectée, avec le statut de
     la correction (Corrigé / Non corrigé / Mal corrigé).
     """
+    has_dual_naming = "column_clean_csv" in error_log.columns
+
     rows = []
     for _, log_row in error_log.iterrows():
         idx = log_row["row_index"]
-        col = log_row["column"]
+        col = log_row["column"]                 # nom cote df_cleaned
+        clean_col = log_row["column_clean_csv"] if has_dual_naming else col  # nom cote df_clean
 
-        if col not in df_cleaned.columns or idx not in df_cleaned.index or idx not in df_clean.index:
+        if (col not in df_cleaned.columns or clean_col not in df_clean.columns
+                or idx not in df_cleaned.index or idx not in df_clean.index):
             status = "Colonne/ligne absente après exécution"
             llm_output = None
+            original_value = None
         else:
-            original_value = df_clean.at[idx, col]
+            original_value = df_clean.at[idx, clean_col]
             dirty_value = log_row["injected_value"]
             llm_output = df_cleaned.at[idx, col]
 
@@ -50,7 +55,7 @@ def build_traceability_table(df_clean: pd.DataFrame, df_cleaned: pd.DataFrame,
             "column": col,
             "error_family": log_row.get("error_family"),
             "error_type": log_row.get("error_type"),
-            "valeur_originale": _safe_str(df_clean.at[idx, col]) if idx in df_clean.index and col in df_clean.columns else None,
+            "valeur_originale": _safe_str(original_value),
             "valeur_bruitee_vue_par_llm": _safe_str(log_row["injected_value"]),
             "valeur_produite_par_llm": _safe_str(llm_output),
             "statut": status,

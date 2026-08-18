@@ -1,0 +1,309 @@
+{
+  "global_precision": 0.8529,
+  "global_recall": 0.4865,
+  "global_f1": 0.6196,
+  "global_initial_error_rate": 0.0889,
+  "global_final_error_rate": 0.0456,
+  "total_cells": 16632,
+  "total_errors_start": 1478,
+  "total_errors_end": 759,
+  "total_fixed": 719,
+  "total_regressions": 635,
+  "columns": {
+    "act_arr_time": {
+      "initial_error_rate": 0.1709,
+      "final_error_rate": 0.1258,
+      "total_errors": 406,
+      "correct_repairs": 107,
+      "failed_repair": 43,
+      "regressions": 256,
+      "precision": 0.7133,
+      "recall": 0.2635,
+      "f1_score": 0.3849,
+      "success_samples": [
+        {
+          "id": "1928",
+          "dirty": null,
+          "truth": "5:11 a.m.",
+          "llm_output": "5:11 a.m."
+        },
+        {
+          "id": "913",
+          "dirty": null,
+          "truth": "9:43 a.m.",
+          "llm_output": "9:43 a.m."
+        },
+        {
+          "id": "1509",
+          "dirty": null,
+          "truth": "11:32 a.m.",
+          "llm_output": "11:32 a.m."
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "113",
+          "dirty": "12/2/11 12:01 a.m.",
+          "truth": "12:29 a.m.",
+          "llm_output": "12:01 a.m."
+        },
+        {
+          "id": "2289",
+          "dirty": "12:02 a.m.",
+          "truth": "12:21 a.m.",
+          "llm_output": "11:52 p.m."
+        },
+        {
+          "id": "1361",
+          "dirty": null,
+          "truth": "9:52 p.m.",
+          "llm_output": "10:48 p.m."
+        }
+      ],
+      "regression_samples": [
+        {
+          "id": "154",
+          "dirty": "9:40 a.m.",
+          "truth": "9:43 a.m.",
+          "llm_output": "9:40 a.m."
+        },
+        {
+          "id": "490",
+          "dirty": "9:49 p.m.",
+          "truth": "9:53 p.m.",
+          "llm_output": "9:49 p.m."
+        },
+        {
+          "id": "390",
+          "dirty": "6:28 p.m.",
+          "truth": "6:38 p.m.",
+          "llm_output": "6:28 p.m."
+        }
+      ]
+    },
+    "act_dep_time": {
+      "initial_error_rate": 0.197,
+      "final_error_rate": 0.1662,
+      "total_errors": 468,
+      "correct_repairs": 73,
+      "failed_repair": 78,
+      "regressions": 317,
+      "precision": 0.4834,
+      "recall": 0.156,
+      "f1_score": 0.2359,
+      "success_samples": [
+        {
+          "id": "71",
+          "dirty": null,
+          "truth": "2:48 p.m.",
+          "llm_output": "2:48 p.m."
+        },
+        {
+          "id": "1557",
+          "dirty": null,
+          "truth": "3:01 p.m.",
+          "llm_output": "3:01 p.m."
+        },
+        {
+          "id": "1918",
+          "dirty": "12:10 a.m. (Estimated runway)",
+          "truth": "11:55 p.m.",
+          "llm_output": "11:55 p.m."
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "947",
+          "dirty": null,
+          "truth": "11:08 p.m.",
+          "llm_output": "11:35 p.m."
+        },
+        {
+          "id": "1993",
+          "dirty": null,
+          "truth": "6:30 p.m.",
+          "llm_output": "6:47 p.m."
+        },
+        {
+          "id": "1389",
+          "dirty": null,
+          "truth": "1:30 p.m.",
+          "llm_output": "1:41 p.m."
+        }
+      ],
+      "regression_samples": [
+        {
+          "id": "1022",
+          "dirty": "7:08 a.m.",
+          "truth": "7:21 a.m.",
+          "llm_output": "7:08 a.m."
+        },
+        {
+          "id": "1150",
+          "dirty": "7:23 a.m.",
+          "truth": "7:22 a.m.",
+          "llm_output": "7:23 a.m."
+        },
+        {
+          "id": "1142",
+          "dirty": "1:45 p.m.",
+          "truth": "1:32 p.m.",
+          "llm_output": "1:45 p.m."
+        }
+      ]
+    },
+    "sched_arr_time": {
+      "initial_error_rate": 0.1389,
+      "final_error_rate": 0.0223,
+      "total_errors": 330,
+      "correct_repairs": 277,
+      "failed_repair": 0,
+      "regressions": 53,
+      "precision": 1.0,
+      "recall": 0.8394,
+      "f1_score": 0.9127,
+      "success_samples": [
+        {
+          "id": "1246",
+          "dirty": null,
+          "truth": "5:00 p.m.",
+          "llm_output": "5:00 p.m."
+        },
+        {
+          "id": "2054",
+          "dirty": null,
+          "truth": "9:54 a.m.",
+          "llm_output": "9:54 a.m."
+        },
+        {
+          "id": "145",
+          "dirty": null,
+          "truth": "7:45 a.m.",
+          "llm_output": "7:45 a.m."
+        }
+      ],
+      "failed_samples": [],
+      "regression_samples": [
+        {
+          "id": "976",
+          "dirty": "4:20 p.m.",
+          "truth": "4:31 p.m.",
+          "llm_output": "4:20 p.m."
+        },
+        {
+          "id": "1058",
+          "dirty": "Not Available",
+          "truth": "1:39 p.m.",
+          "llm_output": "not available"
+        },
+        {
+          "id": "1672",
+          "dirty": "3:33 p.m.",
+          "truth": "3:50 p.m.",
+          "llm_output": "3:33 p.m."
+        }
+      ]
+    },
+    "sched_dep_time": {
+      "initial_error_rate": 0.1153,
+      "final_error_rate": 0.0051,
+      "total_errors": 274,
+      "correct_repairs": 262,
+      "failed_repair": 3,
+      "regressions": 9,
+      "precision": 0.9887,
+      "recall": 0.9562,
+      "f1_score": 0.9722,
+      "success_samples": [
+        {
+          "id": "1511",
+          "dirty": null,
+          "truth": "11:50 a.m.",
+          "llm_output": "11:50 a.m."
+        },
+        {
+          "id": "1193",
+          "dirty": null,
+          "truth": "1:55 p.m.",
+          "llm_output": "1:55 p.m."
+        },
+        {
+          "id": "1407",
+          "dirty": "8:35aDec 1",
+          "truth": "8:35 a.m.",
+          "llm_output": "8:35 a.m."
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "1334",
+          "dirty": "6:14aDec 1",
+          "truth": "6:00 a.m.",
+          "llm_output": "6:14 a.m."
+        },
+        {
+          "id": "1018",
+          "dirty": "12:00noon",
+          "truth": "12:00 a.m.",
+          "llm_output": "12:00 p.m."
+        },
+        {
+          "id": "1326",
+          "dirty": "8:19aDec 1",
+          "truth": "8:00 a.m.",
+          "llm_output": "8:19 a.m."
+        }
+      ],
+      "regression_samples": [
+        {
+          "id": "1359",
+          "dirty": "12:00 p.m.",
+          "truth": "12:00 a.m.",
+          "llm_output": "12:00 p.m."
+        },
+        {
+          "id": "473",
+          "dirty": "12:00 p.m.",
+          "truth": "12:00 a.m.",
+          "llm_output": "12:00 p.m."
+        },
+        {
+          "id": "982",
+          "dirty": "7:27 p.m.",
+          "truth": "7:10 p.m.",
+          "llm_output": "7:27 p.m."
+        }
+      ]
+    }
+  },
+  "pipeline_time_seconds": 49.95,
+  "workflow_name": "flights_profile_mistral_api_iter5",
+  "rows_expected": 2376,
+  "rows_remaining": 2376,
+  "rows_lost": 0,
+  "rows_lost_pct": 0.0,
+  "errors_lost_with_deleted_rows": 0,
+  "warning_over_cleaning": false,
+  "global_accuracy_all_cells": 0.8254,
+  "total_failed_repairs": 124,
+  "by_error_family": {
+    "missing_values": {
+      "total_errors": 701,
+      "correct_repairs": 615,
+      "failed_repair": 86,
+      "regressions": 0,
+      "precision": 0.8773,
+      "recall": 0.8773,
+      "f1_score": 0.8773
+    },
+    "real_world_error": {
+      "total_errors": 777,
+      "correct_repairs": 104,
+      "failed_repair": 38,
+      "regressions": 635,
+      "precision": 0.7324,
+      "recall": 0.1338,
+      "f1_score": 0.2263
+    }
+  }
+}

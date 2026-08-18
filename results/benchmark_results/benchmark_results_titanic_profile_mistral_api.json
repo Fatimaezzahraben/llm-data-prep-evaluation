@@ -1,0 +1,368 @@
+{
+  "global_precision": 0.7198,
+  "global_recall": 0.712,
+  "global_f1": 0.7158,
+  "global_initial_error_rate": 0.0172,
+  "global_final_error_rate": 0.005,
+  "total_cells": 10692,
+  "total_errors_start": 184,
+  "total_errors_end": 53,
+  "total_fixed": 131,
+  "total_regressions": 2,
+  "columns": {
+    "Age": {
+      "initial_error_rate": 0.0539,
+      "final_error_rate": 0.0404,
+      "total_errors": 48,
+      "correct_repairs": 12,
+      "failed_repair": 36,
+      "regressions": 0,
+      "precision": 0.25,
+      "recall": 0.25,
+      "f1_score": 0.25,
+      "success_samples": [
+        {
+          "id": "458",
+          "dirty": "50.0kg",
+          "truth": "50.0",
+          "llm_output": "50.0"
+        },
+        {
+          "id": "546",
+          "dirty": "19.O",
+          "truth": "19.0",
+          "llm_output": "19.0"
+        },
+        {
+          "id": "342",
+          "dirty": "28kg.0",
+          "truth": "28.0",
+          "llm_output": "28.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "590",
+          "dirty": " ",
+          "truth": "35.0",
+          "llm_output": "27.0"
+        },
+        {
+          "id": "574",
+          "dirty": "205.57",
+          "truth": "16.0",
+          "llm_output": "27.0"
+        },
+        {
+          "id": "837",
+          "dirty": "NA€",
+          "truth": null,
+          "llm_output": "27.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "Cabin": {
+      "initial_error_rate": 0.0303,
+      "final_error_rate": 0.0034,
+      "total_errors": 27,
+      "correct_repairs": 24,
+      "failed_repair": 1,
+      "regressions": 2,
+      "precision": 0.96,
+      "recall": 0.8889,
+      "f1_score": 0.9231,
+      "success_samples": [
+        {
+          "id": "645",
+          "dirty": " ",
+          "truth": "D33",
+          "llm_output": "D33"
+        },
+        {
+          "id": "340",
+          "dirty": " ",
+          "truth": "F2",
+          "llm_output": "F2"
+        },
+        {
+          "id": "812",
+          "dirty": null,
+          "truth": null,
+          "llm_output": null
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "679",
+          "dirty": " ",
+          "truth": "B51 B53 B55",
+          "llm_output": "B101"
+        }
+      ],
+      "regression_samples": [
+        {
+          "id": "853",
+          "dirty": null,
+          "truth": "D28",
+          "llm_output": null
+        },
+        {
+          "id": "539",
+          "dirty": null,
+          "truth": "B39",
+          "llm_output": null
+        }
+      ]
+    },
+    "Embarked": {
+      "initial_error_rate": 0.0539,
+      "final_error_rate": 0.0067,
+      "total_errors": 48,
+      "correct_repairs": 42,
+      "failed_repair": 6,
+      "regressions": 0,
+      "precision": 0.875,
+      "recall": 0.875,
+      "f1_score": 0.875,
+      "success_samples": [
+        {
+          "id": "304",
+          "dirty": null,
+          "truth": "S",
+          "llm_output": "S"
+        },
+        {
+          "id": "120",
+          "dirty": "S",
+          "truth": "S",
+          "llm_output": "S"
+        },
+        {
+          "id": "197",
+          "dirty": "S",
+          "truth": "S",
+          "llm_output": "S"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "790",
+          "dirty": "unknown",
+          "truth": "Q",
+          "llm_output": "S"
+        },
+        {
+          "id": "366",
+          "dirty": "unknown",
+          "truth": "C",
+          "llm_output": "S"
+        },
+        {
+          "id": "493",
+          "dirty": " ",
+          "truth": "C",
+          "llm_output": "S"
+        }
+      ],
+      "regression_samples": []
+    },
+    "Fare": {
+      "initial_error_rate": 0.0303,
+      "final_error_rate": 0.0079,
+      "total_errors": 27,
+      "correct_repairs": 20,
+      "failed_repair": 7,
+      "regressions": 0,
+      "precision": 0.7407,
+      "recall": 0.7407,
+      "f1_score": 0.7407,
+      "success_samples": [
+        {
+          "id": "794",
+          "dirty": "7.8958O",
+          "truth": "7.8958",
+          "llm_output": "7.8958"
+        },
+        {
+          "id": "741",
+          "dirty": "7508.47",
+          "truth": "78.85",
+          "llm_output": "78.85"
+        },
+        {
+          "id": "219",
+          "dirty": "10B.5",
+          "truth": "10.5",
+          "llm_output": "10.5"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "258",
+          "dirty": "512.32kg92",
+          "truth": "512.3292",
+          "llm_output": "14.4542"
+        },
+        {
+          "id": "605",
+          "dirty": "2978.58S",
+          "truth": "15.55",
+          "llm_output": "14.4542"
+        },
+        {
+          "id": "834",
+          "dirty": "6678.82",
+          "truth": "8.3",
+          "llm_output": "14.4542"
+        }
+      ],
+      "regression_samples": []
+    },
+    "Parch": {
+      "initial_error_rate": 0.0067,
+      "final_error_rate": 0.0011,
+      "total_errors": 6,
+      "correct_repairs": 5,
+      "failed_repair": 1,
+      "regressions": 0,
+      "precision": 0.8333,
+      "recall": 0.8333,
+      "f1_score": 0.8333,
+      "success_samples": [
+        {
+          "id": "146",
+          "dirty": "38.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "401",
+          "dirty": "29.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "672",
+          "dirty": "32.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "634",
+          "dirty": "34.0",
+          "truth": "2",
+          "llm_output": "0.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "Sex": {
+      "initial_error_rate": 0.0247,
+      "final_error_rate": 0.0,
+      "total_errors": 22,
+      "correct_repairs": 22,
+      "failed_repair": 0,
+      "regressions": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "success_samples": [
+        {
+          "id": "709",
+          "dirty": "  male ",
+          "truth": "male",
+          "llm_output": "male"
+        },
+        {
+          "id": "435",
+          "dirty": "femalle",
+          "truth": "female",
+          "llm_output": "female"
+        },
+        {
+          "id": "601",
+          "dirty": "mle",
+          "truth": "male",
+          "llm_output": "male"
+        }
+      ],
+      "failed_samples": [],
+      "regression_samples": []
+    },
+    "SibSp": {
+      "initial_error_rate": 0.0067,
+      "final_error_rate": 0.0,
+      "total_errors": 6,
+      "correct_repairs": 6,
+      "failed_repair": 0,
+      "regressions": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "success_samples": [
+        {
+          "id": "51",
+          "dirty": "24.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "730",
+          "dirty": "48.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "384",
+          "dirty": "31.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        }
+      ],
+      "failed_samples": [],
+      "regression_samples": []
+    }
+  },
+  "pipeline_time_seconds": 56.76,
+  "workflow_name": "titanic_profile_mistral_api_iter4",
+  "rows_expected": 891,
+  "rows_remaining": 891,
+  "rows_lost": 0,
+  "rows_lost_pct": 0.0,
+  "errors_lost_with_deleted_rows": 0,
+  "warning_over_cleaning": false,
+  "global_accuracy_all_cells": 0.9689,
+  "total_failed_repairs": 51,
+  "by_error_family": {
+    "typos": {
+      "total_errors": 80,
+      "correct_repairs": 72,
+      "failed_repair": 8,
+      "regressions": 0,
+      "precision": 0.9,
+      "recall": 0.9,
+      "f1_score": 0.9
+    },
+    "missing_values": {
+      "total_errors": 85,
+      "correct_repairs": 47,
+      "failed_repair": 36,
+      "regressions": 2,
+      "precision": 0.5663,
+      "recall": 0.5529,
+      "f1_score": 0.5595
+    },
+    "outliers": {
+      "total_errors": 19,
+      "correct_repairs": 12,
+      "failed_repair": 7,
+      "regressions": 0,
+      "precision": 0.6316,
+      "recall": 0.6316,
+      "f1_score": 0.6316
+    }
+  }
+}

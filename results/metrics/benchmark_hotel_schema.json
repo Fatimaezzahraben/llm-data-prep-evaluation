@@ -1,0 +1,246 @@
+{
+  "workflow_name": "hotel_schema",
+  "rows_expected": 119390,
+  "rows_remaining": 2,
+  "rows_lost": 119388,
+  "rows_lost_pct": 100.0,
+  "errors_lost_with_deleted_rows": 134900,
+  "warning_over_cleaning": true,
+  "global_accuracy_on_error_cells": 0.0,
+  "global_accuracy_all_cells": 0.4062,
+  "global_precision": 0.3333,
+  "global_recall": 0.0,
+  "global_f1": 0.0,
+  "global_initial_error_rate": 0.0353,
+  "global_final_error_rate": 0.0,
+  "total_cells": 3820480,
+  "total_errors_start": 134906,
+  "total_errors_end": 4,
+  "total_fixed": 2,
+  "total_failed_repairs": 4,
+  "total_regressions": 0,
+  "columns": {
+    "country": {
+      "total_errors": 11939,
+      "correct_repairs": 0,
+      "failed_repairs": 1,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [
+        {
+          "id": "0",
+          "dirty": " ",
+          "truth": "PRT",
+          "llm_output": "FRA"
+        }
+      ]
+    },
+    "agent": {
+      "total_errors": 11939,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "children": {
+      "total_errors": 11939,
+      "correct_repairs": 1,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0001,
+      "precision": 1.0,
+      "recall": 0.0001,
+      "f1_score": 0.0002,
+      "success_samples": [
+        {
+          "id": "0",
+          "dirty": " ",
+          "truth": "0.0",
+          "llm_output": "0.0"
+        }
+      ],
+      "failed_samples": []
+    },
+    "market_segment": {
+      "total_errors": 11939,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "meal": {
+      "total_errors": 11939,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "reservation_status_date": {
+      "total_errors": 17908,
+      "correct_repairs": 0,
+      "failed_repairs": 1,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [
+        {
+          "id": "0",
+          "dirty": "2015/07/01",
+          "truth": "2015-07-01",
+          "llm_output": "2015/11/15"
+        }
+      ]
+    },
+    "adr": {
+      "total_errors": 2387,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "babies": {
+      "total_errors": 2387,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "stays_in_week_nights": {
+      "total_errors": 2387,
+      "correct_repairs": 0,
+      "failed_repairs": 1,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [
+        {
+          "id": "1",
+          "dirty": "543.0",
+          "truth": "0",
+          "llm_output": "1.0"
+        }
+      ]
+    },
+    "days_in_waiting_list": {
+      "total_errors": 2387,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "hotel": {
+      "total_errors": 9551,
+      "correct_repairs": 0,
+      "failed_repairs": 1,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [
+        {
+          "id": "0",
+          "dirty": "Resoort Hotel",
+          "truth": "Resort Hotel",
+          "llm_output": "Resort Hotel Hotel"
+        }
+      ]
+    },
+    "deposit_type": {
+      "total_errors": 9551,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "customer_type": {
+      "total_errors": 9551,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "lead_time": {
+      "total_errors": 9551,
+      "correct_repairs": 0,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": []
+    },
+    "adults": {
+      "total_errors": 9551,
+      "correct_repairs": 1,
+      "failed_repairs": 0,
+      "regressions": 0,
+      "accuracy": 0.0001,
+      "precision": 1.0,
+      "recall": 0.0001,
+      "f1_score": 0.0002,
+      "success_samples": [
+        {
+          "id": "1",
+          "dirty": "2O",
+          "truth": "2",
+          "llm_output": "2.0"
+        }
+      ],
+      "failed_samples": []
+    }
+  }
+}

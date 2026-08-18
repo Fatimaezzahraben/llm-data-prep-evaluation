@@ -1,0 +1,799 @@
+{
+  "global_precision": 0.812,
+  "global_recall": 0.8112,
+  "global_f1": 0.8116,
+  "global_initial_error_rate": 0.0106,
+  "global_final_error_rate": 0.002,
+  "total_cells": 3820480,
+  "total_errors_start": 40481,
+  "total_errors_end": 7644,
+  "total_fixed": 32837,
+  "total_regressions": 39,
+  "columns": {
+    "adr": {
+      "initial_error_rate": 0.006,
+      "final_error_rate": 0.0057,
+      "total_errors": 717,
+      "correct_repairs": 38,
+      "failed_repair": 640,
+      "regressions": 39,
+      "precision": 0.056,
+      "recall": 0.053,
+      "f1_score": 0.0545,
+      "success_samples": [
+        {
+          "id": "118141",
+          "dirty": "9601.15",
+          "truth": "112.67",
+          "llm_output": "112.67"
+        },
+        {
+          "id": "42403",
+          "dirty": "2983.37",
+          "truth": "105.0",
+          "llm_output": "105.0"
+        },
+        {
+          "id": "112586",
+          "dirty": "4945.1",
+          "truth": "114.4",
+          "llm_output": "114.4"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "20004",
+          "dirty": "8761.89",
+          "truth": "4.0",
+          "llm_output": "46.0"
+        },
+        {
+          "id": "77549",
+          "dirty": "9339.16",
+          "truth": "170.0",
+          "llm_output": "105.0"
+        },
+        {
+          "id": "2823",
+          "dirty": "9480.21",
+          "truth": "48.0",
+          "llm_output": "62.02"
+        }
+      ],
+      "regression_samples": [
+        {
+          "id": "45293",
+          "dirty": "251.67",
+          "truth": "85.67",
+          "llm_output": "251.67"
+        },
+        {
+          "id": "94492",
+          "dirty": "-2.47",
+          "truth": "118.8",
+          "llm_output": "-2.47"
+        },
+        {
+          "id": "71068",
+          "dirty": "11.59",
+          "truth": "130.0",
+          "llm_output": "11.59"
+        }
+      ]
+    },
+    "adults": {
+      "initial_error_rate": 0.024,
+      "final_error_rate": 0.0,
+      "total_errors": 2866,
+      "correct_repairs": 2865,
+      "failed_repair": 1,
+      "regressions": 0,
+      "precision": 0.9997,
+      "recall": 0.9997,
+      "f1_score": 0.9997,
+      "success_samples": [
+        {
+          "id": "42787",
+          "dirty": "2€",
+          "truth": "2",
+          "llm_output": "2.0"
+        },
+        {
+          "id": "3201",
+          "dirty": "2O",
+          "truth": "2",
+          "llm_output": "2.0"
+        },
+        {
+          "id": "107763",
+          "dirty": "2l",
+          "truth": "2",
+          "llm_output": "2.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "45158",
+          "dirty": "O",
+          "truth": "0",
+          "llm_output": "2.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "agent": {
+      "initial_error_rate": 0.03,
+      "final_error_rate": 0.0132,
+      "total_errors": 3582,
+      "correct_repairs": 2002,
+      "failed_repair": 1580,
+      "regressions": 0,
+      "precision": 0.5589,
+      "recall": 0.5589,
+      "f1_score": 0.5589,
+      "success_samples": [
+        {
+          "id": "45050",
+          "dirty": " ",
+          "truth": "6.0",
+          "llm_output": "6.0"
+        },
+        {
+          "id": "41135",
+          "dirty": "unknown",
+          "truth": "9.0",
+          "llm_output": "9.0"
+        },
+        {
+          "id": "93401",
+          "dirty": " ",
+          "truth": "9.0",
+          "llm_output": "9.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "93211",
+          "dirty": null,
+          "truth": "7.0",
+          "llm_output": "9.0"
+        },
+        {
+          "id": "1418",
+          "dirty": null,
+          "truth": null,
+          "llm_output": "250.0"
+        },
+        {
+          "id": "63917",
+          "dirty": null,
+          "truth": "30.0",
+          "llm_output": "1.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "babies": {
+      "initial_error_rate": 0.006,
+      "final_error_rate": 0.0,
+      "total_errors": 717,
+      "correct_repairs": 714,
+      "failed_repair": 3,
+      "regressions": 0,
+      "precision": 0.9958,
+      "recall": 0.9958,
+      "f1_score": 0.9958,
+      "success_samples": [
+        {
+          "id": "32271",
+          "dirty": "46.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "66044",
+          "dirty": "44.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "108035",
+          "dirty": "44.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "36870",
+          "dirty": "46.0",
+          "truth": "1",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "23641",
+          "dirty": "27.0",
+          "truth": "1",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "44774",
+          "dirty": "26.0",
+          "truth": "1",
+          "llm_output": "0.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "children": {
+      "initial_error_rate": 0.03,
+      "final_error_rate": 0.0022,
+      "total_errors": 3582,
+      "correct_repairs": 3319,
+      "failed_repair": 263,
+      "regressions": 0,
+      "precision": 0.9266,
+      "recall": 0.9266,
+      "f1_score": 0.9266,
+      "success_samples": [
+        {
+          "id": "93757",
+          "dirty": null,
+          "truth": "0.0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "6592",
+          "dirty": null,
+          "truth": "0.0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "50459",
+          "dirty": null,
+          "truth": "0.0",
+          "llm_output": "0.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "28331",
+          "dirty": " ",
+          "truth": "2.0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "7304",
+          "dirty": " ",
+          "truth": "1.0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "11418",
+          "dirty": "unknown",
+          "truth": "2.0",
+          "llm_output": "0.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "country": {
+      "initial_error_rate": 0.03,
+      "final_error_rate": 0.0176,
+      "total_errors": 3582,
+      "correct_repairs": 1482,
+      "failed_repair": 2100,
+      "regressions": 0,
+      "precision": 0.4137,
+      "recall": 0.4137,
+      "f1_score": 0.4137,
+      "success_samples": [
+        {
+          "id": "10643",
+          "dirty": "unknown",
+          "truth": "PRT",
+          "llm_output": "PRT"
+        },
+        {
+          "id": "13102",
+          "dirty": null,
+          "truth": "PRT",
+          "llm_output": "PRT"
+        },
+        {
+          "id": "63147",
+          "dirty": " ",
+          "truth": "PRT",
+          "llm_output": "PRT"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "28540",
+          "dirty": " ",
+          "truth": "CN",
+          "llm_output": "PRT"
+        },
+        {
+          "id": "72029",
+          "dirty": null,
+          "truth": "DEU",
+          "llm_output": "PRT"
+        },
+        {
+          "id": "107440",
+          "dirty": "unknown",
+          "truth": "GBR",
+          "llm_output": "PRT"
+        }
+      ],
+      "regression_samples": []
+    },
+    "customer_type": {
+      "initial_error_rate": 0.024,
+      "final_error_rate": 0.0,
+      "total_errors": 2866,
+      "correct_repairs": 2866,
+      "failed_repair": 0,
+      "regressions": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "success_samples": [
+        {
+          "id": "39962",
+          "dirty": "Trransient",
+          "truth": "Transient",
+          "llm_output": "Transient"
+        },
+        {
+          "id": "103411",
+          "dirty": "  Transient ",
+          "truth": "Transient",
+          "llm_output": "Transient"
+        },
+        {
+          "id": "67512",
+          "dirty": "Tarnsient",
+          "truth": "Transient",
+          "llm_output": "Transient"
+        }
+      ],
+      "failed_samples": [],
+      "regression_samples": []
+    },
+    "days_in_waiting_list": {
+      "initial_error_rate": 0.006,
+      "final_error_rate": 0.0001,
+      "total_errors": 717,
+      "correct_repairs": 703,
+      "failed_repair": 14,
+      "regressions": 0,
+      "precision": 0.9805,
+      "recall": 0.9805,
+      "f1_score": 0.9805,
+      "success_samples": [
+        {
+          "id": "1814",
+          "dirty": "8761.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "83439",
+          "dirty": "3818.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "32646",
+          "dirty": "3007.0",
+          "truth": "0",
+          "llm_output": "0.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "50038",
+          "dirty": "6332.0",
+          "truth": "48",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "50608",
+          "dirty": "7661.0",
+          "truth": "60",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "51441",
+          "dirty": "5494.0",
+          "truth": "98",
+          "llm_output": "0.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "deposit_type": {
+      "initial_error_rate": 0.024,
+      "final_error_rate": 0.0,
+      "total_errors": 2866,
+      "correct_repairs": 2865,
+      "failed_repair": 1,
+      "regressions": 0,
+      "precision": 0.9997,
+      "recall": 0.9997,
+      "f1_score": 0.9997,
+      "success_samples": [
+        {
+          "id": "41644",
+          "dirty": "NO DEPOSIt",
+          "truth": "No Deposit",
+          "llm_output": "No Deposit"
+        },
+        {
+          "id": "36607",
+          "dirty": "No Dposit",
+          "truth": "No Deposit",
+          "llm_output": "No Deposit"
+        },
+        {
+          "id": "41774",
+          "dirty": "  No Deposit ",
+          "truth": "No Deposit",
+          "llm_output": "No Deposit"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "22723",
+          "dirty": "REfundable",
+          "truth": "Refundable",
+          "llm_output": "Non Refund"
+        }
+      ],
+      "regression_samples": []
+    },
+    "hotel": {
+      "initial_error_rate": 0.024,
+      "final_error_rate": 0.0,
+      "total_errors": 2866,
+      "correct_repairs": 2866,
+      "failed_repair": 0,
+      "regressions": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "success_samples": [
+        {
+          "id": "69007",
+          "dirty": "City Hoetl",
+          "truth": "City Hotel",
+          "llm_output": "City Hotel"
+        },
+        {
+          "id": "86532",
+          "dirty": "Ciity Hotel",
+          "truth": "City Hotel",
+          "llm_output": "City Hotel"
+        },
+        {
+          "id": "54684",
+          "dirty": "  City Hotel ",
+          "truth": "City Hotel",
+          "llm_output": "City Hotel"
+        }
+      ],
+      "failed_samples": [],
+      "regression_samples": []
+    },
+    "lead_time": {
+      "initial_error_rate": 0.024,
+      "final_error_rate": 0.0016,
+      "total_errors": 2866,
+      "correct_repairs": 2676,
+      "failed_repair": 190,
+      "regressions": 0,
+      "precision": 0.9337,
+      "recall": 0.9337,
+      "f1_score": 0.9337,
+      "success_samples": [
+        {
+          "id": "40843",
+          "dirty": "3O0",
+          "truth": "30",
+          "llm_output": "30.0"
+        },
+        {
+          "id": "109730",
+          "dirty": "2kg03",
+          "truth": "203",
+          "llm_output": "203.0"
+        },
+        {
+          "id": "77187",
+          "dirty": "34O",
+          "truth": "34",
+          "llm_output": "34.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "61172",
+          "dirty": "O",
+          "truth": "0",
+          "llm_output": "69.0"
+        },
+        {
+          "id": "46085",
+          "dirty": "1O6",
+          "truth": "106",
+          "llm_output": "16.0"
+        },
+        {
+          "id": "6500",
+          "dirty": "5O",
+          "truth": "50",
+          "llm_output": "5.0"
+        }
+      ],
+      "regression_samples": []
+    },
+    "market_segment": {
+      "initial_error_rate": 0.03,
+      "final_error_rate": 0.0107,
+      "total_errors": 3582,
+      "correct_repairs": 2307,
+      "failed_repair": 1275,
+      "regressions": 0,
+      "precision": 0.6441,
+      "recall": 0.6441,
+      "f1_score": 0.6441,
+      "success_samples": [
+        {
+          "id": "117341",
+          "dirty": " ",
+          "truth": "Online TA",
+          "llm_output": "Online TA"
+        },
+        {
+          "id": "97356",
+          "dirty": null,
+          "truth": "Direct",
+          "llm_output": "Direct"
+        },
+        {
+          "id": "75139",
+          "dirty": null,
+          "truth": "Groups",
+          "llm_output": "Groups"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "88842",
+          "dirty": null,
+          "truth": "Online TA",
+          "llm_output": "Groups"
+        },
+        {
+          "id": "57765",
+          "dirty": null,
+          "truth": "Offline TA/TO",
+          "llm_output": "Groups"
+        },
+        {
+          "id": "49078",
+          "dirty": null,
+          "truth": "Offline TA/TO",
+          "llm_output": "Groups"
+        }
+      ],
+      "regression_samples": []
+    },
+    "meal": {
+      "initial_error_rate": 0.03,
+      "final_error_rate": 0.0063,
+      "total_errors": 3582,
+      "correct_repairs": 2828,
+      "failed_repair": 754,
+      "regressions": 0,
+      "precision": 0.7895,
+      "recall": 0.7895,
+      "f1_score": 0.7895,
+      "success_samples": [
+        {
+          "id": "50270",
+          "dirty": " ",
+          "truth": "BB",
+          "llm_output": "BB"
+        },
+        {
+          "id": "81807",
+          "dirty": null,
+          "truth": "BB",
+          "llm_output": "BB"
+        },
+        {
+          "id": "103262",
+          "dirty": null,
+          "truth": "BB",
+          "llm_output": "BB"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "109823",
+          "dirty": "unknown",
+          "truth": "SC",
+          "llm_output": "BB"
+        },
+        {
+          "id": "81540",
+          "dirty": null,
+          "truth": "HB",
+          "llm_output": "BB"
+        },
+        {
+          "id": "97196",
+          "dirty": "unknown",
+          "truth": "HB",
+          "llm_output": "BB"
+        }
+      ],
+      "regression_samples": []
+    },
+    "reservation_status_date": {
+      "initial_error_rate": 0.045,
+      "final_error_rate": 0.0024,
+      "total_errors": 5373,
+      "correct_repairs": 5083,
+      "failed_repair": 290,
+      "regressions": 0,
+      "precision": 0.946,
+      "recall": 0.946,
+      "f1_score": 0.946,
+      "success_samples": [
+        {
+          "id": "98336",
+          "dirty": "1475020800",
+          "truth": "2016-09-28",
+          "llm_output": "2016-09-28"
+        },
+        {
+          "id": "77591",
+          "dirty": "1459555200",
+          "truth": "2016-04-02",
+          "llm_output": "2016-04-02"
+        },
+        {
+          "id": "19621",
+          "dirty": "29-Dec-2015",
+          "truth": "2015-12-29",
+          "llm_output": "2015-12-29"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "113169",
+          "dirty": "06/03/2017",
+          "truth": "2017-06-03",
+          "llm_output": "2017-03-06"
+        },
+        {
+          "id": "62757",
+          "dirty": "08/10/2016",
+          "truth": "2016-08-10",
+          "llm_output": "2016-10-08"
+        },
+        {
+          "id": "102916",
+          "dirty": "12/09/2016",
+          "truth": "2016-12-09",
+          "llm_output": "2016-09-12"
+        }
+      ],
+      "regression_samples": []
+    },
+    "stays_in_week_nights": {
+      "initial_error_rate": 0.006,
+      "final_error_rate": 0.0041,
+      "total_errors": 717,
+      "correct_repairs": 223,
+      "failed_repair": 494,
+      "regressions": 0,
+      "precision": 0.311,
+      "recall": 0.311,
+      "f1_score": 0.311,
+      "success_samples": [
+        {
+          "id": "57149",
+          "dirty": "687.0",
+          "truth": "2",
+          "llm_output": "2.0"
+        },
+        {
+          "id": "99911",
+          "dirty": "633.0",
+          "truth": "2",
+          "llm_output": "2.0"
+        },
+        {
+          "id": "31149",
+          "dirty": "696.0",
+          "truth": "2",
+          "llm_output": "2.0"
+        }
+      ],
+      "failed_samples": [
+        {
+          "id": "37132",
+          "dirty": "243.0",
+          "truth": "3",
+          "llm_output": "2.0"
+        },
+        {
+          "id": "6710",
+          "dirty": "465.0",
+          "truth": "3",
+          "llm_output": "2.0"
+        },
+        {
+          "id": "6895",
+          "dirty": "344.0",
+          "truth": "8",
+          "llm_output": "2.0"
+        }
+      ],
+      "regression_samples": []
+    }
+  },
+  "pipeline_time_seconds": 86.47,
+  "workflow_name": "hotel-booking-demand_profile_mistral_api_iter5",
+  "rows_expected": 119390,
+  "rows_remaining": 119390,
+  "rows_lost": 0,
+  "rows_lost_pct": 0.0,
+  "errors_lost_with_deleted_rows": 0,
+  "warning_over_cleaning": false,
+  "global_accuracy_all_cells": 0.9644,
+  "total_failed_repairs": 7605,
+  "by_error_family": {
+    "outliers": {
+      "total_errors": 2868,
+      "correct_repairs": 1678,
+      "failed_repair": 1151,
+      "regressions": 39,
+      "precision": 0.5931,
+      "recall": 0.5851,
+      "f1_score": 0.5891
+    },
+    "typos": {
+      "total_errors": 14330,
+      "correct_repairs": 14138,
+      "failed_repair": 192,
+      "regressions": 0,
+      "precision": 0.9866,
+      "recall": 0.9866,
+      "f1_score": 0.9866
+    },
+    "missing_values": {
+      "total_errors": 17910,
+      "correct_repairs": 11938,
+      "failed_repair": 5972,
+      "regressions": 0,
+      "precision": 0.6666,
+      "recall": 0.6666,
+      "f1_score": 0.6666
+    },
+    "format_errors": {
+      "total_errors": 5373,
+      "correct_repairs": 5083,
+      "failed_repair": 290,
+      "regressions": 0,
+      "precision": 0.946,
+      "recall": 0.946,
+      "f1_score": 0.946
+    }
+  }
+}

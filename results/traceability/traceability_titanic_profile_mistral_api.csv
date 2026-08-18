@@ -1,0 +1,603 @@
+row_index,column,error_family,error_type,valeur_originale,valeur_bruitee_vue_par_llm,valeur_produite_par_llm,statut
+322,Age,missing_values,missing_nan,30.0,,29.0,Mal corrigé (valeur différente mais fausse)
+590,Age,missing_values,missing_whitespace,35.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+599,Age,missing_values,missing_N/A_string,49.0,,29.0,Mal corrigé (valeur différente mais fausse)
+305,Age,missing_values,missing_whitespace,0.92, ,29.0,Mal corrigé (valeur différente mais fausse)
+317,Age,missing_values,missing_nan,54.0,,29.0,Mal corrigé (valeur différente mais fausse)
+823,Age,missing_values,missing_NA_string,27.0,,29.0,Mal corrigé (valeur différente mais fausse)
+786,Age,missing_values,missing_unknown_string,18.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+796,Age,missing_values,missing_NA_string,49.0,,29.0,Mal corrigé (valeur différente mais fausse)
+684,Age,missing_values,missing_NA_string,60.0,,29.0,Mal corrigé (valeur différente mais fausse)
+420,Age,missing_values,missing_nan,,,29.0,Mal corrigé (valeur différente mais fausse)
+837,Age,missing_values,missing_NA_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+353,Age,missing_values,missing_empty_string,25.0,,29.0,Mal corrigé (valeur différente mais fausse)
+386,Age,missing_values,missing_empty_string,1.0,,29.0,Mal corrigé (valeur différente mais fausse)
+693,Age,missing_values,missing_unknown_string,25.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+150,Age,missing_values,missing_N/A_string,51.0,,29.0,Mal corrigé (valeur différente mais fausse)
+113,Age,missing_values,missing_N/A_string,20.0,,29.0,Mal corrigé (valeur différente mais fausse)
+411,Age,missing_values,missing_NA_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+165,Age,missing_values,missing_whitespace,9.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+299,Age,missing_values,missing_nan,50.0,,29.0,Mal corrigé (valeur différente mais fausse)
+639,Age,missing_values,missing_NA_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+497,Age,missing_values,missing_nan,,,29.0,Mal corrigé (valeur différente mais fausse)
+737,Age,missing_values,missing_NA_string,35.0,,29.0,Mal corrigé (valeur différente mais fausse)
+290,Age,missing_values,missing_whitespace,26.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+428,Age,missing_values,missing_NA_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+399,Age,missing_values,missing_whitespace,28.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+86,Age,missing_values,missing_NA_string,16.0,,29.0,Mal corrigé (valeur différente mais fausse)
+375,Age,missing_values,missing_unknown_string,,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+142,Age,missing_values,missing_NA_string,24.0,,29.0,Mal corrigé (valeur différente mais fausse)
+66,Age,missing_values,missing_empty_string,29.0,,29.0,Corrigé
+646,Age,missing_values,missing_unknown_string,19.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+830,Age,missing_values,missing_whitespace,15.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+139,Age,missing_values,missing_empty_string,24.0,,29.0,Mal corrigé (valeur différente mais fausse)
+663,Age,missing_values,missing_unknown_string,36.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+409,Age,missing_values,missing_empty_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+588,Age,missing_values,missing_unknown_string,22.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+76,Age,missing_values,missing_unknown_string,,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+564,Age,missing_values,missing_NA_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+695,Age,missing_values,missing_unknown_string,52.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+105,Age,missing_values,missing_empty_string,28.0,,29.0,Mal corrigé (valeur différente mais fausse)
+591,Age,missing_values,missing_nan,52.0,,29.0,Mal corrigé (valeur différente mais fausse)
+622,Age,missing_values,missing_nan,20.0,,29.0,Mal corrigé (valeur différente mais fausse)
+57,Age,missing_values,missing_NA_string,28.5,,29.0,Mal corrigé (valeur différente mais fausse)
+621,Age,missing_values,missing_whitespace,42.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+743,Age,missing_values,missing_nan,24.0,,29.0,Mal corrigé (valeur différente mais fausse)
+426,Age,missing_values,missing_NA_string,28.0,,29.0,Mal corrigé (valeur différente mais fausse)
+166,Age,missing_values,missing_unknown_string,,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+333,Age,missing_values,missing_empty_string,16.0,,29.0,Mal corrigé (valeur différente mais fausse)
+682,Age,missing_values,missing_unknown_string,20.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+189,Age,missing_values,missing_empty_string,36.0,,29.0,Mal corrigé (valeur différente mais fausse)
+453,Age,missing_values,missing_unknown_string,49.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+531,Age,missing_values,missing_N/A_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+349,Age,missing_values,missing_N/A_string,42.0,,29.0,Mal corrigé (valeur différente mais fausse)
+199,Age,missing_values,missing_empty_string,24.0,,29.0,Mal corrigé (valeur différente mais fausse)
+378,Age,missing_values,missing_NA_string,20.0,,29.0,Mal corrigé (valeur différente mais fausse)
+887,Age,missing_values,missing_whitespace,19.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+282,Age,missing_values,missing_nan,16.0,,29.0,Mal corrigé (valeur différente mais fausse)
+278,Age,missing_values,missing_unknown_string,7.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+533,Age,missing_values,missing_NA_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+69,Age,missing_values,missing_unknown_string,26.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+586,Age,missing_values,missing_N/A_string,47.0,,29.0,Mal corrigé (valeur différente mais fausse)
+163,Age,missing_values,missing_NA_string,17.0,,29.0,Mal corrigé (valeur différente mais fausse)
+526,Age,missing_values,missing_empty_string,50.0,,29.0,Mal corrigé (valeur différente mais fausse)
+53,Age,missing_values,missing_N/A_string,29.0,,29.0,Corrigé
+558,Age,missing_values,missing_nan,39.0,,29.0,Mal corrigé (valeur différente mais fausse)
+368,Age,missing_values,missing_N/A_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+720,Age,missing_values,missing_nan,6.0,,29.0,Mal corrigé (valeur différente mais fausse)
+311,Age,missing_values,missing_N/A_string,18.0,,29.0,Mal corrigé (valeur différente mais fausse)
+689,Age,missing_values,missing_N/A_string,15.0,,29.0,Mal corrigé (valeur différente mais fausse)
+576,Age,missing_values,missing_nan,34.0,,29.0,Mal corrigé (valeur différente mais fausse)
+463,Age,missing_values,missing_unknown_string,48.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+759,Age,missing_values,missing_NA_string,33.0,,29.0,Mal corrigé (valeur différente mais fausse)
+469,Age,missing_values,missing_unknown_string,0.75,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+132,Age,missing_values,missing_nan,47.0,,29.0,Mal corrigé (valeur différente mais fausse)
+640,Age,missing_values,missing_empty_string,20.0,,29.0,Mal corrigé (valeur différente mais fausse)
+71,Age,missing_values,missing_NA_string,16.0,,29.0,Mal corrigé (valeur différente mais fausse)
+863,Age,missing_values,missing_empty_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+643,Age,missing_values,missing_empty_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+356,Age,missing_values,missing_N/A_string,22.0,,29.0,Mal corrigé (valeur différente mais fausse)
+794,Age,missing_values,missing_nan,25.0,,29.0,Mal corrigé (valeur différente mais fausse)
+648,Age,missing_values,missing_unknown_string,,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+37,Age,missing_values,missing_nan,21.0,,29.0,Mal corrigé (valeur différente mais fausse)
+370,Age,missing_values,missing_empty_string,25.0,,29.0,Mal corrigé (valeur différente mais fausse)
+765,Age,missing_values,missing_N/A_string,51.0,,29.0,Mal corrigé (valeur différente mais fausse)
+417,Age,missing_values,missing_unknown_string,18.0,unknown,29.0,Mal corrigé (valeur différente mais fausse)
+834,Age,missing_values,missing_empty_string,18.0,,29.0,Mal corrigé (valeur différente mais fausse)
+405,Age,missing_values,missing_empty_string,34.0,,29.0,Mal corrigé (valeur différente mais fausse)
+694,Age,missing_values,missing_whitespace,60.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+232,Age,missing_values,missing_whitespace,59.0, ,29.0,Mal corrigé (valeur différente mais fausse)
+602,Age,missing_values,missing_N/A_string,,,29.0,Mal corrigé (valeur différente mais fausse)
+321,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+527,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+92,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+827,Embarked,missing_values,missing_empty_string,C,,S,Mal corrigé (valeur différente mais fausse)
+452,Embarked,missing_values,missing_whitespace,C, ,S,Mal corrigé (valeur différente mais fausse)
+474,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+400,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+637,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+204,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+269,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+471,Embarked,missing_values,missing_nan,S,,S,Corrigé
+132,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+100,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+704,Embarked,missing_values,missing_nan,S,,S,Corrigé
+379,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+145,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+467,Embarked,missing_values,missing_nan,S,,S,Corrigé
+825,Embarked,missing_values,missing_unknown_string,Q,unknown,S,Mal corrigé (valeur différente mais fausse)
+840,Embarked,missing_values,missing_nan,S,,S,Corrigé
+366,Embarked,missing_values,missing_unknown_string,C,unknown,S,Mal corrigé (valeur différente mais fausse)
+159,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+752,Embarked,missing_values,missing_nan,S,,S,Corrigé
+398,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+447,Embarked,missing_values,missing_nan,S,,S,Corrigé
+570,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+834,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+556,Embarked,missing_values,missing_whitespace,C, ,S,Mal corrigé (valeur différente mais fausse)
+275,Embarked,missing_values,missing_unknown_string,S,unknown,S,Corrigé
+456,Embarked,missing_values,missing_unknown_string,S,unknown,S,Corrigé
+304,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+237,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+274,Embarked,missing_values,missing_N/A_string,Q,,S,Mal corrigé (valeur différente mais fausse)
+32,Embarked,missing_values,missing_unknown_string,Q,unknown,S,Mal corrigé (valeur différente mais fausse)
+265,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+472,Embarked,missing_values,missing_nan,S,,S,Corrigé
+882,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+18,Embarked,missing_values,missing_nan,S,,S,Corrigé
+549,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+657,Embarked,missing_values,missing_unknown_string,Q,unknown,S,Mal corrigé (valeur différente mais fausse)
+620,Embarked,missing_values,missing_empty_string,C,,S,Mal corrigé (valeur différente mais fausse)
+118,Embarked,missing_values,missing_unknown_string,C,unknown,S,Mal corrigé (valeur différente mais fausse)
+564,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+835,Embarked,missing_values,missing_empty_string,C,,S,Mal corrigé (valeur différente mais fausse)
+91,Embarked,missing_values,missing_NA_string,S,,NNA,Mal corrigé (valeur différente mais fausse)
+387,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+52,Embarked,missing_values,missing_unknown_string,C,unknown,S,Mal corrigé (valeur différente mais fausse)
+802,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+493,Embarked,missing_values,missing_whitespace,C, ,S,Mal corrigé (valeur différente mais fausse)
+266,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+692,Embarked,missing_values,missing_unknown_string,S,unknown,S,Corrigé
+707,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+770,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+881,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+797,Embarked,missing_values,missing_nan,S,,S,Corrigé
+339,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+561,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+239,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+476,Embarked,missing_values,missing_nan,S,,S,Corrigé
+39,Embarked,missing_values,missing_N/A_string,C,,/A,Mal corrigé (valeur différente mais fausse)
+255,Embarked,missing_values,missing_whitespace,C, ,S,Mal corrigé (valeur différente mais fausse)
+225,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+839,Embarked,missing_values,missing_empty_string,C,,S,Mal corrigé (valeur différente mais fausse)
+198,Embarked,missing_values,missing_NA_string,Q,,S,Mal corrigé (valeur différente mais fausse)
+358,Embarked,missing_values,missing_N/A_string,Q,,S,Mal corrigé (valeur différente mais fausse)
+402,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+221,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+721,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+622,Embarked,missing_values,missing_whitespace,C, ,S,Mal corrigé (valeur différente mais fausse)
+122,Embarked,missing_values,missing_unknown_string,C,unknown,S,Mal corrigé (valeur différente mais fausse)
+864,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+790,Embarked,missing_values,missing_unknown_string,Q,unknown,unnown,Mal corrigé (valeur différente mais fausse)
+433,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+207,Embarked,missing_values,missing_nan,C,,S,Mal corrigé (valeur différente mais fausse)
+546,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+787,Embarked,missing_values,missing_nan,Q,,S,Mal corrigé (valeur différente mais fausse)
+278,Embarked,missing_values,missing_NA_string,Q,,S,Mal corrigé (valeur différente mais fausse)
+667,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+8,Embarked,missing_values,missing_NA_string,S,,S,Corrigé
+254,Embarked,missing_values,missing_nan,S,,S,Corrigé
+391,Embarked,missing_values,missing_empty_string,S,,S,Corrigé
+177,Embarked,missing_values,missing_unknown_string,C,unknown,S,Mal corrigé (valeur différente mais fausse)
+362,Embarked,missing_values,missing_empty_string,C,,S,Mal corrigé (valeur différente mais fausse)
+875,Embarked,missing_values,missing_empty_string,C,,S,Mal corrigé (valeur différente mais fausse)
+277,Embarked,missing_values,missing_whitespace,S, ,S,Corrigé
+480,Embarked,missing_values,missing_nan,S,,S,Corrigé
+776,Embarked,missing_values,missing_whitespace,Q, ,S,Mal corrigé (valeur différente mais fausse)
+453,Embarked,missing_values,missing_whitespace,C, ,S,Mal corrigé (valeur différente mais fausse)
+67,Embarked,missing_values,missing_N/A_string,S,,S,Corrigé
+863,Embarked,missing_values,missing_nan,S,,S,Corrigé
+719,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+676,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+437,Cabin,missing_values,missing_N/A_string,,,D,Mal corrigé (valeur différente mais fausse)
+710,Cabin,missing_values,missing_unknown_string,C90,unknown,B96 B98,Mal corrigé (valeur différente mais fausse)
+545,Cabin,missing_values,missing_unknown_string,,unknown,B96 B98,Mal corrigé (valeur différente mais fausse)
+117,Cabin,missing_values,missing_whitespace,, ,D,Mal corrigé (valeur différente mais fausse)
+677,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+208,Cabin,missing_values,missing_N/A_string,,,G6,Mal corrigé (valeur différente mais fausse)
+85,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+237,Cabin,missing_values,missing_empty_string,,,D,Mal corrigé (valeur différente mais fausse)
+659,Cabin,missing_values,missing_N/A_string,D48,,B96 B98,Mal corrigé (valeur différente mais fausse)
+125,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+17,Cabin,missing_values,missing_whitespace,, ,D,Mal corrigé (valeur différente mais fausse)
+158,Cabin,missing_values,missing_whitespace,, ,G6,Mal corrigé (valeur différente mais fausse)
+566,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+86,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+469,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+386,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+483,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+345,Cabin,missing_values,missing_NA_string,F33,,D,Mal corrigé (valeur différente mais fausse)
+784,Cabin,missing_values,missing_N/A_string,,,G6,Mal corrigé (valeur différente mais fausse)
+841,Cabin,missing_values,missing_unknown_string,,unknown,D,Mal corrigé (valeur différente mais fausse)
+451,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+679,Cabin,missing_values,missing_whitespace,B51 B53 B55, ,B96 B98,Mal corrigé (valeur différente mais fausse)
+681,Cabin,missing_values,missing_unknown_string,D49,unknown,B96 B98,Mal corrigé (valeur différente mais fausse)
+367,Cabin,missing_values,missing_empty_string,,,G6,Mal corrigé (valeur différente mais fausse)
+190,Cabin,missing_values,missing_unknown_string,,unknown,D,Mal corrigé (valeur différente mais fausse)
+657,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+79,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+502,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+590,Cabin,missing_values,missing_whitespace,, ,G6,Mal corrigé (valeur différente mais fausse)
+422,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+464,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+221,Cabin,missing_values,missing_N/A_string,,,D,Mal corrigé (valeur différente mais fausse)
+734,Cabin,missing_values,missing_empty_string,,,D,Mal corrigé (valeur différente mais fausse)
+316,Cabin,missing_values,missing_unknown_string,,unknown,D,Mal corrigé (valeur différente mais fausse)
+207,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+608,Cabin,missing_values,missing_N/A_string,,,D,Mal corrigé (valeur différente mais fausse)
+416,Cabin,missing_values,missing_empty_string,,,D,Mal corrigé (valeur différente mais fausse)
+791,Cabin,missing_values,missing_empty_string,,,D,Mal corrigé (valeur différente mais fausse)
+93,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+645,Cabin,missing_values,missing_whitespace,D33, ,B96 B98,Mal corrigé (valeur différente mais fausse)
+479,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+812,Cabin,missing_values,missing_nan,,,D,Mal corrigé (valeur différente mais fausse)
+151,Cabin,missing_values,missing_whitespace,C2, ,B96 B98,Mal corrigé (valeur différente mais fausse)
+706,Cabin,missing_values,missing_N/A_string,,,D,Mal corrigé (valeur différente mais fausse)
+44,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+228,Cabin,missing_values,missing_unknown_string,,unknown,D,Mal corrigé (valeur différente mais fausse)
+54,Cabin,missing_values,missing_NA_string,B30,,B96 B98,Mal corrigé (valeur différente mais fausse)
+575,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+124,Cabin,missing_values,missing_unknown_string,D26,unknown,B96 B98,Mal corrigé (valeur différente mais fausse)
+123,Cabin,missing_values,missing_empty_string,E101,,D,Mal corrigé (valeur différente mais fausse)
+277,Cabin,missing_values,missing_N/A_string,,,D,Mal corrigé (valeur différente mais fausse)
+340,Cabin,missing_values,missing_whitespace,F2, ,D,Mal corrigé (valeur différente mais fausse)
+846,Cabin,missing_values,missing_whitespace,, ,G6,Mal corrigé (valeur différente mais fausse)
+607,Cabin,missing_values,missing_NA_string,,,B96 B98,Mal corrigé (valeur différente mais fausse)
+444,Cabin,missing_values,missing_unknown_string,,unknown,G6,Mal corrigé (valeur différente mais fausse)
+142,Cabin,missing_values,missing_N/A_string,,,G6,Mal corrigé (valeur différente mais fausse)
+797,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+536,Cabin,missing_values,missing_nan,B38,,B96 B98,Mal corrigé (valeur différente mais fausse)
+283,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+778,Cabin,missing_values,missing_N/A_string,,,G6,Mal corrigé (valeur différente mais fausse)
+754,Cabin,missing_values,missing_whitespace,, ,D,Mal corrigé (valeur différente mais fausse)
+849,Cabin,missing_values,missing_nan,C92,,B96 B98,Mal corrigé (valeur différente mais fausse)
+722,Cabin,missing_values,missing_unknown_string,,unknown,D,Mal corrigé (valeur différente mais fausse)
+91,Cabin,missing_values,missing_whitespace,, ,G6,Mal corrigé (valeur différente mais fausse)
+742,Cabin,missing_values,missing_whitespace,B57 B59 B63 B66, ,B96 B98,Mal corrigé (valeur différente mais fausse)
+408,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+694,Cabin,missing_values,missing_nan,,,B96 B98,Mal corrigé (valeur différente mais fausse)
+758,Cabin,missing_values,missing_empty_string,,,G6,Mal corrigé (valeur différente mais fausse)
+869,Cabin,missing_values,missing_whitespace,, ,G6,Mal corrigé (valeur différente mais fausse)
+725,Cabin,missing_values,missing_whitespace,, ,G6,Mal corrigé (valeur différente mais fausse)
+262,Cabin,missing_values,missing_N/A_string,E67,,B96 B98,Mal corrigé (valeur différente mais fausse)
+558,Cabin,missing_values,missing_nan,E67,,B96 B98,Mal corrigé (valeur différente mais fausse)
+236,Cabin,missing_values,missing_nan,,,D,Mal corrigé (valeur différente mais fausse)
+43,Cabin,missing_values,missing_NA_string,,,D,Mal corrigé (valeur différente mais fausse)
+692,Cabin,missing_values,missing_N/A_string,,,G6,Mal corrigé (valeur différente mais fausse)
+197,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+724,Cabin,missing_values,missing_unknown_string,E8,unknown,B96 B98,Mal corrigé (valeur différente mais fausse)
+689,Cabin,missing_values,missing_N/A_string,B5,,B96 B98,Mal corrigé (valeur différente mais fausse)
+36,Cabin,missing_values,missing_nan,,,G6,Mal corrigé (valeur différente mais fausse)
+41,Cabin,missing_values,missing_nan,,,D,Mal corrigé (valeur différente mais fausse)
+410,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+445,Cabin,missing_values,missing_unknown_string,A34,unknown,B96 B98,Mal corrigé (valeur différente mais fausse)
+323,Cabin,missing_values,missing_unknown_string,,unknown,D,Mal corrigé (valeur différente mais fausse)
+853,Cabin,missing_values,missing_NA_string,D28,,B96 B98,Mal corrigé (valeur différente mais fausse)
+539,Cabin,missing_values,missing_empty_string,B39,,B96 B98,Mal corrigé (valeur différente mais fausse)
+350,Cabin,missing_values,missing_whitespace,, ,G6,Mal corrigé (valeur différente mais fausse)
+5,Cabin,missing_values,missing_NA_string,,,G6,Mal corrigé (valeur différente mais fausse)
+637,Age,outliers,outlier_value,31.0,159.57,159.57,Non corrigé (regression)
+652,Age,outliers,outlier_value,21.0,274.14,257.73250000000047,Mal corrigé (valeur différente mais fausse)
+78,Age,outliers,outlier_value,0.83,244.75,244.75,Non corrigé (regression)
+677,Age,outliers,outlier_value,18.0,263.71,257.73250000000047,Mal corrigé (valeur différente mais fausse)
+864,Age,outliers,outlier_value,24.0,203.18,203.18,Non corrigé (regression)
+83,Age,outliers,outlier_value,28.0,295.6,257.73250000000047,Mal corrigé (valeur différente mais fausse)
+177,Age,outliers,outlier_value,50.0,283.97,257.73250000000047,Mal corrigé (valeur différente mais fausse)
+385,Age,outliers,outlier_value,18.0,266.76,257.73250000000047,Mal corrigé (valeur différente mais fausse)
+755,Age,outliers,outlier_value,0.67,179.2,179.2,Non corrigé (regression)
+699,Age,outliers,outlier_value,42.0,220.01,220.01,Non corrigé (regression)
+465,Age,outliers,outlier_value,38.0,156.57,156.57,Non corrigé (regression)
+457,Age,outliers,outlier_value,,173.14,173.14,Non corrigé (regression)
+380,Age,outliers,outlier_value,42.0,252.46,252.46,Non corrigé (regression)
+615,Age,outliers,outlier_value,24.0,261.71,257.73250000000047,Mal corrigé (valeur différente mais fausse)
+75,Age,outliers,outlier_value,25.0,295.13,257.73250000000047,Mal corrigé (valeur différente mais fausse)
+675,Age,outliers,outlier_value,18.0,198.87,198.87,Non corrigé (regression)
+574,Age,outliers,outlier_value,16.0,205.57,205.57,Non corrigé (regression)
+143,Fare,outliers,outlier_value,6.75,3399.36,3399.36,Non corrigé (regression)
+485,Fare,outliers,outlier_value,25.4667,2051.54,2051.54,Non corrigé (regression)
+741,Fare,outliers,outlier_value,78.85,7508.47,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+411,Fare,outliers,outlier_value,6.8583,6653.96,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+407,Fare,outliers,outlier_value,18.75,6936.16,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+388,Fare,outliers,outlier_value,7.7292,7465.1,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+114,Fare,outliers,outlier_value,14.4583,5212.41,5212.41,Non corrigé (regression)
+698,Fare,outliers,outlier_value,110.8833,5981.19,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+605,Fare,outliers,outlier_value,15.55,2978.58,2978.58,Non corrigé (regression)
+420,Fare,outliers,outlier_value,7.8958,2801.71,2801.71,Non corrigé (regression)
+834,Fare,outliers,outlier_value,8.3,6678.82,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+594,Fare,outliers,outlier_value,26.0,5297.67,5297.67,Non corrigé (regression)
+291,Fare,outliers,outlier_value,91.0792,5956.65,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+166,Fare,outliers,outlier_value,55.0,7354.99,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+66,Fare,outliers,outlier_value,10.5,6443.03,5918.670000000001,Mal corrigé (valeur différente mais fausse)
+500,Fare,outliers,outlier_value,8.6625,5875.06,5875.06,Non corrigé (regression)
+200,Fare,outliers,outlier_value,9.5,5914.45,5914.45,Non corrigé (regression)
+27,SibSp,outliers,outlier_value,3,20.0,20.0,Non corrigé (regression)
+695,SibSp,outliers,outlier_value,0,22.0,22.0,Non corrigé (regression)
+878,SibSp,outliers,outlier_value,0,41.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+756,SibSp,outliers,outlier_value,0,33.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+361,SibSp,outliers,outlier_value,1,24.0,24.0,Non corrigé (regression)
+528,SibSp,outliers,outlier_value,0,35.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+51,SibSp,outliers,outlier_value,0,24.0,24.0,Non corrigé (regression)
+30,SibSp,outliers,outlier_value,0,40.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+189,SibSp,outliers,outlier_value,0,33.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+384,SibSp,outliers,outlier_value,0,31.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+207,SibSp,outliers,outlier_value,0,29.0,29.0,Non corrigé (regression)
+266,SibSp,outliers,outlier_value,4,38.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+244,SibSp,outliers,outlier_value,0,30.0,30.0,Non corrigé (regression)
+865,SibSp,outliers,outlier_value,0,22.0,22.0,Non corrigé (regression)
+762,SibSp,outliers,outlier_value,0,23.0,23.0,Non corrigé (regression)
+730,SibSp,outliers,outlier_value,0,48.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+305,SibSp,outliers,outlier_value,1,47.0,30.100000000000023,Mal corrigé (valeur différente mais fausse)
+687,Parch,outliers,outlier_value,0,41.0,32,Mal corrigé (valeur différente mais fausse)
+672,Parch,outliers,outlier_value,0,32.0,32,Non corrigé (regression)
+146,Parch,outliers,outlier_value,0,38.0,32,Mal corrigé (valeur différente mais fausse)
+654,Parch,outliers,outlier_value,0,37.0,32,Mal corrigé (valeur différente mais fausse)
+699,Parch,outliers,outlier_value,0,39.0,32,Mal corrigé (valeur différente mais fausse)
+70,Parch,outliers,outlier_value,0,22.0,22,Non corrigé (regression)
+398,Parch,outliers,outlier_value,0,32.0,32,Non corrigé (regression)
+233,Parch,outliers,outlier_value,2,21.0,21,Non corrigé (regression)
+634,Parch,outliers,outlier_value,2,34.0,32,Mal corrigé (valeur différente mais fausse)
+401,Parch,outliers,outlier_value,0,29.0,29,Non corrigé (regression)
+85,Parch,outliers,outlier_value,0,24.0,24,Non corrigé (regression)
+613,Parch,outliers,outlier_value,0,23.0,23,Non corrigé (regression)
+230,Parch,outliers,outlier_value,0,37.0,32,Mal corrigé (valeur différente mais fausse)
+853,Parch,outliers,outlier_value,1,25.0,25,Non corrigé (regression)
+433,Parch,outliers,outlier_value,0,47.0,32,Mal corrigé (valeur différente mais fausse)
+242,Parch,outliers,outlier_value,0,37.0,32,Mal corrigé (valeur différente mais fausse)
+232,Parch,outliers,outlier_value,0,30.0,30,Non corrigé (regression)
+357,Sex,typos,typo_duplicated_letter,female,feemale,feemale,Non corrigé (regression)
+577,Sex,typos,typo_swapped_letters,female,femael,femael,Non corrigé (regression)
+612,Sex,typos,typo_extra_whitespace,female,  female ,female,Corrigé
+435,Sex,typos,typo_duplicated_letter,female,femalle,femalle,Non corrigé (regression)
+135,Sex,typos,typo_missing_letter,male,mae,mae,Non corrigé (regression)
+710,Sex,typos,typo_duplicated_letter,female,femalle,femalle,Non corrigé (regression)
+169,Sex,typos,typo_duplicated_letter,male,maale,maale,Non corrigé (regression)
+437,Sex,typos,typo_random_case,female,FEMale,FEMale,Corrigé
+479,Sex,typos,typo_swapped_letters,female,femlae,femlae,Non corrigé (regression)
+544,Sex,typos,typo_extra_whitespace,male,  male ,male,Corrigé
+420,Sex,typos,typo_swapped_letters,male,mlae,mlae,Non corrigé (regression)
+656,Sex,typos,typo_swapped_letters,male,mael,mael,Non corrigé (regression)
+378,Sex,typos,typo_duplicated_letter,male,mmale,mmale,Non corrigé (regression)
+589,Sex,typos,typo_duplicated_letter,male,mmale,mmale,Non corrigé (regression)
+840,Sex,typos,typo_missing_letter,male,ale,ale,Non corrigé (regression)
+636,Sex,typos,typo_random_case,male,MALe,MALe,Corrigé
+288,Sex,typos,typo_swapped_letters,male,mael,mael,Non corrigé (regression)
+812,Sex,typos,typo_missing_letter,male,mae,mae,Non corrigé (regression)
+803,Sex,typos,typo_swapped_letters,male,mael,mael,Non corrigé (regression)
+54,Sex,typos,typo_missing_letter,male,mle,male,Corrigé
+697,Sex,typos,typo_random_case,female,FEMale,FEMale,Corrigé
+601,Sex,typos,typo_missing_letter,male,mle,male,Corrigé
+538,Sex,typos,typo_duplicated_letter,male,mmale,mmale,Non corrigé (regression)
+38,Sex,typos,typo_random_case,female,FEMAle,female,Corrigé
+361,Sex,typos,typo_duplicated_letter,male,malle,malle,Non corrigé (regression)
+237,Sex,typos,typo_missing_letter,female,fmale,fmale,Non corrigé (regression)
+657,Sex,typos,typo_missing_letter,female,fmale,fmale,Non corrigé (regression)
+363,Sex,typos,typo_extra_whitespace,male,  male ,male,Corrigé
+328,Sex,typos,typo_extra_whitespace,female,  female ,female,Corrigé
+473,Sex,typos,typo_random_case,female,FEmale,FEmale,Corrigé
+660,Sex,typos,typo_random_case,male,Male,Male,Corrigé
+142,Sex,typos,typo_random_case,female,FEMAle,female,Corrigé
+661,Sex,typos,typo_random_case,male,MALe,MALe,Corrigé
+429,Sex,typos,typo_duplicated_letter,male,mmale,mmale,Non corrigé (regression)
+782,Sex,typos,typo_missing_letter,male,mle,male,Corrigé
+775,Sex,typos,typo_extra_whitespace,male,  male ,male,Corrigé
+376,Sex,typos,typo_swapped_letters,female,femlae,femlae,Non corrigé (regression)
+317,Sex,typos,typo_duplicated_letter,male,malle,malle,Non corrigé (regression)
+73,Sex,typos,typo_duplicated_letter,male,malle,malle,Non corrigé (regression)
+417,Sex,typos,typo_swapped_letters,female,feamle,feamle,Non corrigé (regression)
+67,Sex,typos,typo_missing_letter,male,mle,male,Corrigé
+759,Sex,typos,typo_extra_whitespace,female,  female ,female,Corrigé
+71,Sex,typos,typo_random_case,female,FEMAle,female,Corrigé
+463,Sex,typos,typo_random_case,male,Male,Male,Corrigé
+383,Sex,typos,typo_random_case,female,FEMale,FEMale,Corrigé
+811,Sex,typos,typo_missing_letter,male,mle,male,Corrigé
+708,Sex,typos,typo_random_case,female,FEMAle,female,Corrigé
+306,Sex,typos,typo_swapped_letters,female,femlae,femlae,Non corrigé (regression)
+704,Sex,typos,typo_missing_letter,male,ale,ale,Non corrigé (regression)
+323,Sex,typos,typo_swapped_letters,female,efmale,efmale,Non corrigé (regression)
+407,Sex,typos,typo_duplicated_letter,male,maale,maale,Non corrigé (regression)
+153,Sex,typos,typo_missing_letter,male,mae,mae,Non corrigé (regression)
+58,Sex,typos,typo_missing_letter,female,emale,emale,Non corrigé (regression)
+653,Sex,typos,typo_swapped_letters,female,femlae,femlae,Non corrigé (regression)
+107,Sex,typos,typo_missing_letter,male,ale,ale,Non corrigé (regression)
+709,Sex,typos,typo_extra_whitespace,male,  male ,male,Corrigé
+543,Sex,typos,typo_swapped_letters,male,mlae,mlae,Non corrigé (regression)
+855,Sex,typos,typo_duplicated_letter,female,femaale,femaale,Non corrigé (regression)
+677,Sex,typos,typo_swapped_letters,female,fmeale,fmeale,Non corrigé (regression)
+78,Sex,typos,typo_missing_letter,male,ale,ale,Non corrigé (regression)
+340,Sex,typos,typo_extra_whitespace,male,  male ,male,Corrigé
+878,Sex,typos,typo_swapped_letters,male,mlae,mlae,Non corrigé (regression)
+604,Sex,typos,typo_random_case,male,Male,Male,Corrigé
+735,Sex,typos,typo_duplicated_letter,male,maale,maale,Non corrigé (regression)
+599,Sex,typos,typo_random_case,male,MAle,MAle,Corrigé
+312,Sex,typos,typo_extra_whitespace,female,  female ,female,Corrigé
+193,Sex,typos,typo_swapped_letters,male,mlae,mlae,Non corrigé (regression)
+386,Sex,typos,typo_swapped_letters,male,mael,mael,Non corrigé (regression)
+167,Sex,typos,typo_duplicated_letter,female,femalle,femalle,Non corrigé (regression)
+852,Sex,typos,typo_duplicated_letter,female,femmale,femmale,Non corrigé (regression)
+634,Sex,typos,typo_swapped_letters,female,femael,femael,Non corrigé (regression)
+519,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+120,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+822,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+102,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+785,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+174,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+553,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+31,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+613,Embarked,typos,typo_too_short_unchanged,Q,Q,Q,Corrigé
+775,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+197,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+133,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+222,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+790,Embarked,typos,typo_missing_letter,Q,unnown,unnown,Non corrigé (regression)
+611,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+250,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+261,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+828,Embarked,typos,typo_too_short_unchanged,Q,Q,Q,Corrigé
+466,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+460,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+815,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+17,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+647,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+235,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+394,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+143,Embarked,typos,typo_too_short_unchanged,Q,Q,Q,Corrigé
+862,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+465,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+8,Embarked,typos,typo_extra_whitespace,S,  NA ,S,Corrigé
+872,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+195,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+681,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+561,Embarked,typos,typo_too_short_unchanged,S, ,S,Corrigé
+265,Embarked,typos,typo_too_short_unchanged,S, ,S,Corrigé
+80,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+317,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+273,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+200,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+157,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+90,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+262,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+786,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+381,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+694,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+473,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+792,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+204,Embarked,typos,typo_too_short_unchanged,S, ,S,Corrigé
+116,Embarked,typos,typo_too_short_unchanged,Q,Q,Q,Corrigé
+711,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+449,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+538,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+548,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+299,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+747,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+281,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+555,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+788,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+417,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+360,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+99,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+461,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+661,Embarked,typos,typo_too_short_unchanged,C,C,C,Corrigé
+446,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+741,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+851,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+91,Embarked,typos,typo_duplicated_letter,S,NNA,NNA,Non corrigé (regression)
+826,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+251,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+270,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+39,Embarked,typos,typo_missing_letter,C,/A,/A,Non corrigé (regression)
+233,Embarked,typos,typo_too_short_unchanged,S,S,S,Corrigé
+153,Fare,typos,typo_letter_inside_number,14.5,1j4.5,14.5,Corrigé
+398,Fare,typos,typo_letter_inside_number,10.5,10.kg5,10.5,Corrigé
+763,Fare,typos,typo_zero_as_letter_O,120.0,12O.0,12.0,Mal corrigé (valeur différente mais fausse)
+654,Fare,typos,typo_zero_as_letter_O,6.75,6.75O,6.75,Corrigé
+458,Fare,typos,typo_unit_suffix_injected,10.5,10.5kg,10.5,Corrigé
+702,Fare,typos,typo_unit_suffix_injected,14.4542,14.4542kg,14.4542,Corrigé
+882,Fare,typos,typo_unit_suffix_injected,10.5167,10.5167€,10.5167,Corrigé
+288,Fare,typos,typo_letter_inside_number,13.0,1kg3.0,13.0,Corrigé
+524,Fare,typos,typo_unit_suffix_injected,7.2292,7.2292kg,7.2292,Corrigé
+605,Fare,typos,typo_unit_suffix_injected,15.55,2978.58S,2978.58,Mal corrigé (valeur différente mais fausse)
+241,Fare,typos,typo_letter_inside_number,15.5,15.j5,15.5,Corrigé
+219,Fare,typos,typo_letter_inside_number,10.5,10B.5,10.5,Corrigé
+809,Fare,typos,typo_unit_suffix_injected,53.1,53.1€,53.1,Corrigé
+787,Fare,typos,typo_zero_as_letter_O,29.125,29.125O,29.125,Corrigé
+794,Fare,typos,typo_zero_as_letter_O,7.8958,7.8958O,7.8958,Corrigé
+468,Fare,typos,typo_unit_suffix_injected,7.725,7.725B,7.725,Corrigé
+810,Fare,typos,typo_unit_suffix_injected,7.8875,7.8875l,7.8875,Corrigé
+215,Fare,typos,typo_zero_as_letter_O,113.275,113.275O,113.275,Corrigé
+813,Fare,typos,typo_unit_suffix_injected,31.275,31.275S,31.275,Corrigé
+5,Fare,typos,typo_unit_suffix_injected,8.4583,8.4583B,8.4583,Corrigé
+625,Fare,typos,typo_zero_as_letter_O,32.3208,32.32O8,32.328,Mal corrigé (valeur différente mais fausse)
+711,Fare,typos,typo_unit_suffix_injected,26.55,26.55B,26.55,Corrigé
+747,Fare,typos,typo_letter_inside_number,13.0,1l3.0,13.0,Corrigé
+461,Fare,typos,typo_letter_inside_number,8.05,8.0S5,8.05,Corrigé
+544,Fare,typos,typo_letter_inside_number,106.425,106.42€5,106.425,Corrigé
+200,Fare,typos,typo_letter_inside_number,9.5,59B14.45,5914.45,Mal corrigé (valeur différente mais fausse)
+682,Fare,typos,typo_unit_suffix_injected,9.225,9.225B,9.225,Corrigé
+397,Fare,typos,typo_letter_inside_number,26.0,26j.0,26.0,Corrigé
+246,Fare,typos,typo_zero_as_letter_O,7.775,7.775O,7.775,Corrigé
+869,Fare,typos,typo_unit_suffix_injected,11.1333,11.1333kg,11.1333,Corrigé
+99,Fare,typos,typo_letter_inside_number,26.0,26B.0,26.0,Corrigé
+668,Fare,typos,typo_zero_as_letter_O,8.05,8.O5,8.5,Mal corrigé (valeur différente mais fausse)
+496,Fare,typos,typo_letter_inside_number,78.2667,7l8.2667,78.2667,Corrigé
+93,Fare,typos,typo_unit_suffix_injected,20.575,20.575l,20.575,Corrigé
+528,Fare,typos,typo_unit_suffix_injected,7.925,7.925€,7.925,Corrigé
+366,Fare,typos,typo_letter_inside_number,75.25,7j5.25,75.25,Corrigé
+753,Fare,typos,typo_unit_suffix_injected,7.8958,7.8958j,7.8958,Corrigé
+726,Fare,typos,typo_zero_as_letter_O,21.0,21.O,21.0,Corrigé
+209,Fare,typos,typo_letter_inside_number,31.0,31€.0,31.0,Corrigé
+117,Fare,typos,typo_unit_suffix_injected,21.0,21.0O,21.0,Corrigé
+661,Fare,typos,typo_letter_inside_number,7.225,7j.225,7.225,Corrigé
+567,Fare,typos,typo_letter_inside_number,21.075,2j1.075,21.075,Corrigé
+252,Fare,typos,typo_unit_suffix_injected,26.55,26.55kg,26.55,Corrigé
+572,Fare,typos,typo_unit_suffix_injected,26.3875,26.3875€,26.3875,Corrigé
+258,Fare,typos,typo_letter_inside_number,512.3292,512.32kg92,512.3292,Corrigé
+662,Fare,typos,typo_letter_inside_number,25.5875,2j5.5875,25.5875,Corrigé
+417,Fare,typos,typo_letter_inside_number,13.0,13l.0,13.0,Corrigé
+789,Fare,typos,typo_zero_as_letter_O,79.2,79.2O,79.2,Corrigé
+236,Fare,typos,typo_unit_suffix_injected,26.0,26.0B,26.0,Corrigé
+139,Fare,typos,typo_zero_as_letter_O,79.2,79.2O,79.2,Corrigé
+854,Fare,typos,typo_unit_suffix_injected,26.0,26.0O,26.0,Corrigé
+539,Fare,typos,typo_unit_suffix_injected,49.5,49.5O,49.5,Corrigé
+88,Fare,typos,typo_unit_suffix_injected,263.0,263.0B,263.0,Corrigé
+846,Fare,typos,typo_unit_suffix_injected,69.55,69.55€,69.55,Corrigé
+237,Fare,typos,typo_letter_inside_number,26.25,26.2kg5,26.25,Corrigé
+15,Fare,typos,typo_unit_suffix_injected,16.0,16.0kg,16.0,Corrigé
+103,Fare,typos,typo_zero_as_letter_O,8.6542,8.6542O,8.6542,Corrigé
+327,Fare,typos,typo_zero_as_letter_O,13.0,13.O,13.0,Corrigé
+413,Fare,typos,typo_letter_inside_number,0.0,0j.0,0.0,Corrigé
+373,Fare,typos,typo_zero_as_letter_O,135.6333,135.6333O,135.6333,Corrigé
+628,Fare,typos,typo_zero_as_letter_O,7.8958,7.8958O,7.8958,Corrigé
+352,Fare,typos,typo_unit_suffix_injected,7.2292,7.2292B,7.2292,Corrigé
+359,Fare,typos,typo_unit_suffix_injected,7.8792,7.8792kg,7.8792,Corrigé
+123,Fare,typos,typo_letter_inside_number,13.0,1j3.0,13.0,Corrigé
+20,Fare,typos,typo_letter_inside_number,26.0,26€.0,26.0,Corrigé
+503,Fare,typos,typo_letter_inside_number,9.5875,9.587kg5,9.5875,Corrigé
+685,Fare,typos,typo_unit_suffix_injected,41.5792,41.5792kg,41.5792,Corrigé
+722,Fare,typos,typo_letter_inside_number,13.0,13l.0,13.0,Corrigé
+429,Fare,typos,typo_zero_as_letter_O,8.05,8.O5,8.5,Mal corrigé (valeur différente mais fausse)
+400,Fare,typos,typo_zero_as_letter_O,7.925,7.925O,7.925,Corrigé
+765,Fare,typos,typo_zero_as_letter_O,77.9583,77.9583O,77.9583,Corrigé
+103,Age,typos,typo_letter_inside_number,33.0,33j.0,33.0,Corrigé
+372,Age,typos,typo_zero_as_letter_O,19.0,19.O,19.0,Corrigé
+117,Age,typos,typo_unit_suffix_injected,29.0,29.0O,29.0,Corrigé
+21,Age,typos,typo_zero_as_letter_O,34.0,34.O,34.0,Corrigé
+682,Age,typos,typo_letter_inside_number,20.0,unklnown,29.0,Mal corrigé (valeur différente mais fausse)
+316,Age,typos,typo_unit_suffix_injected,24.0,24.0€,24.0,Corrigé
+541,Age,typos,typo_unit_suffix_injected,9.0,9.0l,9.0,Corrigé
+587,Age,typos,typo_letter_inside_number,60.0,6O0.0,60.0,Corrigé
+315,Age,typos,typo_letter_inside_number,26.0,26S.0,26.0,Corrigé
+590,Age,typos,typo_unit_suffix_injected,35.0, B,29.0,Mal corrigé (valeur différente mais fausse)
+546,Age,typos,typo_zero_as_letter_O,19.0,19.O,19.0,Corrigé
+38,Age,typos,typo_letter_inside_number,18.0,18€.0,18.0,Corrigé
+841,Age,typos,typo_zero_as_letter_O,16.0,16.O,16.0,Corrigé
+608,Age,typos,typo_letter_inside_number,22.0,22l.0,22.0,Corrigé
+788,Age,typos,typo_unit_suffix_injected,1.0,1.0S,1.0,Corrigé
+476,Age,typos,typo_unit_suffix_injected,34.0,34.0€,34.0,Corrigé
+390,Age,typos,typo_zero_as_letter_O,36.0,36.O,36.0,Corrigé
+837,Age,typos,typo_unit_suffix_injected,,NA€,29.0,Mal corrigé (valeur différente mais fausse)
+713,Age,typos,typo_zero_as_letter_O,29.0,29.O,29.0,Corrigé
+4,Age,typos,typo_unit_suffix_injected,35.0,35.0l,35.0,Corrigé
+100,Age,typos,typo_letter_inside_number,28.0,28B.0,28.0,Corrigé
+802,Age,typos,typo_unit_suffix_injected,11.0,11.0j,11.0,Corrigé
+360,Age,typos,typo_zero_as_letter_O,40.0,4O.0,4.0,Mal corrigé (valeur différente mais fausse)
+104,Age,typos,typo_zero_as_letter_O,37.0,37.O,37.0,Corrigé
+407,Age,typos,typo_zero_as_letter_O,3.0,3.O,3.0,Corrigé
+875,Age,typos,typo_zero_as_letter_O,15.0,15.O,15.0,Corrigé
+94,Age,typos,typo_unit_suffix_injected,59.0,59.0€,59.0,Corrigé
+458,Age,typos,typo_unit_suffix_injected,50.0,50.0kg,50.0,Corrigé
+644,Age,typos,typo_unit_suffix_injected,0.75,0.75S,1.0,Mal corrigé (valeur différente mais fausse)
+592,Age,typos,typo_unit_suffix_injected,47.0,47.0j,47.0,Corrigé
+721,Age,typos,typo_unit_suffix_injected,17.0,17.0l,17.0,Corrigé
+10,Age,typos,typo_zero_as_letter_O,4.0,4.O,4.0,Corrigé
+456,Age,typos,typo_unit_suffix_injected,65.0,65.0j,65.0,Corrigé
+604,Age,typos,typo_zero_as_letter_O,35.0,35.O,35.0,Corrigé
+262,Age,typos,typo_zero_as_letter_O,52.0,52.O,52.0,Corrigé
+96,Age,typos,typo_unit_suffix_injected,71.0,71.0S,71.0,Corrigé
+884,Age,typos,typo_unit_suffix_injected,25.0,25.0B,25.0,Corrigé
+383,Age,typos,typo_zero_as_letter_O,35.0,35.O,35.0,Corrigé
+27,Age,typos,typo_unit_suffix_injected,19.0,19.0O,19.0,Corrigé
+686,Age,typos,typo_unit_suffix_injected,14.0,14.0S,14.0,Corrigé
+449,Age,typos,typo_letter_inside_number,52.0,52€.0,52.0,Corrigé
+70,Age,typos,typo_unit_suffix_injected,32.0,32.0€,32.0,Corrigé
+887,Age,typos,typo_unit_suffix_injected,19.0, €,29.0,Mal corrigé (valeur différente mais fausse)
+397,Age,typos,typo_zero_as_letter_O,46.0,46.O,46.0,Corrigé
+800,Age,typos,typo_unit_suffix_injected,34.0,34.0kg,34.0,Corrigé
+145,Age,typos,typo_zero_as_letter_O,19.0,19.O,19.0,Corrigé
+745,Age,typos,typo_unit_suffix_injected,70.0,70.0B,70.0,Corrigé
+400,Age,typos,typo_unit_suffix_injected,39.0,39.0€,39.0,Corrigé
+769,Age,typos,typo_letter_inside_number,32.0,32S.0,32.0,Corrigé
+342,Age,typos,typo_letter_inside_number,28.0,28kg.0,28.0,Corrigé
+603,Age,typos,typo_zero_as_letter_O,44.0,44.O,44.0,Corrigé
+105,Age,typos,typo_letter_inside_number,28.0,j,29.0,Mal corrigé (valeur différente mais fausse)
+255,Age,typos,typo_letter_inside_number,29.0,29B.0,29.0,Corrigé
+273,Age,typos,typo_letter_inside_number,37.0,3l7.0,37.0,Corrigé

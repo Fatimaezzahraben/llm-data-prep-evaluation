@@ -1,0 +1,7 @@
+provider,prompt_type,execution_success,error,rows_lost_pct,global_f1,global_precision,global_recall,global_accuracy_all_cells,warning_over_cleaning
+ollama,simple,False,'check_in',,,,,,
+ollama,schema,False,'arrival_date',,,,,,
+ollama,profile,False,invalid literal for int() with base 10: '0.0',,,,,,
+mistral_api,simple,True,,0.0,0.1621,1.0,0.0882,0.9359,False
+mistral_api,schema,False,Cannot perform reduction 'median' with string dtype,,,,,,
+mistral_api,profile,True,,0.0,0.1621,1.0,0.0882,0.9359,False

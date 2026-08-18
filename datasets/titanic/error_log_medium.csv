@@ -1,0 +1,603 @@
+row_index,column,original_value,injected_value,error_type,error_family,noise_level
+322,Age,30.0,,missing_nan,missing_values,medium
+590,Age,35.0, ,missing_whitespace,missing_values,medium
+599,Age,49.0,N/A,missing_N/A_string,missing_values,medium
+305,Age,0.92, ,missing_whitespace,missing_values,medium
+317,Age,54.0,,missing_nan,missing_values,medium
+823,Age,27.0,NA,missing_NA_string,missing_values,medium
+786,Age,18.0,unknown,missing_unknown_string,missing_values,medium
+796,Age,49.0,NA,missing_NA_string,missing_values,medium
+684,Age,60.0,NA,missing_NA_string,missing_values,medium
+420,Age,,,missing_nan,missing_values,medium
+837,Age,,NA,missing_NA_string,missing_values,medium
+353,Age,25.0,,missing_empty_string,missing_values,medium
+386,Age,1.0,,missing_empty_string,missing_values,medium
+693,Age,25.0,unknown,missing_unknown_string,missing_values,medium
+150,Age,51.0,N/A,missing_N/A_string,missing_values,medium
+113,Age,20.0,N/A,missing_N/A_string,missing_values,medium
+411,Age,,NA,missing_NA_string,missing_values,medium
+165,Age,9.0, ,missing_whitespace,missing_values,medium
+299,Age,50.0,,missing_nan,missing_values,medium
+639,Age,,NA,missing_NA_string,missing_values,medium
+497,Age,,,missing_nan,missing_values,medium
+737,Age,35.0,NA,missing_NA_string,missing_values,medium
+290,Age,26.0, ,missing_whitespace,missing_values,medium
+428,Age,,NA,missing_NA_string,missing_values,medium
+399,Age,28.0, ,missing_whitespace,missing_values,medium
+86,Age,16.0,NA,missing_NA_string,missing_values,medium
+375,Age,,unknown,missing_unknown_string,missing_values,medium
+142,Age,24.0,NA,missing_NA_string,missing_values,medium
+66,Age,29.0,,missing_empty_string,missing_values,medium
+646,Age,19.0,unknown,missing_unknown_string,missing_values,medium
+830,Age,15.0, ,missing_whitespace,missing_values,medium
+139,Age,24.0,,missing_empty_string,missing_values,medium
+663,Age,36.0,unknown,missing_unknown_string,missing_values,medium
+409,Age,,,missing_empty_string,missing_values,medium
+588,Age,22.0,unknown,missing_unknown_string,missing_values,medium
+76,Age,,unknown,missing_unknown_string,missing_values,medium
+564,Age,,NA,missing_NA_string,missing_values,medium
+695,Age,52.0,unknown,missing_unknown_string,missing_values,medium
+105,Age,28.0,,missing_empty_string,missing_values,medium
+591,Age,52.0,,missing_nan,missing_values,medium
+622,Age,20.0,,missing_nan,missing_values,medium
+57,Age,28.5,NA,missing_NA_string,missing_values,medium
+621,Age,42.0, ,missing_whitespace,missing_values,medium
+743,Age,24.0,,missing_nan,missing_values,medium
+426,Age,28.0,NA,missing_NA_string,missing_values,medium
+166,Age,,unknown,missing_unknown_string,missing_values,medium
+333,Age,16.0,,missing_empty_string,missing_values,medium
+682,Age,20.0,unknown,missing_unknown_string,missing_values,medium
+189,Age,36.0,,missing_empty_string,missing_values,medium
+453,Age,49.0,unknown,missing_unknown_string,missing_values,medium
+531,Age,,N/A,missing_N/A_string,missing_values,medium
+349,Age,42.0,N/A,missing_N/A_string,missing_values,medium
+199,Age,24.0,,missing_empty_string,missing_values,medium
+378,Age,20.0,NA,missing_NA_string,missing_values,medium
+887,Age,19.0, ,missing_whitespace,missing_values,medium
+282,Age,16.0,,missing_nan,missing_values,medium
+278,Age,7.0,unknown,missing_unknown_string,missing_values,medium
+533,Age,,NA,missing_NA_string,missing_values,medium
+69,Age,26.0,unknown,missing_unknown_string,missing_values,medium
+586,Age,47.0,N/A,missing_N/A_string,missing_values,medium
+163,Age,17.0,NA,missing_NA_string,missing_values,medium
+526,Age,50.0,,missing_empty_string,missing_values,medium
+53,Age,29.0,N/A,missing_N/A_string,missing_values,medium
+558,Age,39.0,,missing_nan,missing_values,medium
+368,Age,,N/A,missing_N/A_string,missing_values,medium
+720,Age,6.0,,missing_nan,missing_values,medium
+311,Age,18.0,N/A,missing_N/A_string,missing_values,medium
+689,Age,15.0,N/A,missing_N/A_string,missing_values,medium
+576,Age,34.0,,missing_nan,missing_values,medium
+463,Age,48.0,unknown,missing_unknown_string,missing_values,medium
+759,Age,33.0,NA,missing_NA_string,missing_values,medium
+469,Age,0.75,unknown,missing_unknown_string,missing_values,medium
+132,Age,47.0,,missing_nan,missing_values,medium
+640,Age,20.0,,missing_empty_string,missing_values,medium
+71,Age,16.0,NA,missing_NA_string,missing_values,medium
+863,Age,,,missing_empty_string,missing_values,medium
+643,Age,,,missing_empty_string,missing_values,medium
+356,Age,22.0,N/A,missing_N/A_string,missing_values,medium
+794,Age,25.0,,missing_nan,missing_values,medium
+648,Age,,unknown,missing_unknown_string,missing_values,medium
+37,Age,21.0,,missing_nan,missing_values,medium
+370,Age,25.0,,missing_empty_string,missing_values,medium
+765,Age,51.0,N/A,missing_N/A_string,missing_values,medium
+417,Age,18.0,unknown,missing_unknown_string,missing_values,medium
+834,Age,18.0,,missing_empty_string,missing_values,medium
+405,Age,34.0,,missing_empty_string,missing_values,medium
+694,Age,60.0, ,missing_whitespace,missing_values,medium
+232,Age,59.0, ,missing_whitespace,missing_values,medium
+602,Age,,N/A,missing_N/A_string,missing_values,medium
+321,Embarked,S,NA,missing_NA_string,missing_values,medium
+527,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+92,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+827,Embarked,C,,missing_empty_string,missing_values,medium
+452,Embarked,C, ,missing_whitespace,missing_values,medium
+474,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+400,Embarked,S,,missing_empty_string,missing_values,medium
+637,Embarked,S, ,missing_whitespace,missing_values,medium
+204,Embarked,S, ,missing_whitespace,missing_values,medium
+269,Embarked,S,NA,missing_NA_string,missing_values,medium
+471,Embarked,S,,missing_nan,missing_values,medium
+132,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+100,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+704,Embarked,S,,missing_nan,missing_values,medium
+379,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+145,Embarked,S, ,missing_whitespace,missing_values,medium
+467,Embarked,S,,missing_nan,missing_values,medium
+825,Embarked,Q,unknown,missing_unknown_string,missing_values,medium
+840,Embarked,S,,missing_nan,missing_values,medium
+366,Embarked,C,unknown,missing_unknown_string,missing_values,medium
+159,Embarked,S,NA,missing_NA_string,missing_values,medium
+752,Embarked,S,,missing_nan,missing_values,medium
+398,Embarked,S, ,missing_whitespace,missing_values,medium
+447,Embarked,S,,missing_nan,missing_values,medium
+570,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+834,Embarked,S,,missing_empty_string,missing_values,medium
+556,Embarked,C, ,missing_whitespace,missing_values,medium
+275,Embarked,S,unknown,missing_unknown_string,missing_values,medium
+456,Embarked,S,unknown,missing_unknown_string,missing_values,medium
+304,Embarked,S,NA,missing_NA_string,missing_values,medium
+237,Embarked,S,NA,missing_NA_string,missing_values,medium
+274,Embarked,Q,N/A,missing_N/A_string,missing_values,medium
+32,Embarked,Q,unknown,missing_unknown_string,missing_values,medium
+265,Embarked,S, ,missing_whitespace,missing_values,medium
+472,Embarked,S,,missing_nan,missing_values,medium
+882,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+18,Embarked,S,,missing_nan,missing_values,medium
+549,Embarked,S,,missing_empty_string,missing_values,medium
+657,Embarked,Q,unknown,missing_unknown_string,missing_values,medium
+620,Embarked,C,,missing_empty_string,missing_values,medium
+118,Embarked,C,unknown,missing_unknown_string,missing_values,medium
+564,Embarked,S,NA,missing_NA_string,missing_values,medium
+835,Embarked,C,,missing_empty_string,missing_values,medium
+91,Embarked,S,NA,missing_NA_string,missing_values,medium
+387,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+52,Embarked,C,unknown,missing_unknown_string,missing_values,medium
+802,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+493,Embarked,C, ,missing_whitespace,missing_values,medium
+266,Embarked,S, ,missing_whitespace,missing_values,medium
+692,Embarked,S,unknown,missing_unknown_string,missing_values,medium
+707,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+770,Embarked,S,,missing_empty_string,missing_values,medium
+881,Embarked,S,NA,missing_NA_string,missing_values,medium
+797,Embarked,S,,missing_nan,missing_values,medium
+339,Embarked,S,NA,missing_NA_string,missing_values,medium
+561,Embarked,S, ,missing_whitespace,missing_values,medium
+239,Embarked,S,NA,missing_NA_string,missing_values,medium
+476,Embarked,S,,missing_nan,missing_values,medium
+39,Embarked,C,N/A,missing_N/A_string,missing_values,medium
+255,Embarked,C, ,missing_whitespace,missing_values,medium
+225,Embarked,S, ,missing_whitespace,missing_values,medium
+839,Embarked,C,,missing_empty_string,missing_values,medium
+198,Embarked,Q,NA,missing_NA_string,missing_values,medium
+358,Embarked,Q,N/A,missing_N/A_string,missing_values,medium
+402,Embarked,S,,missing_empty_string,missing_values,medium
+221,Embarked,S,,missing_empty_string,missing_values,medium
+721,Embarked,S,,missing_empty_string,missing_values,medium
+622,Embarked,C, ,missing_whitespace,missing_values,medium
+122,Embarked,C,unknown,missing_unknown_string,missing_values,medium
+864,Embarked,S, ,missing_whitespace,missing_values,medium
+790,Embarked,Q,unknown,missing_unknown_string,missing_values,medium
+433,Embarked,S, ,missing_whitespace,missing_values,medium
+207,Embarked,C,,missing_nan,missing_values,medium
+546,Embarked,S, ,missing_whitespace,missing_values,medium
+787,Embarked,Q,,missing_nan,missing_values,medium
+278,Embarked,Q,NA,missing_NA_string,missing_values,medium
+667,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+8,Embarked,S,NA,missing_NA_string,missing_values,medium
+254,Embarked,S,,missing_nan,missing_values,medium
+391,Embarked,S,,missing_empty_string,missing_values,medium
+177,Embarked,C,unknown,missing_unknown_string,missing_values,medium
+362,Embarked,C,,missing_empty_string,missing_values,medium
+875,Embarked,C,,missing_empty_string,missing_values,medium
+277,Embarked,S, ,missing_whitespace,missing_values,medium
+480,Embarked,S,,missing_nan,missing_values,medium
+776,Embarked,Q, ,missing_whitespace,missing_values,medium
+453,Embarked,C, ,missing_whitespace,missing_values,medium
+67,Embarked,S,N/A,missing_N/A_string,missing_values,medium
+863,Embarked,S,,missing_nan,missing_values,medium
+719,Cabin,,NA,missing_NA_string,missing_values,medium
+676,Cabin,,unknown,missing_unknown_string,missing_values,medium
+437,Cabin,,N/A,missing_N/A_string,missing_values,medium
+710,Cabin,C90,unknown,missing_unknown_string,missing_values,medium
+545,Cabin,,unknown,missing_unknown_string,missing_values,medium
+117,Cabin,, ,missing_whitespace,missing_values,medium
+677,Cabin,,unknown,missing_unknown_string,missing_values,medium
+208,Cabin,,N/A,missing_N/A_string,missing_values,medium
+85,Cabin,,NA,missing_NA_string,missing_values,medium
+237,Cabin,,,missing_empty_string,missing_values,medium
+659,Cabin,D48,N/A,missing_N/A_string,missing_values,medium
+125,Cabin,,,missing_nan,missing_values,medium
+17,Cabin,, ,missing_whitespace,missing_values,medium
+158,Cabin,, ,missing_whitespace,missing_values,medium
+566,Cabin,,,missing_nan,missing_values,medium
+86,Cabin,,unknown,missing_unknown_string,missing_values,medium
+469,Cabin,,,missing_nan,missing_values,medium
+386,Cabin,,unknown,missing_unknown_string,missing_values,medium
+483,Cabin,,,missing_nan,missing_values,medium
+345,Cabin,F33,NA,missing_NA_string,missing_values,medium
+784,Cabin,,N/A,missing_N/A_string,missing_values,medium
+841,Cabin,,unknown,missing_unknown_string,missing_values,medium
+451,Cabin,,NA,missing_NA_string,missing_values,medium
+679,Cabin,B51 B53 B55, ,missing_whitespace,missing_values,medium
+681,Cabin,D49,unknown,missing_unknown_string,missing_values,medium
+367,Cabin,,,missing_empty_string,missing_values,medium
+190,Cabin,,unknown,missing_unknown_string,missing_values,medium
+657,Cabin,,unknown,missing_unknown_string,missing_values,medium
+79,Cabin,,NA,missing_NA_string,missing_values,medium
+502,Cabin,,unknown,missing_unknown_string,missing_values,medium
+590,Cabin,, ,missing_whitespace,missing_values,medium
+422,Cabin,,unknown,missing_unknown_string,missing_values,medium
+464,Cabin,,unknown,missing_unknown_string,missing_values,medium
+221,Cabin,,N/A,missing_N/A_string,missing_values,medium
+734,Cabin,,,missing_empty_string,missing_values,medium
+316,Cabin,,unknown,missing_unknown_string,missing_values,medium
+207,Cabin,,NA,missing_NA_string,missing_values,medium
+608,Cabin,,N/A,missing_N/A_string,missing_values,medium
+416,Cabin,,,missing_empty_string,missing_values,medium
+791,Cabin,,,missing_empty_string,missing_values,medium
+93,Cabin,,,missing_nan,missing_values,medium
+645,Cabin,D33, ,missing_whitespace,missing_values,medium
+479,Cabin,,,missing_nan,missing_values,medium
+812,Cabin,,,missing_nan,missing_values,medium
+151,Cabin,C2, ,missing_whitespace,missing_values,medium
+706,Cabin,,N/A,missing_N/A_string,missing_values,medium
+44,Cabin,,NA,missing_NA_string,missing_values,medium
+228,Cabin,,unknown,missing_unknown_string,missing_values,medium
+54,Cabin,B30,NA,missing_NA_string,missing_values,medium
+575,Cabin,,,missing_nan,missing_values,medium
+124,Cabin,D26,unknown,missing_unknown_string,missing_values,medium
+123,Cabin,E101,,missing_empty_string,missing_values,medium
+277,Cabin,,N/A,missing_N/A_string,missing_values,medium
+340,Cabin,F2, ,missing_whitespace,missing_values,medium
+846,Cabin,, ,missing_whitespace,missing_values,medium
+607,Cabin,,NA,missing_NA_string,missing_values,medium
+444,Cabin,,unknown,missing_unknown_string,missing_values,medium
+142,Cabin,,N/A,missing_N/A_string,missing_values,medium
+797,Cabin,,NA,missing_NA_string,missing_values,medium
+536,Cabin,B38,,missing_nan,missing_values,medium
+283,Cabin,,NA,missing_NA_string,missing_values,medium
+778,Cabin,,N/A,missing_N/A_string,missing_values,medium
+754,Cabin,, ,missing_whitespace,missing_values,medium
+849,Cabin,C92,,missing_nan,missing_values,medium
+722,Cabin,,unknown,missing_unknown_string,missing_values,medium
+91,Cabin,, ,missing_whitespace,missing_values,medium
+742,Cabin,B57 B59 B63 B66, ,missing_whitespace,missing_values,medium
+408,Cabin,,NA,missing_NA_string,missing_values,medium
+694,Cabin,,,missing_nan,missing_values,medium
+758,Cabin,,,missing_empty_string,missing_values,medium
+869,Cabin,, ,missing_whitespace,missing_values,medium
+725,Cabin,, ,missing_whitespace,missing_values,medium
+262,Cabin,E67,N/A,missing_N/A_string,missing_values,medium
+558,Cabin,E67,,missing_nan,missing_values,medium
+236,Cabin,,,missing_nan,missing_values,medium
+43,Cabin,,NA,missing_NA_string,missing_values,medium
+692,Cabin,,N/A,missing_N/A_string,missing_values,medium
+197,Cabin,,,missing_nan,missing_values,medium
+724,Cabin,E8,unknown,missing_unknown_string,missing_values,medium
+689,Cabin,B5,N/A,missing_N/A_string,missing_values,medium
+36,Cabin,,,missing_nan,missing_values,medium
+41,Cabin,,,missing_nan,missing_values,medium
+410,Cabin,,NA,missing_NA_string,missing_values,medium
+445,Cabin,A34,unknown,missing_unknown_string,missing_values,medium
+323,Cabin,,unknown,missing_unknown_string,missing_values,medium
+853,Cabin,D28,NA,missing_NA_string,missing_values,medium
+539,Cabin,B39,,missing_empty_string,missing_values,medium
+350,Cabin,, ,missing_whitespace,missing_values,medium
+5,Cabin,,NA,missing_NA_string,missing_values,medium
+637,Age,31.0,159.57,outlier_value,outliers,medium
+652,Age,21.0,274.14,outlier_value,outliers,medium
+78,Age,0.83,244.75,outlier_value,outliers,medium
+677,Age,18.0,263.71,outlier_value,outliers,medium
+864,Age,24.0,203.18,outlier_value,outliers,medium
+83,Age,28.0,295.6,outlier_value,outliers,medium
+177,Age,50.0,283.97,outlier_value,outliers,medium
+385,Age,18.0,266.76,outlier_value,outliers,medium
+755,Age,0.67,179.2,outlier_value,outliers,medium
+699,Age,42.0,220.01,outlier_value,outliers,medium
+465,Age,38.0,156.57,outlier_value,outliers,medium
+457,Age,,173.14,outlier_value,outliers,medium
+380,Age,42.0,252.46,outlier_value,outliers,medium
+615,Age,24.0,261.71,outlier_value,outliers,medium
+75,Age,25.0,295.13,outlier_value,outliers,medium
+675,Age,18.0,198.87,outlier_value,outliers,medium
+574,Age,16.0,205.57,outlier_value,outliers,medium
+143,Fare,6.75,3399.36,outlier_value,outliers,medium
+485,Fare,25.4667,2051.54,outlier_value,outliers,medium
+741,Fare,78.85,7508.47,outlier_value,outliers,medium
+411,Fare,6.8583,6653.96,outlier_value,outliers,medium
+407,Fare,18.75,6936.16,outlier_value,outliers,medium
+388,Fare,7.7292,7465.1,outlier_value,outliers,medium
+114,Fare,14.4583,5212.41,outlier_value,outliers,medium
+698,Fare,110.8833,5981.19,outlier_value,outliers,medium
+605,Fare,15.55,2978.58,outlier_value,outliers,medium
+420,Fare,7.8958,2801.71,outlier_value,outliers,medium
+834,Fare,8.3,6678.82,outlier_value,outliers,medium
+594,Fare,26.0,5297.67,outlier_value,outliers,medium
+291,Fare,91.0792,5956.65,outlier_value,outliers,medium
+166,Fare,55.0,7354.99,outlier_value,outliers,medium
+66,Fare,10.5,6443.03,outlier_value,outliers,medium
+500,Fare,8.6625,5875.06,outlier_value,outliers,medium
+200,Fare,9.5,5914.45,outlier_value,outliers,medium
+27,SibSp,3.0,20.0,outlier_value,outliers,medium
+695,SibSp,0.0,22.0,outlier_value,outliers,medium
+878,SibSp,0.0,41.0,outlier_value,outliers,medium
+756,SibSp,0.0,33.0,outlier_value,outliers,medium
+361,SibSp,1.0,24.0,outlier_value,outliers,medium
+528,SibSp,0.0,35.0,outlier_value,outliers,medium
+51,SibSp,0.0,24.0,outlier_value,outliers,medium
+30,SibSp,0.0,40.0,outlier_value,outliers,medium
+189,SibSp,0.0,33.0,outlier_value,outliers,medium
+384,SibSp,0.0,31.0,outlier_value,outliers,medium
+207,SibSp,0.0,29.0,outlier_value,outliers,medium
+266,SibSp,4.0,38.0,outlier_value,outliers,medium
+244,SibSp,0.0,30.0,outlier_value,outliers,medium
+865,SibSp,0.0,22.0,outlier_value,outliers,medium
+762,SibSp,0.0,23.0,outlier_value,outliers,medium
+730,SibSp,0.0,48.0,outlier_value,outliers,medium
+305,SibSp,1.0,47.0,outlier_value,outliers,medium
+687,Parch,0.0,41.0,outlier_value,outliers,medium
+672,Parch,0.0,32.0,outlier_value,outliers,medium
+146,Parch,0.0,38.0,outlier_value,outliers,medium
+654,Parch,0.0,37.0,outlier_value,outliers,medium
+699,Parch,0.0,39.0,outlier_value,outliers,medium
+70,Parch,0.0,22.0,outlier_value,outliers,medium
+398,Parch,0.0,32.0,outlier_value,outliers,medium
+233,Parch,2.0,21.0,outlier_value,outliers,medium
+634,Parch,2.0,34.0,outlier_value,outliers,medium
+401,Parch,0.0,29.0,outlier_value,outliers,medium
+85,Parch,0.0,24.0,outlier_value,outliers,medium
+613,Parch,0.0,23.0,outlier_value,outliers,medium
+230,Parch,0.0,37.0,outlier_value,outliers,medium
+853,Parch,1.0,25.0,outlier_value,outliers,medium
+433,Parch,0.0,47.0,outlier_value,outliers,medium
+242,Parch,0.0,37.0,outlier_value,outliers,medium
+232,Parch,0.0,30.0,outlier_value,outliers,medium
+357,Sex,female,feemale,typo_duplicated_letter,typos,medium
+577,Sex,female,femael,typo_swapped_letters,typos,medium
+612,Sex,female,  female ,typo_extra_whitespace,typos,medium
+435,Sex,female,femalle,typo_duplicated_letter,typos,medium
+135,Sex,male,mae,typo_missing_letter,typos,medium
+710,Sex,female,femalle,typo_duplicated_letter,typos,medium
+169,Sex,male,maale,typo_duplicated_letter,typos,medium
+437,Sex,female,FEMale,typo_random_case,typos,medium
+479,Sex,female,femlae,typo_swapped_letters,typos,medium
+544,Sex,male,  male ,typo_extra_whitespace,typos,medium
+420,Sex,male,mlae,typo_swapped_letters,typos,medium
+656,Sex,male,mael,typo_swapped_letters,typos,medium
+378,Sex,male,mmale,typo_duplicated_letter,typos,medium
+589,Sex,male,mmale,typo_duplicated_letter,typos,medium
+840,Sex,male,ale,typo_missing_letter,typos,medium
+636,Sex,male,MALe,typo_random_case,typos,medium
+288,Sex,male,mael,typo_swapped_letters,typos,medium
+812,Sex,male,mae,typo_missing_letter,typos,medium
+803,Sex,male,mael,typo_swapped_letters,typos,medium
+54,Sex,male,mle,typo_missing_letter,typos,medium
+697,Sex,female,FEMale,typo_random_case,typos,medium
+601,Sex,male,mle,typo_missing_letter,typos,medium
+538,Sex,male,mmale,typo_duplicated_letter,typos,medium
+38,Sex,female,FEMAle,typo_random_case,typos,medium
+361,Sex,male,malle,typo_duplicated_letter,typos,medium
+237,Sex,female,fmale,typo_missing_letter,typos,medium
+657,Sex,female,fmale,typo_missing_letter,typos,medium
+363,Sex,male,  male ,typo_extra_whitespace,typos,medium
+328,Sex,female,  female ,typo_extra_whitespace,typos,medium
+473,Sex,female,FEmale,typo_random_case,typos,medium
+660,Sex,male,Male,typo_random_case,typos,medium
+142,Sex,female,FEMAle,typo_random_case,typos,medium
+661,Sex,male,MALe,typo_random_case,typos,medium
+429,Sex,male,mmale,typo_duplicated_letter,typos,medium
+782,Sex,male,mle,typo_missing_letter,typos,medium
+775,Sex,male,  male ,typo_extra_whitespace,typos,medium
+376,Sex,female,femlae,typo_swapped_letters,typos,medium
+317,Sex,male,malle,typo_duplicated_letter,typos,medium
+73,Sex,male,malle,typo_duplicated_letter,typos,medium
+417,Sex,female,feamle,typo_swapped_letters,typos,medium
+67,Sex,male,mle,typo_missing_letter,typos,medium
+759,Sex,female,  female ,typo_extra_whitespace,typos,medium
+71,Sex,female,FEMAle,typo_random_case,typos,medium
+463,Sex,male,Male,typo_random_case,typos,medium
+383,Sex,female,FEMale,typo_random_case,typos,medium
+811,Sex,male,mle,typo_missing_letter,typos,medium
+708,Sex,female,FEMAle,typo_random_case,typos,medium
+306,Sex,female,femlae,typo_swapped_letters,typos,medium
+704,Sex,male,ale,typo_missing_letter,typos,medium
+323,Sex,female,efmale,typo_swapped_letters,typos,medium
+407,Sex,male,maale,typo_duplicated_letter,typos,medium
+153,Sex,male,mae,typo_missing_letter,typos,medium
+58,Sex,female,emale,typo_missing_letter,typos,medium
+653,Sex,female,femlae,typo_swapped_letters,typos,medium
+107,Sex,male,ale,typo_missing_letter,typos,medium
+709,Sex,male,  male ,typo_extra_whitespace,typos,medium
+543,Sex,male,mlae,typo_swapped_letters,typos,medium
+855,Sex,female,femaale,typo_duplicated_letter,typos,medium
+677,Sex,female,fmeale,typo_swapped_letters,typos,medium
+78,Sex,male,ale,typo_missing_letter,typos,medium
+340,Sex,male,  male ,typo_extra_whitespace,typos,medium
+878,Sex,male,mlae,typo_swapped_letters,typos,medium
+604,Sex,male,Male,typo_random_case,typos,medium
+735,Sex,male,maale,typo_duplicated_letter,typos,medium
+599,Sex,male,MAle,typo_random_case,typos,medium
+312,Sex,female,  female ,typo_extra_whitespace,typos,medium
+193,Sex,male,mlae,typo_swapped_letters,typos,medium
+386,Sex,male,mael,typo_swapped_letters,typos,medium
+167,Sex,female,femalle,typo_duplicated_letter,typos,medium
+852,Sex,female,femmale,typo_duplicated_letter,typos,medium
+634,Sex,female,femael,typo_swapped_letters,typos,medium
+519,Embarked,S,S,typo_too_short_unchanged,typos,medium
+120,Embarked,S,S,typo_too_short_unchanged,typos,medium
+822,Embarked,S,S,typo_too_short_unchanged,typos,medium
+102,Embarked,S,S,typo_too_short_unchanged,typos,medium
+785,Embarked,S,S,typo_too_short_unchanged,typos,medium
+174,Embarked,C,C,typo_too_short_unchanged,typos,medium
+553,Embarked,C,C,typo_too_short_unchanged,typos,medium
+31,Embarked,C,C,typo_too_short_unchanged,typos,medium
+613,Embarked,Q,Q,typo_too_short_unchanged,typos,medium
+775,Embarked,S,S,typo_too_short_unchanged,typos,medium
+197,Embarked,S,S,typo_too_short_unchanged,typos,medium
+133,Embarked,S,S,typo_too_short_unchanged,typos,medium
+222,Embarked,S,S,typo_too_short_unchanged,typos,medium
+790,Embarked,unknown,unnown,typo_missing_letter,typos,medium
+611,Embarked,S,S,typo_too_short_unchanged,typos,medium
+250,Embarked,S,S,typo_too_short_unchanged,typos,medium
+261,Embarked,S,S,typo_too_short_unchanged,typos,medium
+828,Embarked,Q,Q,typo_too_short_unchanged,typos,medium
+466,Embarked,S,S,typo_too_short_unchanged,typos,medium
+460,Embarked,S,S,typo_too_short_unchanged,typos,medium
+815,Embarked,S,S,typo_too_short_unchanged,typos,medium
+17,Embarked,S,S,typo_too_short_unchanged,typos,medium
+647,Embarked,C,C,typo_too_short_unchanged,typos,medium
+235,Embarked,S,S,typo_too_short_unchanged,typos,medium
+394,Embarked,S,S,typo_too_short_unchanged,typos,medium
+143,Embarked,Q,Q,typo_too_short_unchanged,typos,medium
+862,Embarked,S,S,typo_too_short_unchanged,typos,medium
+465,Embarked,S,S,typo_too_short_unchanged,typos,medium
+8,Embarked,NA,  NA ,typo_extra_whitespace,typos,medium
+872,Embarked,S,S,typo_too_short_unchanged,typos,medium
+195,Embarked,C,C,typo_too_short_unchanged,typos,medium
+681,Embarked,C,C,typo_too_short_unchanged,typos,medium
+561,Embarked, , ,typo_too_short_unchanged,typos,medium
+265,Embarked, , ,typo_too_short_unchanged,typos,medium
+80,Embarked,S,S,typo_too_short_unchanged,typos,medium
+317,Embarked,S,S,typo_too_short_unchanged,typos,medium
+273,Embarked,C,C,typo_too_short_unchanged,typos,medium
+200,Embarked,S,S,typo_too_short_unchanged,typos,medium
+157,Embarked,S,S,typo_too_short_unchanged,typos,medium
+90,Embarked,S,S,typo_too_short_unchanged,typos,medium
+262,Embarked,S,S,typo_too_short_unchanged,typos,medium
+786,Embarked,S,S,typo_too_short_unchanged,typos,medium
+381,Embarked,C,C,typo_too_short_unchanged,typos,medium
+694,Embarked,S,S,typo_too_short_unchanged,typos,medium
+473,Embarked,C,C,typo_too_short_unchanged,typos,medium
+792,Embarked,S,S,typo_too_short_unchanged,typos,medium
+204,Embarked, , ,typo_too_short_unchanged,typos,medium
+116,Embarked,Q,Q,typo_too_short_unchanged,typos,medium
+711,Embarked,S,S,typo_too_short_unchanged,typos,medium
+449,Embarked,S,S,typo_too_short_unchanged,typos,medium
+538,Embarked,S,S,typo_too_short_unchanged,typos,medium
+548,Embarked,S,S,typo_too_short_unchanged,typos,medium
+299,Embarked,C,C,typo_too_short_unchanged,typos,medium
+747,Embarked,S,S,typo_too_short_unchanged,typos,medium
+281,Embarked,S,S,typo_too_short_unchanged,typos,medium
+555,Embarked,S,S,typo_too_short_unchanged,typos,medium
+788,Embarked,S,S,typo_too_short_unchanged,typos,medium
+417,Embarked,S,S,typo_too_short_unchanged,typos,medium
+360,Embarked,S,S,typo_too_short_unchanged,typos,medium
+99,Embarked,S,S,typo_too_short_unchanged,typos,medium
+461,Embarked,S,S,typo_too_short_unchanged,typos,medium
+661,Embarked,C,C,typo_too_short_unchanged,typos,medium
+446,Embarked,S,S,typo_too_short_unchanged,typos,medium
+741,Embarked,S,S,typo_too_short_unchanged,typos,medium
+851,Embarked,S,S,typo_too_short_unchanged,typos,medium
+91,Embarked,NA,NNA,typo_duplicated_letter,typos,medium
+826,Embarked,S,S,typo_too_short_unchanged,typos,medium
+251,Embarked,S,S,typo_too_short_unchanged,typos,medium
+270,Embarked,S,S,typo_too_short_unchanged,typos,medium
+39,Embarked,N/A,/A,typo_missing_letter,typos,medium
+233,Embarked,S,S,typo_too_short_unchanged,typos,medium
+153,Fare,14.5,1j4.5,typo_letter_inside_number,typos,medium
+398,Fare,10.5,10.kg5,typo_letter_inside_number,typos,medium
+763,Fare,120.0,12O.0,typo_zero_as_letter_O,typos,medium
+654,Fare,6.75,6.75O,typo_zero_as_letter_O,typos,medium
+458,Fare,10.5,10.5kg,typo_unit_suffix_injected,typos,medium
+702,Fare,14.4542,14.4542kg,typo_unit_suffix_injected,typos,medium
+882,Fare,10.5167,10.5167€,typo_unit_suffix_injected,typos,medium
+288,Fare,13.0,1kg3.0,typo_letter_inside_number,typos,medium
+524,Fare,7.2292,7.2292kg,typo_unit_suffix_injected,typos,medium
+605,Fare,2978.58,2978.58S,typo_unit_suffix_injected,typos,medium
+241,Fare,15.5,15.j5,typo_letter_inside_number,typos,medium
+219,Fare,10.5,10B.5,typo_letter_inside_number,typos,medium
+809,Fare,53.1,53.1€,typo_unit_suffix_injected,typos,medium
+787,Fare,29.125,29.125O,typo_zero_as_letter_O,typos,medium
+794,Fare,7.8958,7.8958O,typo_zero_as_letter_O,typos,medium
+468,Fare,7.725,7.725B,typo_unit_suffix_injected,typos,medium
+810,Fare,7.8875,7.8875l,typo_unit_suffix_injected,typos,medium
+215,Fare,113.275,113.275O,typo_zero_as_letter_O,typos,medium
+813,Fare,31.275,31.275S,typo_unit_suffix_injected,typos,medium
+5,Fare,8.4583,8.4583B,typo_unit_suffix_injected,typos,medium
+625,Fare,32.3208,32.32O8,typo_zero_as_letter_O,typos,medium
+711,Fare,26.55,26.55B,typo_unit_suffix_injected,typos,medium
+747,Fare,13.0,1l3.0,typo_letter_inside_number,typos,medium
+461,Fare,8.05,8.0S5,typo_letter_inside_number,typos,medium
+544,Fare,106.425,106.42€5,typo_letter_inside_number,typos,medium
+200,Fare,5914.45,59B14.45,typo_letter_inside_number,typos,medium
+682,Fare,9.225,9.225B,typo_unit_suffix_injected,typos,medium
+397,Fare,26.0,26j.0,typo_letter_inside_number,typos,medium
+246,Fare,7.775,7.775O,typo_zero_as_letter_O,typos,medium
+869,Fare,11.1333,11.1333kg,typo_unit_suffix_injected,typos,medium
+99,Fare,26.0,26B.0,typo_letter_inside_number,typos,medium
+668,Fare,8.05,8.O5,typo_zero_as_letter_O,typos,medium
+496,Fare,78.2667,7l8.2667,typo_letter_inside_number,typos,medium
+93,Fare,20.575,20.575l,typo_unit_suffix_injected,typos,medium
+528,Fare,7.925,7.925€,typo_unit_suffix_injected,typos,medium
+366,Fare,75.25,7j5.25,typo_letter_inside_number,typos,medium
+753,Fare,7.8958,7.8958j,typo_unit_suffix_injected,typos,medium
+726,Fare,21.0,21.O,typo_zero_as_letter_O,typos,medium
+209,Fare,31.0,31€.0,typo_letter_inside_number,typos,medium
+117,Fare,21.0,21.0O,typo_unit_suffix_injected,typos,medium
+661,Fare,7.225,7j.225,typo_letter_inside_number,typos,medium
+567,Fare,21.075,2j1.075,typo_letter_inside_number,typos,medium
+252,Fare,26.55,26.55kg,typo_unit_suffix_injected,typos,medium
+572,Fare,26.3875,26.3875€,typo_unit_suffix_injected,typos,medium
+258,Fare,512.3292,512.32kg92,typo_letter_inside_number,typos,medium
+662,Fare,25.5875,2j5.5875,typo_letter_inside_number,typos,medium
+417,Fare,13.0,13l.0,typo_letter_inside_number,typos,medium
+789,Fare,79.2,79.2O,typo_zero_as_letter_O,typos,medium
+236,Fare,26.0,26.0B,typo_unit_suffix_injected,typos,medium
+139,Fare,79.2,79.2O,typo_zero_as_letter_O,typos,medium
+854,Fare,26.0,26.0O,typo_unit_suffix_injected,typos,medium
+539,Fare,49.5,49.5O,typo_unit_suffix_injected,typos,medium
+88,Fare,263.0,263.0B,typo_unit_suffix_injected,typos,medium
+846,Fare,69.55,69.55€,typo_unit_suffix_injected,typos,medium
+237,Fare,26.25,26.2kg5,typo_letter_inside_number,typos,medium
+15,Fare,16.0,16.0kg,typo_unit_suffix_injected,typos,medium
+103,Fare,8.6542,8.6542O,typo_zero_as_letter_O,typos,medium
+327,Fare,13.0,13.O,typo_zero_as_letter_O,typos,medium
+413,Fare,0.0,0j.0,typo_letter_inside_number,typos,medium
+373,Fare,135.6333,135.6333O,typo_zero_as_letter_O,typos,medium
+628,Fare,7.8958,7.8958O,typo_zero_as_letter_O,typos,medium
+352,Fare,7.2292,7.2292B,typo_unit_suffix_injected,typos,medium
+359,Fare,7.8792,7.8792kg,typo_unit_suffix_injected,typos,medium
+123,Fare,13.0,1j3.0,typo_letter_inside_number,typos,medium
+20,Fare,26.0,26€.0,typo_letter_inside_number,typos,medium
+503,Fare,9.5875,9.587kg5,typo_letter_inside_number,typos,medium
+685,Fare,41.5792,41.5792kg,typo_unit_suffix_injected,typos,medium
+722,Fare,13.0,13l.0,typo_letter_inside_number,typos,medium
+429,Fare,8.05,8.O5,typo_zero_as_letter_O,typos,medium
+400,Fare,7.925,7.925O,typo_zero_as_letter_O,typos,medium
+765,Fare,77.9583,77.9583O,typo_zero_as_letter_O,typos,medium
+103,Age,33.0,33j.0,typo_letter_inside_number,typos,medium
+372,Age,19.0,19.O,typo_zero_as_letter_O,typos,medium
+117,Age,29.0,29.0O,typo_unit_suffix_injected,typos,medium
+21,Age,34.0,34.O,typo_zero_as_letter_O,typos,medium
+682,Age,unknown,unklnown,typo_letter_inside_number,typos,medium
+316,Age,24.0,24.0€,typo_unit_suffix_injected,typos,medium
+541,Age,9.0,9.0l,typo_unit_suffix_injected,typos,medium
+587,Age,60.0,6O0.0,typo_letter_inside_number,typos,medium
+315,Age,26.0,26S.0,typo_letter_inside_number,typos,medium
+590,Age, , B,typo_unit_suffix_injected,typos,medium
+546,Age,19.0,19.O,typo_zero_as_letter_O,typos,medium
+38,Age,18.0,18€.0,typo_letter_inside_number,typos,medium
+841,Age,16.0,16.O,typo_zero_as_letter_O,typos,medium
+608,Age,22.0,22l.0,typo_letter_inside_number,typos,medium
+788,Age,1.0,1.0S,typo_unit_suffix_injected,typos,medium
+476,Age,34.0,34.0€,typo_unit_suffix_injected,typos,medium
+390,Age,36.0,36.O,typo_zero_as_letter_O,typos,medium
+837,Age,NA,NA€,typo_unit_suffix_injected,typos,medium
+713,Age,29.0,29.O,typo_zero_as_letter_O,typos,medium
+4,Age,35.0,35.0l,typo_unit_suffix_injected,typos,medium
+100,Age,28.0,28B.0,typo_letter_inside_number,typos,medium
+802,Age,11.0,11.0j,typo_unit_suffix_injected,typos,medium
+360,Age,40.0,4O.0,typo_zero_as_letter_O,typos,medium
+104,Age,37.0,37.O,typo_zero_as_letter_O,typos,medium
+407,Age,3.0,3.O,typo_zero_as_letter_O,typos,medium
+875,Age,15.0,15.O,typo_zero_as_letter_O,typos,medium
+94,Age,59.0,59.0€,typo_unit_suffix_injected,typos,medium
+458,Age,50.0,50.0kg,typo_unit_suffix_injected,typos,medium
+644,Age,0.75,0.75S,typo_unit_suffix_injected,typos,medium
+592,Age,47.0,47.0j,typo_unit_suffix_injected,typos,medium
+721,Age,17.0,17.0l,typo_unit_suffix_injected,typos,medium
+10,Age,4.0,4.O,typo_zero_as_letter_O,typos,medium
+456,Age,65.0,65.0j,typo_unit_suffix_injected,typos,medium
+604,Age,35.0,35.O,typo_zero_as_letter_O,typos,medium
+262,Age,52.0,52.O,typo_zero_as_letter_O,typos,medium
+96,Age,71.0,71.0S,typo_unit_suffix_injected,typos,medium
+884,Age,25.0,25.0B,typo_unit_suffix_injected,typos,medium
+383,Age,35.0,35.O,typo_zero_as_letter_O,typos,medium
+27,Age,19.0,19.0O,typo_unit_suffix_injected,typos,medium
+686,Age,14.0,14.0S,typo_unit_suffix_injected,typos,medium
+449,Age,52.0,52€.0,typo_letter_inside_number,typos,medium
+70,Age,32.0,32.0€,typo_unit_suffix_injected,typos,medium
+887,Age, , €,typo_unit_suffix_injected,typos,medium
+397,Age,46.0,46.O,typo_zero_as_letter_O,typos,medium
+800,Age,34.0,34.0kg,typo_unit_suffix_injected,typos,medium
+145,Age,19.0,19.O,typo_zero_as_letter_O,typos,medium
+745,Age,70.0,70.0B,typo_unit_suffix_injected,typos,medium
+400,Age,39.0,39.0€,typo_unit_suffix_injected,typos,medium
+769,Age,32.0,32S.0,typo_letter_inside_number,typos,medium
+342,Age,28.0,28kg.0,typo_letter_inside_number,typos,medium
+603,Age,44.0,44.O,typo_zero_as_letter_O,typos,medium
+105,Age,,j,typo_letter_inside_number,typos,medium
+255,Age,29.0,29B.0,typo_letter_inside_number,typos,medium
+273,Age,37.0,3l7.0,typo_letter_inside_number,typos,medium
