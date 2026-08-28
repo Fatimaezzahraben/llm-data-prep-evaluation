@@ -1,7 +1,7 @@
 Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 233, in <module>
+  File "<string>", line 133, in <module>
   File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\tools\numeric.py", line 183, in to_numeric
     raise ValueError("invalid error value specified")
 ValueError: invalid error value specified

@@ -1,19 +1,35 @@
 import pandas as pd
 import numpy as np
 import difflib
-import re
 
-# ====================== MISSING VALUE HANDLING ======================
-# First, convert all disguised missing values to np.nan for all columns
-disguised_missing = ['', ' ', 'NA', 'N/A', 'unknown', 'nan', 'NaN', 'None', 'null']
-for col in df.columns:
-    df[col] = df[col].replace(disguised_missing, np.nan)
-    # Also handle whitespace-only strings
-    if df[col].dtype == 'object':
-        df[col] = df[col].str.strip()
-        df[col] = df[col].replace(r'^\s*$', np.nan, regex=True)
+# --- 1. Disguised missing values ---
+missing_markers = ['NA', 'N/A', 'unknown', '', ' ', 'NaN', 'nan', '?', 'None']
+for col in ['Name', 'Sex', 'Age', 'Ticket', 'Fare', 'Cabin', 'Embarked']:
+    df[col] = df[col].astype(str).replace({m: np.nan for m in missing_markers})
 
-# ====================== SEX COLUMN ======================
+# --- 2. Numeric columns ---
+# Convert Age to numeric
+df['Age'] = pd.to_numeric(df['Age'].astype(str).str.replace(r'[^0-9.\-]', '', regex=True), errors='coerce')
+# Convert Fare to numeric
+df['Fare'] = pd.to_numeric(df['Fare'].astype(str).str.replace(r'[^0-9.\-]', '', regex=True), errors='coerce')
+
+# --- 3. Outlier handling for numeric columns ---
+# Age: treat values > 100 as outliers (realistic max for human age)
+age_outliers = (df['Age'] > 100) | (df['Age'] < 0)
+df.loc[age_outliers, 'Age'] = np.nan
+
+# SibSp: cap at 8 (realistic max for siblings/spouses)
+sibsp_outliers = (df['SibSp'] > 8)
+df.loc[sibsp_outliers, 'SibSp'] = np.nan
+df['SibSp'] = df['SibSp'].fillna(df['SibSp'].median())
+
+# Parch: cap at 6 (realistic max for parents/children)
+parch_outliers = (df['Parch'] > 6)
+df.loc[parch_outliers, 'Parch'] = np.nan
+df['Parch'] = df['Parch'].fillna(df['Parch'].median())
+
+# --- 4. Categorical columns ---
+# Sex: fuzzy correction
 valid_sex = ['male', 'female']
 def fuzzy_correct_sex(val):
     if pd.isna(val):
@@ -25,147 +41,88 @@ def fuzzy_correct_sex(val):
     if match:
         return next(v for v in valid_sex if v.lower() == match[0])
     return val
-
 df['Sex'] = df['Sex'].apply(fuzzy_correct_sex)
-df['Sex'] = df['Sex'].str.lower()
 
-# Final imputation with mode
-sex_mode = df['Sex'].mode()[0]
-df['Sex'] = df['Sex'].fillna(sex_mode)
-df['Sex'] = df['Sex'].replace({'male': 'male', 'female': 'female'})  # Ensure only valid values
-
-# ====================== AGE COLUMN ======================
-# Convert to numeric, handling various formats
-def clean_age(age_str):
-    if pd.isna(age_str):
-        return np.nan
-    age_str = str(age_str).strip()
-    # Remove any non-numeric characters except decimal point and minus
-    age_str = re.sub(r'[^0-9.-]', '', age_str)
-    if not age_str or age_str == '.':
-        return np.nan
-    try:
-        return float(age_str)
-    except ValueError:
-        return np.nan
-
-df['Age'] = df['Age'].apply(clean_age)
-
-# Cap outliers (plausible range: 0-100)
-df.loc[(df['Age'] < 0) | (df['Age'] > 100), 'Age'] = np.nan
-
-# Group-aware imputation: Pclass -> Age (known grouping key)
-age_by_pclass = df.groupby('Pclass')['Age'].transform(lambda s: s.median())
-df['Age'] = df['Age'].fillna(age_by_pclass)
-
-# Composite key imputation: (Pclass, Sex) -> Age (stronger grouping)
-age_by_pclass_sex = df.groupby(['Pclass', 'Sex'])['Age'].transform(lambda s: s.median())
-df['Age'] = df['Age'].fillna(age_by_pclass_sex)
-
-# Global median fallback
-age_median = df['Age'].median()
-df['Age'] = df['Age'].fillna(age_median)
-
-# ====================== FARE COLUMN ======================
-# Convert to numeric
-def clean_fare(fare_str):
-    if pd.isna(fare_str):
-        return np.nan
-    fare_str = str(fare_str).strip()
-    # Remove any non-numeric characters except decimal point
-    fare_str = re.sub(r'[^0-9.]', '', fare_str)
-    if not fare_str or fare_str == '.':
-        return np.nan
-    try:
-        return float(fare_str)
-    except ValueError:
-        return np.nan
-
-df['Fare'] = df['Fare'].apply(clean_fare)
-
-# Cap outliers (plausible range: 0-500)
-df.loc[(df['Fare'] < 0) | (df['Fare'] > 500), 'Fare'] = np.nan
-
-# Group-aware imputation: Ticket -> Fare (known grouping key)
-fare_by_ticket = df.groupby('Ticket')['Fare'].transform(lambda s: s.median())
-df['Fare'] = df['Fare'].fillna(fare_by_ticket)
-
-# Group-aware imputation: Pclass -> Fare (known grouping key)
-fare_by_pclass = df.groupby('Pclass')['Fare'].transform(lambda s: s.median())
-df['Fare'] = df['Fare'].fillna(fare_by_pclass)
-
-# Global median fallback
-fare_median = df['Fare'].median()
-df['Fare'] = df['Fare'].fillna(fare_median)
-
-# ====================== EMBARKED COLUMN ======================
+# Embarked: fuzzy correction
 valid_embarked = ['S', 'C', 'Q']
 def fuzzy_correct_embarked(val):
     if pd.isna(val):
-        return np.nan
+        return val
     val_norm = str(val).strip().upper()
-    if val_norm in valid_embarked:
-        return val_norm
-    match = difflib.get_close_matches(val_norm, valid_embarked, n=1, cutoff=0.6)
+    if val_norm in [v.upper() for v in valid_embarked]:
+        return next(v for v in valid_embarked if v.upper() == val_norm)
+    match = difflib.get_close_matches(val_norm, [v.upper() for v in valid_embarked], n=1, cutoff=0.6)
     if match:
-        return match[0]
-    return np.nan
-
+        return next(v for v in valid_embarked if v.upper() == match[0])
+    return val
 df['Embarked'] = df['Embarked'].apply(fuzzy_correct_embarked)
 
-# Group-aware imputation: Ticket -> Embarked (known grouping key)
-embarked_by_ticket = df.groupby('Ticket')['Embarked'].transform(lambda s: s.mode()[0] if not s.mode().empty else np.nan)
+# --- 5. Group-aware imputation ---
+# First pass: impute with strong group signals
+# Ticket -> Age (composite key with Pclass)
+age_by_ticket_pclass = df.groupby(['Ticket', 'Pclass'])['Age'].transform(
+    lambda s: s.median() if not s.median() != s.median() else np.nan
+)
+df['Age'] = df['Age'].fillna(age_by_ticket_pclass)
+
+# Pclass -> Age
+age_by_pclass = df.groupby('Pclass')['Age'].transform('median')
+df['Age'] = df['Age'].fillna(age_by_pclass)
+
+# Ticket -> Fare
+fare_by_ticket = df.groupby('Ticket')['Fare'].transform('median')
+df['Fare'] = df['Fare'].fillna(fare_by_ticket)
+
+# Pclass -> Fare
+fare_by_pclass = df.groupby('Pclass')['Fare'].transform('median')
+df['Fare'] = df['Fare'].fillna(fare_by_pclass)
+
+# Ticket -> Embarked
+embarked_by_ticket = df.groupby('Ticket')['Embarked'].transform(
+    lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
+)
 df['Embarked'] = df['Embarked'].fillna(embarked_by_ticket)
 
-# Global mode fallback
-embarked_mode = df['Embarked'].mode()[0]
-df['Embarked'] = df['Embarked'].fillna(embarked_mode)
-
-# ====================== CABIN COLUMN ======================
-# High missing rate - only fill when we have a strong signal
-# Group-aware imputation: Ticket -> Cabin (strong grouping)
-cabin_by_ticket = df.groupby('Ticket')['Cabin'].transform(lambda s: s.mode()[0] if not s.mode().empty else np.nan)
+# Ticket -> Cabin (only fill if at least 2 non-null values in group)
+cabin_by_ticket = df.groupby('Ticket')['Cabin'].transform(
+    lambda s: s.mode().iloc[0] if (not s.mode().empty and s.count() >= 2) else np.nan
+)
 df['Cabin'] = df['Cabin'].fillna(cabin_by_ticket)
 
-# Group-aware imputation: (Pclass, Embarked) -> Cabin (strong grouping)
-cabin_by_pclass_embarked = df.groupby(['Pclass', 'Embarked'])['Cabin'].transform(
-    lambda s: s.mode()[0] if not s.mode().empty else np.nan)
-df['Cabin'] = df['Cabin'].fillna(cabin_by_pclass_embarked)
+# Second pass: global imputation only for columns with low missing rate
+# Age: global median
+age_median = df['Age'].median()
+df['Age'] = df['Age'].fillna(age_median)
 
-# Leave remaining as NaN (high missing rate)
+# Fare: global median
+fare_median = df['Fare'].median()
+df['Fare'] = df['Fare'].fillna(fare_median)
 
-# ====================== SIBSP AND PARCH COLUMNS ======================
-# Cap outliers (plausible range: 0-10)
-for col in ['SibSp', 'Parch']:
-    df.loc[df[col] > 10, col] = np.nan
-    median_val = df[col].median()
-    df[col] = df[col].fillna(median_val)
+# Sex: global mode
+sex_mode = df['Sex'].mode(dropna=True)
+fill_value = sex_mode.iloc[0] if not sex_mode.empty else 'male'
+df['Sex'] = df['Sex'].fillna(fill_value)
 
-# ====================== NAME COLUMN ======================
-# Standardize formatting (no content changes)
-name_mode = df['Name'].mode()[0]
-df['Name'] = df['Name'].fillna(name_mode)
+# Embarked: global mode
+embarked_mode = df['Embarked'].mode(dropna=True)
+fill_value = embarked_mode.iloc[0] if not embarked_mode.empty else 'S'
+df['Embarked'] = df['Embarked'].fillna(fill_value)
 
-# ====================== TICKET COLUMN ======================
-# Standardize formatting (no content changes)
-ticket_mode = df['Ticket'].mode()[0]
-df['Ticket'] = df['Ticket'].fillna(ticket_mode)
+# Cabin: leave as NaN (high missing rate, weak imputation signal)
+# Only fill if we have a very strong signal (at least 3 non-null in group)
+cabin_by_ticket_strong = df.groupby('Ticket')['Cabin'].transform(
+    lambda s: s.mode().iloc[0] if (not s.mode().empty and s.count() >= 3) else np.nan
+)
+df['Cabin'] = df['Cabin'].fillna(cabin_by_ticket_strong)
 
-# ====================== NUMERIC COLUMNS ======================
-for col in ['PassengerId', 'Survived', 'Pclass']:
-    df[col] = pd.to_numeric(df[col], errors='coerce')
-    median_val = df[col].median()
-    df[col] = df[col].fillna(median_val)
+# --- 6. Final cleanup ---
+# Ensure numeric columns are properly typed
+numeric_cols = ['PassengerId', 'Survived', 'Pclass', 'Age', 'SibSp', 'Parch', 'Fare']
+for col in numeric_cols:
+    if col in ['Age', 'Fare']:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+    else:
+        df[col] = df[col].astype(float)
 
-# ====================== FINAL CHECK ======================
-critical_cols = ['PassengerId', 'Survived', 'Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']
-for col in critical_cols:
-    if df[col].isna().any():
-        if df[col].dtype == 'object':
-            mode_val = df[col].mode()[0]
-            df[col] = df[col].fillna(mode_val)
-        else:
-            median_val = df[col].median()
-            df[col] = df[col].fillna(median_val)
-
+# Final DataFrame
 df

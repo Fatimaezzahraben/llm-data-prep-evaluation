@@ -55,8 +55,22 @@ MISSING VALUES:
   with a fixed default date, do NOT fill a missing id with 0). If you cannot infer a
   meaningful value, impute using an actual statistic computed FROM THE DATA ITSELF:
   the column's mode for categorical columns, the column's median for numeric columns.
-  Compute these statistics with pandas (`df[col].mode()[0]`, `df[col].median()`) —
-  never hardcode a numeric or string constant you did not compute from `df`.
+  Compute these statistics with pandas (`df[col].median()` for numeric; for
+  categorical, see the MANDATORY .mode() SAFETY RULE immediately below) — never
+  hardcode a numeric or string constant you did not compute from `df`.
+- MANDATORY .mode() SAFETY RULE: NEVER write bare `df[col].mode()[0]` anywhere in your
+  script, not even once — if that column happens to have zero valid (non-null) values
+  at that point (fully missing, or emptied out earlier in your own script), `.mode()`
+  returns an EMPTY Series and `[0]` crashes with a KeyError. This is a real, repeated
+  crash seen in practice. ALWAYS guard every single `.mode()` call, with no exceptions,
+  using this exact pattern:
+  ```
+  _mode = df[col].mode(dropna=True)
+  fill_value = _mode.iloc[0] if not _mode.empty else <a sensible fallback, e.g. df[col].median() for a numeric-like column, or leave as NaN>
+  df[col] = df[col].fillna(fill_value)
+  ```
+  Use `.iloc[0]` (positional), never bare `[0]` (label-based — can fail even on a
+  non-empty Series if its index isn't a simple 0-based range, e.g. inside a groupby).
 - Apply this to EVERY column that has missing or disguised-missing values (empty
   string, "NA", "N/A", "unknown", whitespace-only) — do not skip columns; skipping
   columns lowers recall, which is heavily penalized.
@@ -223,6 +237,19 @@ OUTLIERS:
   `.clip()` is only appropriate when you specifically want to compress a continuous
   range at its edges (rare for this task) — for correcting a clearly-wrong outlier
   value back to a plausible one, always use the missing-then-impute pattern above.
+- NEVER PICK plausible_min/plausible_max AS A ROUND NUMBER YOU GUESSED — always derive
+  them FROM the profile's own reported statistics for that exact column (its actual
+  min/max, or a percentile like the 1st/99th, or median ± a few times the IQR). A real
+  bug seen in practice: a script capped a Fare column at a hardcoded "500" — but the
+  true, correctly-documented maximum fare in the real data was 512.3292 (a genuine,
+  famous historical value, not an error) — capping at the guessed round number treated
+  this correct value as an outlier, deleted it, and replaced it with an unrelated
+  group-median guess, turning a CORRECT cell into a WRONG one. Before writing any
+  `plausible_min`/`plausible_max`, look at the actual `min`/`max` numbers given for
+  that column in the profile above and set your bounds using headroom around THOSE
+  real numbers (e.g. a percentile bound, or a domain-reasonable multiple of the
+  profile's own IQR) — never substitute a number you invented instead of reading the
+  profile.
 
 COVERAGE (avoid under-cleaning):
 - Your script will be scored on how many of the flagged issues below (columns with
@@ -240,6 +267,16 @@ COVERAGE (avoid under-cleaning):
   family-size count that should realistically top out around 8-10) — this scored zero
   credit for that column. Go through EVERY numeric column's min/max explicitly, even
   ones with 0% missing, and cap/clip anything implausible.
+- MISSING-VALUE HANDLING AND OUTLIER HANDLING ARE TWO SEPARATE STEPS FOR THE SAME
+  COLUMN — writing one does NOT cover the other, even for a column that has BOTH
+  issues at once. A real regression observed in practice: a script correctly imputed
+  a column's missing values (via group median) but never added an outlier check for
+  that SAME column, so clearly-impossible present values (e.g. an age of 205, or 261)
+  were left completely untouched — each counted as a fully wrong answer. Before moving
+  to the next column, explicitly ask both questions separately: "does this column have
+  missing values to impute?" AND "does this column's profile min/max show implausible
+  present values to detect and fix?" — answering yes to one is not evidence about the
+  other, and a column can legitimately need both treatments.
 
 GROUP-AWARE IMPUTATION (important for high-cardinality columns):
 - Before imputing a column with its GLOBAL mode, check its n_unique in the profile
@@ -298,15 +335,31 @@ GROUP-AWARE IMPUTATION (important for high-cardinality columns):
   measure); the composite key (hospital_id, measure_code) does determine it uniquely.
   This exact pattern — an identifier column combined with a category/measure column —
   is common any time a dataset records repeated observations per entity.
-- EXCEPTION — VERIFIED FUNCTIONAL DEPENDENCIES ONLY: if this prompt explicitly lists a
-  "KNOWN GROUPING KEYS" section below with a column marked as an exact/near-exact
-  dependency for this specific dataset, it IS safe and beneficial to overwrite the
-  WHOLE column with the group-computed mode for those specific columns only (not
-  columns you guessed yourself) — because the target is confirmed constant per group,
-  this doubles as free typo-correction (a rare typo'd row gets outvoted by its correct
-  group majority). Do NOT extend this whole-column-overwrite technique to any column or
-  key that isn't explicitly confirmed in that section — for everything else, use the
-  fillna-only pattern above."""
+- EXCEPTION — VERIFIED EXACT FUNCTIONAL DEPENDENCIES ONLY: if this prompt explicitly
+  lists a "KNOWN GROUPING KEYS" section below with a line tagged **EXACT** for this
+  specific dataset, it IS safe and beneficial to overwrite the WHOLE column with the
+  group-computed mode for those specific columns only (not columns you guessed
+  yourself) — because the target is confirmed constant per group, this doubles as free
+  typo-correction (a rare typo'd row gets outvoted by its correct group majority). Do
+  NOT extend this whole-column-overwrite technique to any column or key that isn't
+  tagged EXACT — in particular, a line tagged "strong signal, NOT exact" is NOT safe to
+  overwrite (real bug seen in practice: a strong-but-imperfect key was overwritten
+  wholesale and destroyed already-correct values). For everything else, including
+  strong-signal lines, use the fillna-only pattern above.
+- WARNING — AN EXACT KEY GIVES ZERO TYPO-CORRECTION POWER IF EACH GROUP HAS ONLY ONE
+  ROW: the "free typo-correction via majority vote" benefit above ONLY works when
+  MULTIPLE rows share the same key value (so a correct majority can outvote a rare
+  typo). If a key is (close to) unique per row — e.g. a composite key that is really
+  the table's own primary key, with exactly one row per key combination — then
+  `.mode()` on a group of size 1 trivially returns that row's OWN value, corrupted or
+  not, so the overwrite changes nothing. A real bug seen in practice: a composite EXACT
+  key correctly filled genuinely missing values, but a typo'd-and-present value in the
+  SAME target column (e.g. "x7%" instead of "57%") was left completely untouched,
+  because it was the only row in its group. Before assuming an EXACT key's targets are
+  "handled", check the key's typical group size (via n_unique of the key vs total row
+  count in the profile) — if the group size is close to 1, that target column STILL
+  needs its own dedicated typo-correction (regex/pattern-based, or fuzzy matching
+  against a known value list) exactly as if no dependency existed at all."""
 
 
 # ---------------------------------------------------------------------------
@@ -316,14 +369,60 @@ GROUP-AWARE IMPUTATION (important for high-cardinality columns):
 # Format : dataset_name -> liste de (colonne(s) cle, [colonnes determinees]).
 # La cle peut etre un str (FD simple) ou un tuple de str (FD composite).
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Notes textuelles specifiques a un dataset, EFFECTIVEMENT inserees dans le prompt
+# (contrairement a un commentaire Python dans FUNCTIONAL_DEPENDENCIES, qui n'est
+# jamais vu par le modele). A utiliser pour une mise en garde qui ne rentre pas dans
+# le format cle->cibles des dependances (ex: expliquer qu'AUCUNE cle ne peut aider
+# pour certaines colonnes, et quelle technique utiliser a la place).
+# ---------------------------------------------------------------------------
+DATASET_NOTES = {
+    "hospital": (
+        "IMPORTANT NOTE ON Score AND Sample: their only natural key, "
+        "(ProviderNumber, MeasureCode), is this dataset's PRIMARY KEY — verified: "
+        "1000 unique pairs for 1000 rows, so every group has EXACTLY 1 row. This "
+        "means NO grouping/majority-vote technique can ever help correct Score or "
+        "Sample (with a group of size 1, the group's \"mode\" is just that same row's "
+        "own value, corrupted or not — it never gets outvoted by anything). Do NOT "
+        "rely on any groupby step for these two columns. Their correction must come "
+        "ENTIRELY from a robust pattern-based parser applied directly to the string: "
+        "these two columns are corrupted by a single character (often 'x') replacing "
+        "a random digit or letter (e.g. 'x7%' should become a 2-digit percentage — "
+        "extract the digits you can read and infer the corrupted one from context, "
+        "or extract all readable digits and reconstruct the number). Spend real "
+        "effort on this regex/parsing logic for Score and Sample specifically — a "
+        "single hardcoded `.replace('1xx%', '100%')` line is not enough to catch the "
+        "many different corruption instances in the full column."
+    ),
+}
+
+
 FUNCTIONAL_DEPENDENCIES = {
+    # Format de chaque entree : (cle, [colonnes cibles], exact)
+    #   exact=True  : vraie dependance fonctionnelle verifiee (1 seule valeur possible
+    #                 par groupe) -> l'ecrasement de colonne entiere (group-mode direct)
+    #                 est sans risque, voir EXCEPTION rule.
+    #   exact=False : signal statistique fort mais PAS une egalite garantie (plusieurs
+    #                 valeurs restent possibles par groupe, juste moins qu'au niveau
+    #                 global) -> ecraser la colonne entiere serait aussi dangereux que
+    #                 pour n'importe quelle autre colonne (bug reel observe sur hotel :
+    #                 agent/country/adr avaient ete ecrases ainsi, detruisant les
+    #                 valeurs deja correctes). Pour exact=False, on ne fait QUE remplacer
+    #                 les valeurs manquantes (fillna), jamais un overwrite.
     "hospital": [
+        # NOTE IMPORTANTE : (ProviderNumber, MeasureCode) est litteralement la cle
+        # primaire de la table (verifie : 1000 paires uniques pour 1000 lignes, aucun
+        # doublon) -> chaque groupe a EXACTEMENT 1 ligne. Le mecanisme EXACT (vote
+        # majoritaire) ne peut donc RIEN corriger sur Score/Sample -- avec un groupe
+        # de taille 1, le "mode" du groupe est juste la valeur elle-meme, corrompue ou
+        # non. Score/Sample sont donc RETIRES de cette liste (les y laisser suggererait
+        # a tort qu'un overwrite de groupe peut les corriger). Voir DATASET_NOTES
+        # ci-dessous pour le texte explicite envoye au modele a ce sujet.
         ("ProviderNumber", ["HospitalName", "Address1", "City", "State", "ZipCode",
                              "CountyName", "PhoneNumber", "HospitalType", "HospitalOwner",
-                             "EmergencyService"]),
-        ("MeasureCode", ["MeasureName", "Condition"]),
-        (("ProviderNumber", "MeasureCode"), ["Score", "Sample"]),
-        ("ZipCode", ["City", "State", "CountyName"]),
+                             "EmergencyService"], True),
+        ("MeasureCode", ["MeasureName", "Condition"], True),
+        ("ZipCode", ["City", "State", "CountyName"], True),
     ],
     "titanic": [
         # Pas des FD strictes (contrairement a hospital) : verifiees empiriquement comme
@@ -331,8 +430,46 @@ FUNCTIONAL_DEPENDENCIES = {
         # mais ne couvre que les lignes qui PARTAGENT un ticket (~39% du dataset, familles
         # / groupes ayant achete ensemble) ; Pclass est plus faible mais couvre 100% des
         # lignes -> utiliser Ticket en priorite, Pclass en repli.
-        ("Ticket", ["Fare", "Embarked"]),
-        ("Pclass", ["Fare", "Age"]),
+        ("Ticket", ["Fare", "Embarked"], False),
+        ("Pclass", ["Fare", "Age"], False),
+    ],
+    "hotel-booking-demand": [
+        # Verifie empiriquement sur hotel_bookings_clean_reference.csv. Pas de FD stricte
+        # ici (contrairement a hospital) mais des signaux reels mesures, absents des
+        # scripts generes jusqu'ici (qui utilisaient uniquement le median GLOBAL pour
+        # agent/lead_time/adr, sans aucun groupby) :
+        #   - agent : la cle composite (country, market_segment, distribution_channel)
+        #     ramene la mediane du nombre d'agents distincts par groupe a 2 (contre 47
+        #     avec market_segment seul) -- signal bien plus fort qu'avant, mais PAS une
+        #     FD exacte (2 valeurs restent possibles, pas 1) -> fillna seulement.
+        #   - lead_time : grouper par market_segment reduit l'ecart-type de 106.9 a 59.1
+        #     (-45%), un signal solide, non exploite dans les versions precedentes.
+        #   - adr : le meilleur groupement (hotel, market_segment, reserved_room_type) ne
+        #     reduit l'ecart-type que d'environ 23% (50.5 -> 39.1) -- signal FAIBLE,
+        #     proche du cas "Age" chez titanic (pas de cle forte disponible). Utiliser
+        #     quand meme la mediane DE GROUPE plutot que la mediane globale (legerement
+        #     mieux que rien), mais ne pas s'attendre a un F1 eleve sur cette colonne :
+        #     c'est une limite structurelle du dataset, pas un bug a corriger.
+        (("country", "market_segment", "distribution_channel"), ["agent"], False),
+        ("market_segment", ["lead_time"], False),
+        (("hotel", "market_segment", "reserved_room_type"), ["adr"], False),
+    ],
+    "flights": [
+        # Verifie empiriquement via le F1 par colonne d'un run reel : sched_dep_time et
+        # sched_arr_time (heure PROGRAMMEE) sont deja tres bien recuperees (F1=0.97 et
+        # 0.91) via un fillna group-aware simple sur 'flight' -- mais la famille
+        # "real_world_error" (valeur presente mais fausse, pas manquante) reste faible
+        # pour ces deux colonnes precisement parce que fillna() ne touche jamais les
+        # valeurs deja presentes. Une heure PROGRAMMEE est censee etre (quasi) constante
+        # pour un meme numero de vol (meme trajet, meme creneau chaque jour) -> la
+        # marquer EXACT permet l'ecrasement de colonne entiere, qui corrige aussi les
+        # valeurs presentes-mais-fausses par vote majoritaire (comme un correcteur de
+        # coquilles), pas seulement les valeurs manquantes.
+        # act_dep_time / act_arr_time (heure REELLE) sont l'oppose : elles varient avec
+        # les retards du jour, il n'existe PAS de valeur constante par vol -> ne pas les
+        # ajouter ici, F1 faible (0.21 et 0.33) est une limite structurelle du dataset,
+        # pas un bug a corriger (comme adr pour hotel, Age pour titanic).
+        ("flight", ["sched_dep_time", "sched_arr_time"], True),
     ],
 }
 
@@ -350,8 +487,9 @@ def _map_fd_hint(df: pd.DataFrame, dataset_name: str) -> str:
     correspond (dataset non repertorie, ou aucune colonne ne matche).
     """
     fds = FUNCTIONAL_DEPENDENCIES.get(dataset_name)
+    note = DATASET_NOTES.get(dataset_name, "")
     if not fds:
-        return ""
+        return ("\n" + note) if note else ""
 
     real_by_norm = {_normalize_col_name(c): c for c in df.columns}
 
@@ -379,7 +517,7 @@ def _map_fd_hint(df: pd.DataFrame, dataset_name: str) -> str:
         return best_match
 
     lines = []
-    for key, targets in fds:
+    for key, targets, exact in fds:
         key_names = (key,) if isinstance(key, str) else key
         resolved_key = [resolve(k) for k in key_names]
         if any(r is None for r in resolved_key):
@@ -389,36 +527,57 @@ def _map_fd_hint(df: pd.DataFrame, dataset_name: str) -> str:
         if not resolved_targets:
             continue
         key_repr = resolved_key[0] if len(resolved_key) == 1 else "(" + ", ".join(resolved_key) + ")"
-        lines.append(f"  - {key_repr} -> {', '.join(resolved_targets)}")
+        tag = "EXACT" if exact else "strong signal, NOT exact — fillna only, never overwrite"
+        lines.append(f"  - {key_repr} -> {', '.join(resolved_targets)}  [{tag}]")
 
     if not lines:
-        return ""
+        return ("\n" + note) if note else ""
 
+    # L'exemple "overwrite colonne entiere" est propose pour TOUTE cle marquee
+    # exact=True -- simple (une colonne) OU composite (plusieurs colonnes). Bug reel
+    # corrige ici : la version precedente ne generait cet exemple QUE pour les cles
+    # composites (isinstance(key, tuple)), donc une cle EXACT simple (ex: flights,
+    # 'flight' seul) n'obtenait jamais l'exemple de code concret -- le modele voyait
+    # seulement l'etiquette [EXACT] sans jamais voir comment l'appliquer, et continuait
+    # a utiliser le pattern fillna-only "par habitude", perdant tout le benefice de la
+    # correction par vote majoritaire sur les valeurs deja presentes mais fausses.
     key_example = None
-    for key, _ in fds:
-        if isinstance(key, tuple):
-            resolved = [resolve(k) for k in key]
-            if all(r is not None for r in resolved):
-                key_example = resolved
-                break
+    for key, _, exact in fds:
+        if not exact:
+            continue
+        key_names = (key,) if isinstance(key, str) else key
+        resolved = [resolve(k) for k in key_names]
+        if all(r is not None for r in resolved):
+            key_example = resolved[0] if len(resolved) == 1 else list(resolved)
+            break
 
     example_block = ""
     if key_example:
+        groupby_arg = repr(key_example) if isinstance(key_example, str) else str(key_example)
         example_block = (
-            f"\n  Concretely here, this composite key is VERIFIED (see EXCEPTION rule "
-            f"above), so the whole-column overwrite technique is safe and recommended: "
-            f"`df[target_col] = df.groupby({key_example})[target_col].transform("
-            f"lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)` "
-            f"directly, for the composite-dependency targets listed above ONLY — do "
-            f"not use this direct-overwrite form for any other column."
+            f"\n  Concretely here, this key is VERIFIED as an EXACT dependency (see "
+            f"EXCEPTION rule above), so the whole-column overwrite technique is safe "
+            f"and recommended — use it directly, do not just fillna(): "
+            f"`df[target_col] = df.groupby({groupby_arg})[target_col]"
+            f".transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)`. "
+            f"Apply this EXACT line pattern (not fillna) for the EXACT-tagged targets "
+            f"listed above ONLY — this is what actually fixes wrong-but-present values "
+            f"via majority vote, not just missing ones; a comment saying a key is "
+            f"'EXACT' without actually using this direct-overwrite assignment gets none "
+            f"of that benefit. For any line tagged \"strong signal, NOT exact\", do NOT "
+            f"use this direct-overwrite form — use the safe fillna-only pattern from "
+            f"GROUP-AWARE IMPUTATION instead, exactly like any other column without a "
+            f"verified dependency."
         )
 
     return (
         "\nKNOWN GROUPING KEYS FOR THIS SPECIFIC DATASET (measured on the reference "
-        "data, not a guess — for each line, try grouping by the key first; some are "
-        "near-exact, others are just strong regularities, so always keep the "
-        "global-mode fallback for rows whose group has no other valid value):\n"
+        "data, not a guess — for each line, try grouping by the key first; each line "
+        "is tagged EXACT or \"strong signal\": only EXACT lines are safe to overwrite "
+        "the whole column with the group value, strong-signal lines must use fillna "
+        "only, exactly like an unverified column):\n"
         + "\n".join(lines) + example_block
+        + ("\n\n" + note if note else "")
     )
 
 

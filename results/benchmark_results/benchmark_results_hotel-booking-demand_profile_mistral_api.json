@@ -1,43 +1,43 @@
 {
-  "global_precision": 0.812,
-  "global_recall": 0.8112,
-  "global_f1": 0.8116,
+  "global_precision": 0.755,
+  "global_recall": 0.7536,
+  "global_f1": 0.7543,
   "global_initial_error_rate": 0.0106,
-  "global_final_error_rate": 0.002,
+  "global_final_error_rate": 0.0026,
   "total_cells": 3820480,
   "total_errors_start": 40481,
-  "total_errors_end": 7644,
-  "total_fixed": 32837,
-  "total_regressions": 39,
+  "total_errors_end": 9976,
+  "total_fixed": 30505,
+  "total_regressions": 76,
   "columns": {
     "adr": {
       "initial_error_rate": 0.006,
       "final_error_rate": 0.0057,
       "total_errors": 717,
-      "correct_repairs": 38,
-      "failed_repair": 640,
-      "regressions": 39,
-      "precision": 0.056,
-      "recall": 0.053,
-      "f1_score": 0.0545,
+      "correct_repairs": 36,
+      "failed_repair": 621,
+      "regressions": 60,
+      "precision": 0.0548,
+      "recall": 0.0502,
+      "f1_score": 0.0524,
       "success_samples": [
         {
-          "id": "118141",
-          "dirty": "9601.15",
-          "truth": "112.67",
-          "llm_output": "112.67"
+          "id": "23356",
+          "dirty": "8031.42",
+          "truth": "80.0",
+          "llm_output": "80.0"
         },
         {
-          "id": "42403",
-          "dirty": "2983.37",
-          "truth": "105.0",
-          "llm_output": "105.0"
+          "id": "112971",
+          "dirty": "5037.7",
+          "truth": "95.0",
+          "llm_output": "95.0"
         },
         {
-          "id": "112586",
-          "dirty": "4945.1",
-          "truth": "114.4",
-          "llm_output": "114.4"
+          "id": "116754",
+          "dirty": "2755.03",
+          "truth": "95.5",
+          "llm_output": "95.5"
         }
       ],
       "failed_samples": [
@@ -45,39 +45,39 @@
           "id": "20004",
           "dirty": "8761.89",
           "truth": "4.0",
-          "llm_output": "46.0"
+          "llm_output": "60.0"
         },
         {
           "id": "77549",
           "dirty": "9339.16",
           "truth": "170.0",
-          "llm_output": "105.0"
+          "llm_output": "75.0"
         },
         {
           "id": "2823",
           "dirty": "9480.21",
           "truth": "48.0",
-          "llm_output": "62.02"
+          "llm_output": "103.665"
         }
       ],
       "regression_samples": [
+        {
+          "id": "22069",
+          "dirty": "758.73",
+          "truth": "54.0",
+          "llm_output": "758.73"
+        },
+        {
+          "id": "47276",
+          "dirty": "501.21",
+          "truth": "127.0",
+          "llm_output": "501.21"
+        },
         {
           "id": "45293",
           "dirty": "251.67",
           "truth": "85.67",
           "llm_output": "251.67"
-        },
-        {
-          "id": "94492",
-          "dirty": "-2.47",
-          "truth": "118.8",
-          "llm_output": "-2.47"
-        },
-        {
-          "id": "71068",
-          "dirty": "11.59",
-          "truth": "130.0",
-          "llm_output": "11.59"
         }
       ]
     },
@@ -85,12 +85,12 @@
       "initial_error_rate": 0.024,
       "final_error_rate": 0.0,
       "total_errors": 2866,
-      "correct_repairs": 2865,
-      "failed_repair": 1,
+      "correct_repairs": 2861,
+      "failed_repair": 5,
       "regressions": 0,
-      "precision": 0.9997,
-      "recall": 0.9997,
-      "f1_score": 0.9997,
+      "precision": 0.9983,
+      "recall": 0.9983,
+      "f1_score": 0.9983,
       "success_samples": [
         {
           "id": "42787",
@@ -113,6 +113,18 @@
       ],
       "failed_samples": [
         {
+          "id": "103714",
+          "dirty": "0kg",
+          "truth": "0",
+          "llm_output": "2.0"
+        },
+        {
+          "id": "42591",
+          "dirty": "0j",
+          "truth": "0",
+          "llm_output": "2.0"
+        },
+        {
           "id": "45158",
           "dirty": "O",
           "truth": "0",
@@ -123,14 +135,14 @@
     },
     "agent": {
       "initial_error_rate": 0.03,
-      "final_error_rate": 0.0132,
+      "final_error_rate": 0.013,
       "total_errors": 3582,
-      "correct_repairs": 2002,
-      "failed_repair": 1580,
+      "correct_repairs": 2029,
+      "failed_repair": 1553,
       "regressions": 0,
-      "precision": 0.5589,
-      "recall": 0.5589,
-      "f1_score": 0.5589,
+      "precision": 0.5664,
+      "recall": 0.5664,
+      "f1_score": 0.5664,
       "success_samples": [
         {
           "id": "45050",
@@ -175,14 +187,14 @@
     },
     "babies": {
       "initial_error_rate": 0.006,
-      "final_error_rate": 0.0,
+      "final_error_rate": 0.0002,
       "total_errors": 717,
-      "correct_repairs": 714,
+      "correct_repairs": 698,
       "failed_repair": 3,
-      "regressions": 0,
-      "precision": 0.9958,
-      "recall": 0.9958,
-      "f1_score": 0.9958,
+      "regressions": 16,
+      "precision": 0.9957,
+      "recall": 0.9735,
+      "f1_score": 0.9845,
       "success_samples": [
         {
           "id": "32271",
@@ -223,18 +235,37 @@
           "llm_output": "0.0"
         }
       ],
-      "regression_samples": []
+      "regression_samples": [
+        {
+          "id": "97761",
+          "dirty": "10.0",
+          "truth": "0",
+          "llm_output": "10.0"
+        },
+        {
+          "id": "11554",
+          "dirty": "10.0",
+          "truth": "0",
+          "llm_output": "10.0"
+        },
+        {
+          "id": "24774",
+          "dirty": "10.0",
+          "truth": "0",
+          "llm_output": "10.0"
+        }
+      ]
     },
     "children": {
       "initial_error_rate": 0.03,
       "final_error_rate": 0.0022,
       "total_errors": 3582,
-      "correct_repairs": 3319,
-      "failed_repair": 263,
+      "correct_repairs": 3316,
+      "failed_repair": 266,
       "regressions": 0,
-      "precision": 0.9266,
-      "recall": 0.9266,
-      "f1_score": 0.9266,
+      "precision": 0.9257,
+      "recall": 0.9257,
+      "f1_score": 0.9257,
       "success_samples": [
         {
           "id": "93757",
@@ -281,12 +312,12 @@
       "initial_error_rate": 0.03,
       "final_error_rate": 0.0176,
       "total_errors": 3582,
-      "correct_repairs": 1482,
-      "failed_repair": 2100,
+      "correct_repairs": 1475,
+      "failed_repair": 2107,
       "regressions": 0,
-      "precision": 0.4137,
-      "recall": 0.4137,
-      "f1_score": 0.4137,
+      "precision": 0.4118,
+      "recall": 0.4118,
+      "f1_score": 0.4118,
       "success_samples": [
         {
           "id": "10643",
@@ -418,12 +449,12 @@
       "initial_error_rate": 0.024,
       "final_error_rate": 0.0,
       "total_errors": 2866,
-      "correct_repairs": 2865,
-      "failed_repair": 1,
+      "correct_repairs": 2866,
+      "failed_repair": 0,
       "regressions": 0,
-      "precision": 0.9997,
-      "recall": 0.9997,
-      "f1_score": 0.9997,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
       "success_samples": [
         {
           "id": "41644",
@@ -444,14 +475,7 @@
           "llm_output": "No Deposit"
         }
       ],
-      "failed_samples": [
-        {
-          "id": "22723",
-          "dirty": "REfundable",
-          "truth": "Refundable",
-          "llm_output": "Non Refund"
-        }
-      ],
+      "failed_samples": [],
       "regression_samples": []
     },
     "hotel": {
@@ -522,7 +546,7 @@
           "id": "61172",
           "dirty": "O",
           "truth": "0",
-          "llm_output": "69.0"
+          "llm_output": "18.0"
         },
         {
           "id": "46085",
@@ -543,12 +567,12 @@
       "initial_error_rate": 0.03,
       "final_error_rate": 0.0107,
       "total_errors": 3582,
-      "correct_repairs": 2307,
-      "failed_repair": 1275,
+      "correct_repairs": 2304,
+      "failed_repair": 1278,
       "regressions": 0,
-      "precision": 0.6441,
-      "recall": 0.6441,
-      "f1_score": 0.6441,
+      "precision": 0.6432,
+      "recall": 0.6432,
+      "f1_score": 0.6432,
       "success_samples": [
         {
           "id": "117341",
@@ -645,66 +669,66 @@
     },
     "reservation_status_date": {
       "initial_error_rate": 0.045,
-      "final_error_rate": 0.0024,
+      "final_error_rate": 0.0218,
       "total_errors": 5373,
-      "correct_repairs": 5083,
-      "failed_repair": 290,
+      "correct_repairs": 2769,
+      "failed_repair": 2604,
       "regressions": 0,
-      "precision": 0.946,
-      "recall": 0.946,
-      "f1_score": 0.946,
+      "precision": 0.5154,
+      "recall": 0.5154,
+      "f1_score": 0.5154,
       "success_samples": [
-        {
-          "id": "98336",
-          "dirty": "1475020800",
-          "truth": "2016-09-28",
-          "llm_output": "2016-09-28"
-        },
-        {
-          "id": "77591",
-          "dirty": "1459555200",
-          "truth": "2016-04-02",
-          "llm_output": "2016-04-02"
-        },
         {
           "id": "19621",
           "dirty": "29-Dec-2015",
           "truth": "2015-12-29",
           "llm_output": "2015-12-29"
+        },
+        {
+          "id": "22875",
+          "dirty": "2016/04/09",
+          "truth": "2016-04-09",
+          "llm_output": "2016-04-09"
+        },
+        {
+          "id": "24030",
+          "dirty": "2016/05/10",
+          "truth": "2016-05-10",
+          "llm_output": "2016-05-10"
         }
       ],
       "failed_samples": [
         {
-          "id": "113169",
-          "dirty": "06/03/2017",
-          "truth": "2017-06-03",
-          "llm_output": "2017-03-06"
+          "id": "98336",
+          "dirty": "1475020800",
+          "truth": "2016-09-28",
+          "llm_output": "2015-10-21"
         },
         {
-          "id": "62757",
-          "dirty": "08/10/2016",
-          "truth": "2016-08-10",
-          "llm_output": "2016-10-08"
+          "id": "77591",
+          "dirty": "1459555200",
+          "truth": "2016-04-02",
+          "llm_output": "2015-10-21"
         },
         {
-          "id": "102916",
-          "dirty": "12/09/2016",
-          "truth": "2016-12-09",
-          "llm_output": "2016-09-12"
+          "id": "77659",
+          "dirty": "October 06, 2016",
+          "truth": "2016-10-06",
+          "llm_output": "2015-10-21"
         }
       ],
       "regression_samples": []
     },
     "stays_in_week_nights": {
       "initial_error_rate": 0.006,
-      "final_error_rate": 0.0041,
+      "final_error_rate": 0.0042,
       "total_errors": 717,
-      "correct_repairs": 223,
-      "failed_repair": 494,
+      "correct_repairs": 212,
+      "failed_repair": 505,
       "regressions": 0,
-      "precision": 0.311,
-      "recall": 0.311,
-      "f1_score": 0.311,
+      "precision": 0.2957,
+      "recall": 0.2957,
+      "f1_score": 0.2957,
       "success_samples": [
         {
           "id": "57149",
@@ -748,7 +772,7 @@
       "regression_samples": []
     }
   },
-  "pipeline_time_seconds": 86.47,
+  "pipeline_time_seconds": 78.86,
   "workflow_name": "hotel-booking-demand_profile_mistral_api_iter5",
   "rows_expected": 119390,
   "rows_remaining": 119390,
@@ -756,44 +780,44 @@
   "rows_lost_pct": 0.0,
   "errors_lost_with_deleted_rows": 0,
   "warning_over_cleaning": false,
-  "global_accuracy_all_cells": 0.9644,
-  "total_failed_repairs": 7605,
+  "global_accuracy_all_cells": 0.9871,
+  "total_failed_repairs": 9900,
   "by_error_family": {
     "outliers": {
       "total_errors": 2868,
-      "correct_repairs": 1678,
-      "failed_repair": 1151,
-      "regressions": 39,
-      "precision": 0.5931,
-      "recall": 0.5851,
-      "f1_score": 0.5891
+      "correct_repairs": 1649,
+      "failed_repair": 1143,
+      "regressions": 76,
+      "precision": 0.5906,
+      "recall": 0.575,
+      "f1_score": 0.5827
     },
     "typos": {
       "total_errors": 14330,
-      "correct_repairs": 14138,
-      "failed_repair": 192,
+      "correct_repairs": 14135,
+      "failed_repair": 195,
       "regressions": 0,
-      "precision": 0.9866,
-      "recall": 0.9866,
-      "f1_score": 0.9866
+      "precision": 0.9864,
+      "recall": 0.9864,
+      "f1_score": 0.9864
     },
     "missing_values": {
       "total_errors": 17910,
-      "correct_repairs": 11938,
-      "failed_repair": 5972,
+      "correct_repairs": 11952,
+      "failed_repair": 5958,
       "regressions": 0,
-      "precision": 0.6666,
-      "recall": 0.6666,
-      "f1_score": 0.6666
+      "precision": 0.6673,
+      "recall": 0.6673,
+      "f1_score": 0.6673
     },
     "format_errors": {
       "total_errors": 5373,
-      "correct_repairs": 5083,
-      "failed_repair": 290,
+      "correct_repairs": 2769,
+      "failed_repair": 2604,
       "regressions": 0,
-      "precision": 0.946,
-      "recall": 0.946,
-      "f1_score": 0.946
+      "precision": 0.5154,
+      "recall": 0.5154,
+      "f1_score": 0.5154
     }
   }
 }

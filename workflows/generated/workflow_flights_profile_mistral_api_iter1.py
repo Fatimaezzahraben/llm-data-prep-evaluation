@@ -1,74 +1,108 @@
 import pandas as pd
 import numpy as np
-import difflib
 import re
+import difflib
 
-# Disguised missing values handling
-missing_markers = ["NA", "N/A", "unknown", "", " "]
-for col in df.columns:
-    if df[col].dtype == 'object':
-        df[col] = df[col].replace(missing_markers, np.nan)
-        df[col] = df[col].str.strip().replace('', np.nan)
+# tuple_id: numeric, 0% missing, no issues detected
+# No cleaning needed beyond ensuring numeric dtype
+df['tuple_id'] = pd.to_numeric(df['tuple_id'], errors='coerce')
+df['tuple_id'] = df['tuple_id'].fillna(df['tuple_id'].median())
 
-# tuple_id - numeric, no missing, no action needed (already clean)
-
-# src - categorical, no missing, but check for typos
-src_valid = ['helloflight', 'boston', 'airtravelcenter', 'flightview', 'panynj']
+# src: categorical, 0% missing, but check for typos/near-duplicates
+# Profile shows 38 unique values - use fuzzy matching for low-cardinality correction
+valid_src = ['helloflight', 'boston', 'airtravelcenter', 'flightview', 'panynj']
 def fuzzy_correct_src(val):
     if pd.isna(val):
         return val
     val_norm = str(val).strip().lower()
-    if val_norm in [v.lower() for v in src_valid]:
-        return next(v for v in src_valid if v.lower() == val_norm)
-    match = difflib.get_close_matches(val_norm, [v.lower() for v in src_valid], n=1, cutoff=0.6)
+    if val_norm in [v.lower() for v in valid_src]:
+        return next(v for v in valid_src if v.lower() == val_norm)
+    match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_src], n=1, cutoff=0.6)
     if match:
-        return next(v for v in src_valid if v.lower() == match[0])
+        return next(v for v in valid_src if v.lower() == match[0])
     return val
 df['src'] = df['src'].apply(fuzzy_correct_src)
 
-# flight - categorical, no missing, but check for format consistency
-# Standardize format: AA-123-XXX-XXX (remove any extra spaces or inconsistent separators)
-df['flight'] = df['flight'].str.replace(r'[^A-Za-z0-9-]', '', regex=True).str.upper()
-df['flight'] = df['flight'].str.replace(r'^([A-Z]+)(\d+)([A-Z]+)([A-Z]+)$', r'\1-\2-\3-\4', regex=True)
-df['flight'] = df['flight'].str.replace(r'^([A-Z]+)(\d+)([A-Z]+)$', r'\1-\2-\3', regex=True)
+# flight: categorical, 0% missing, no obvious typos in sample
+# No cleaning needed beyond basic whitespace/case normalization
+df['flight'] = df['flight'].astype(str).str.strip().str.upper()
 
-# Time columns: sched_dep_time, act_dep_time, sched_arr_time, act_arr_time
-# Treat as categorical (do not convert to datetime), but clean format and impute missing
+# sched_dep_time: categorical/text, 33% missing, many near-duplicates
+# First normalize disguised missing values
+disguised_missing = df['sched_dep_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
+df.loc[disguised_missing, 'sched_dep_time'] = np.nan
 
-# Clean time format: standardize to "h:mm a.m./p.m." with consistent spacing and dots
+# Apply EXACT dependency: flight -> sched_dep_time
+df['sched_dep_time'] = df.groupby('flight')['sched_dep_time'].transform(
+    lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
+)
+
+# Global fallback for any remaining missing values
+_mode = df['sched_dep_time'].mode(dropna=True)
+fill_value = _mode.iloc[0] if not _mode.empty else '7:10 a.m.'
+df['sched_dep_time'] = df['sched_dep_time'].fillna(fill_value)
+
+# act_dep_time: categorical/text, 15.82% missing
+# First normalize disguised missing values
+disguised_missing = df['act_dep_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
+df.loc[disguised_missing, 'act_dep_time'] = np.nan
+
+# Clean time format issues seen in sample (e.g., '5:58aDec 1')
 def clean_time(val):
     if pd.isna(val):
         return val
-    val = str(val).strip().lower()
-    # Handle cases like "6:00aDec 1" -> "6:00 a.m."
-    val = re.sub(r'(\d+:\d+)\s*[ap]\.?m?\.?.*', r'\1', val, flags=re.IGNORECASE)
-    val = re.sub(r'(\d+:\d+)\s*', r'\1 ', val)
-    val = re.sub(r'(\d+:\d+)\s*([ap])\.?m?\.?', r'\1 \2.m.', val, flags=re.IGNORECASE)
-    val = val.replace('a.m.', 'a.m.').replace('p.m.', 'p.m.')
-    # Reconstruct full format
-    if 'a.m.' not in val and 'p.m.' not in val:
-        if 'a' in val:
-            val = val.replace('a', 'a.m.')
-        elif 'p' in val:
-            val = val.replace('p', 'p.m.')
-    return val.strip()
+    val = str(val).strip()
+    # Handle cases like '5:58aDec 1' -> '5:58 a.m.'
+    if re.match(r'^\d{1,2}:\d{2}[ap]m?\s*[a-zA-Z]', val, re.IGNORECASE):
+        val = re.sub(r'([ap]m?)\s*[a-zA-Z].*', r'\1', val, flags=re.IGNORECASE)
+        val = val.replace('a', ' a.m.').replace('p', ' p.m.')
+    # Handle 'Delayed' -> NaN
+    if val.lower() == 'delayed':
+        return np.nan
+    return val
 
-time_cols = ['sched_dep_time', 'act_dep_time', 'sched_arr_time', 'act_arr_time']
-for col in time_cols:
-    df[col] = df[col].apply(clean_time)
-    # Impute missing with mode (per column)
-    mode_val = df[col].mode(dropna=True)
-    if not mode_val.empty:
-        df[col] = df[col].fillna(mode_val.iloc[0])
+df['act_dep_time'] = df['act_dep_time'].apply(clean_time)
 
-# Group-aware imputation for time columns using flight as key (if flight determines time)
-for col in time_cols:
-    group_mode = df.groupby('flight')[col].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
-    df[col] = df[col].fillna(group_mode)
-    # Fallback to global mode if group mode didn't fill all
-    global_mode = df[col].mode(dropna=True)
-    if not global_mode.empty:
-        df[col] = df[col].fillna(global_mode.iloc[0])
+# Global mode imputation
+_mode = df['act_dep_time'].mode(dropna=True)
+fill_value = _mode.iloc[0] if not _mode.empty else '7:22 a.m.'
+df['act_dep_time'] = df['act_dep_time'].fillna(fill_value)
 
-# Final output
+# sched_arr_time: categorical/text, 32.41% missing
+# First normalize disguised missing values
+disguised_missing = df['sched_arr_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
+df.loc[disguised_missing, 'sched_arr_time'] = np.nan
+
+# Apply EXACT dependency: flight -> sched_arr_time
+df['sched_arr_time'] = df.groupby('flight')['sched_arr_time'].transform(
+    lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
+)
+
+# Global fallback for any remaining missing values
+_mode = df['sched_arr_time'].mode(dropna=True)
+fill_value = _mode.iloc[0] if not _mode.empty else '2:35 p.m.'
+df['sched_arr_time'] = df['sched_arr_time'].fillna(fill_value)
+
+# act_arr_time: categorical/text, 16.08% missing
+# First normalize disguised missing values
+disguised_missing = df['act_arr_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
+df.loc[disguised_missing, 'act_arr_time'] = np.nan
+
+# Clean time format issues seen in sample (e.g., '9:05aDec 1')
+df['act_arr_time'] = df['act_arr_time'].apply(clean_time)
+
+# Global mode imputation
+_mode = df['act_arr_time'].mode(dropna=True)
+fill_value = _mode.iloc[0] if not _mode.empty else '7:10 p.m.'
+df['act_arr_time'] = df['act_arr_time'].fillna(fill_value)
+
+# Final type consistency
+for col in ['sched_dep_time', 'act_dep_time', 'sched_arr_time', 'act_arr_time']:
+    df[col] = df[col].astype(str).str.strip()
+    # Ensure consistent a.m./p.m. formatting
+    df[col] = df[col].str.replace(r'\.m\.', 'm', regex=True)
+    df[col] = df[col].str.replace(r'(\d)([ap]m)', r'\1 \2', regex=True)
+    df[col] = df[col].str.replace(r'(\d)([ap])', r'\1 \2.m.', regex=True)
+    df[col] = df[col].str.replace(r'\s+', ' ', regex=True).str.strip()
+
 df
