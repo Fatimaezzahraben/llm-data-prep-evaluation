@@ -1,7 +1,15 @@
 Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 142, in <module>
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\tools\numeric.py", line 183, in to_numeric
-    raise ValueError("invalid error value specified")
-ValueError: invalid error value specified
+  File "<string>", line 21, in <module>
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\groupby\generic.py", line 786, in transform
+    return self._transform(
+           ^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\groupby\groupby.py", line 1823, in _transform
+    return self._transform_general(func, engine, engine_kwargs, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\groupby\generic.py", line 822, in _transform_general
+    res = func(group, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 21, in <lambda>
+AttributeError: 'numpy.float64' object has no attribute 'isna'

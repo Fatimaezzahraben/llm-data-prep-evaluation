@@ -43,11 +43,25 @@ CONTRACT (how your code will be run):
   fails to update `df`, so your correction will not count even though it runs without
   error. Always reassign instead: `df[col] = df[col].fillna(value)`, or use
   `df.fillna({col: value}, inplace=True)` (dict form on the whole DataFrame is safe).
+- CRITICAL — NEVER WRITE `df[col] = df[col].median()` OR `df[col] = df[col].mode()[0]`
+  (or `.mean()`, or any other statistic) AS A DIRECT ASSIGNMENT TO THE WHOLE COLUMN.
+  This is one single number — assigning it to `df[col]` OVERWRITES EVERY ROW in that
+  column with that same one value, DESTROYING every value that was already correct,
+  not just the missing ones. This is a severe, repeated mistake seen in practice that
+  reduces an entire column's accuracy to near zero. You almost always want to fill
+  ONLY the missing values, which means you must ALWAYS wrap the statistic in
+  `.fillna(...)`: `df[col] = df[col].fillna(df[col].median())` — never a bare
+  `df[col] = df[col].median()`. Before submitting, re-read every line where you
+  compute `.median()`, `.mean()`, or `.mode()[0]`/`.mode().iloc[0]` and confirm it is
+  always the ARGUMENT to a `.fillna(...)` call, never a direct assignment on its own.
 
 COLUMNS:
 - Only use column names that appear in the list given to you below. Never invent a
   column name (even if you recognize this as a well-known public dataset and remember
   different column names from training — always defer to the exact names given here).
+- Column names are CASE-SENSITIVE — copy each one character-for-character from the
+  list below, do not retype it from memory or guess capitalization (a real crash seen
+  in practice: referencing 'Sibsp' when the actual column is 'SibSp').
 
 MISSING VALUES:
 - Never fill missing values with an arbitrary placeholder that could be mistaken for
@@ -71,6 +85,29 @@ MISSING VALUES:
   ```
   Use `.iloc[0]` (positional), never bare `[0]` (label-based — can fail even on a
   non-empty Series if its index isn't a simple 0-based range, e.g. inside a groupby).
+- FOR A COLUMN YOU ARE ALSO CONVERTING WITH `pd.to_numeric(...)`, ALWAYS COMPUTE THE
+  FALLBACK `.mode()`/`.median()` **AFTER** THAT CONVERSION, NEVER BEFORE. A real,
+  repeated crash seen in practice:
+  ```
+  fallback_mode = df[col].mode(dropna=True)          # WRONG — computed on the RAW column
+  df[col] = pd.to_numeric(df[col], errors='coerce')  # column may be mixed dtype (object)
+  df[col] = df[col].fillna(fallback_mode.iloc[0] if not fallback_mode.empty else 0)
+  ```
+  While the raw column is still dirty/mixed-type (object dtype holding both numbers and
+  strings like '0', 'NaN', 'unknown'), `.mode()` picks whichever RAW representation is
+  most frequent — which can be a STRING (e.g. `'0'`) even though most other cells are
+  floats. That string then gets written into an otherwise-numeric column via
+  `.fillna(...)`, silently turning the column back into mixed dtype (e.g.
+  `[102.0, 30.0, ..., '0', 177.0]`). The column looks fine until a LATER line calls
+  `.median()`/`.quantile()` on it (for an unrelated outlier check, or a groupby
+  elsewhere) and crashes with `TypeError: Cannot convert [...] to numeric`. Always
+  convert FIRST, compute the fallback statistic SECOND, so the statistic itself is
+  guaranteed to be a real number:
+  ```
+  df[col] = pd.to_numeric(df[col], errors='coerce')  # RIGHT — convert first
+  fallback_mode = df[col].mode(dropna=True)          # now guaranteed numeric
+  df[col] = df[col].fillna(fallback_mode.iloc[0] if not fallback_mode.empty else 0)
+  ```
 - Apply this to EVERY column that has missing or disguised-missing values (empty
   string, "NA", "N/A", "unknown", whitespace-only) — do not skip columns; skipping
   columns lowers recall, which is heavily penalized.
@@ -155,6 +192,25 @@ TEXT / CATEGORY CLEANING:
   from the profile's top_values is still the right approach.
 
 NUMERIC COLUMNS:
+- CRITICAL — FOR GROUP-AWARE IMPUTATION OF A NUMERIC/CONTINUOUS COLUMN, ALWAYS USE
+  `.median()`, NEVER `.mode()`. `.mode()` (the single most-frequent VALUE) is for
+  CATEGORICAL columns only, where a fixed value repeats meaningfully (e.g. 'S' for
+  Embarked). For a continuous numeric column (Age, Fare, price, etc.), a value like
+  22.0 is not meaningfully "more correct" than 22.5 just because it happens to
+  appear a few more times — `.mode()` here is close to arbitrary and throws away
+  almost all the signal a median would capture. A real, severe regression seen in
+  practice: switching Age's group imputation from `s.median()` to
+  `s.mode().iloc[0]` collapsed that column's F1 from a working score down to
+  near-zero. The correct pattern is always:
+  `group_val = df.groupby(key)[numeric_col].transform(lambda s: s.median())`
+  — never `.mode()` for any column you are treating as numeric.
+- In any `re.sub(...)` replacement string, NEVER write a bare backreference like `\1`
+  immediately followed by a literal digit (e.g. `r'\10'`, `r'\25'`) — Python reads the
+  digits together as ONE group number ("group 10", "group 25"), not as "group 1 then
+  literal 0". This crashes with "invalid group reference" if that group doesn't
+  exist, and commonly comes up when padding/reformatting a captured digit. Always use
+  the unambiguous `\g<1>` form instead whenever a literal digit follows: write
+  `r'\g<1>0'`, never `r'\10'`.
 - Never call `int(x)` or `float(x)` directly on a raw string value from the dataset —
   it will crash on values like '2€', 'x00', '2O', or on already-numeric types. Always:
     1. Strip non-numeric characters with a regex if needed:
@@ -169,8 +225,55 @@ NUMERIC COLUMNS:
   the column directly if the column is genuinely meant to be numeric). Never call
   `.median()` on a column still holding text/object dtype — it will crash with
   "Cannot perform reduction 'median' with string dtype".
+- DO ALL STRING CLEANING FOR A COLUMN BEFORE ANY NUMERIC CONVERSION OF THAT SAME
+  COLUMN, NEVER AFTER. Once you convert a column with `pd.to_numeric(...)`, it holds
+  float/int values and NO LONGER supports `.str.strip()`, `.str.replace()`, or any
+  other `.str.` method — calling one crashes with "Can only use .str accessor with
+  string values, not floating". A real, repeated crash seen in practice: a script
+  correctly converted a column to numeric early, then a LATER line in the same script
+  tried to `.str.strip()` that same column again (perhaps left over from an earlier
+  draft, or applied in the wrong order). For every column, finish 100% of its string
+  cleaning (strip, replace, regex) FIRST, then convert to numeric ONCE as the final
+  step for that column — never go back to string operations afterward.
+- NEVER CAST A COLUMN TO A STRICT INTEGER DTYPE (`.astype('int64')` / `.astype(int)`)
+  UNTIL THE VERY LAST LINE OF YOUR SCRIPT FOR THAT COLUMN, if at all. A real, repeated
+  crash seen in practice: `df[col] = df[col].astype('int64')` early on, followed later
+  by an assignment like `df.loc[mask, col] = df[col].median()` — `.median()` is a
+  FLOAT even for an all-integer column (e.g. 8617.833...), and pandas refuses to
+  silently truncate a float into a strict int64 column, crashing with "Invalid value
+  '...' for dtype 'int64'". Keep every numeric column as plain float during ALL
+  cleaning/imputation steps (float safely holds both whole and fractional values) —
+  only cast to int at the absolute end, and only if the column truly must be integer
+  (e.g. a count), using `df[col] = df[col].round().astype('int64')` (round FIRST,
+  never bare `.astype(int)` on a value that might carry a fractional part).
 
 DATES:
+- NEVER use the `%s` directive in `.strftime('%s')` (intended to produce a Unix
+  timestamp) — it is NOT a portable strftime directive; it happens to work on
+  Linux/Mac but crashes with "bad directive in format '%s'" on Windows, and this
+  environment may run on either. If you genuinely need a Unix timestamp from a
+  datetime column, use `(dt - pd.Timestamp("1970-01-01")) // pd.Timedelta("1s")` or
+  `dt.astype('int64') // 10**9` instead — never `.strftime('%s')`. For this task you
+  almost always want a plain calendar-date STRING output, not a timestamp, so
+  `.strftime('%Y-%m-%d')` (a portable, standard directive) is what you normally want.
+- NEVER CHAIN THE SAME REGEX SUBSTITUTION MULTIPLE TIMES IN A ROW "JUST TO BE SAFE" —
+  a substitution that ADDS characters (e.g. turning "a." into "a.m.") is usually NOT
+  idempotent: applying it a second time can match its OWN previous output and corrupt
+  it further. A real, severe bug seen in practice: the pattern
+  `re.sub(r'(\d+):(\d{2})\s*([ap])\.', r'\1:\2 \3.m.', val)` was written back-to-back
+  2-30 times in the same script. After the FIRST pass, "9:43 a." became "9:43 a.m." —
+  but that result still CONTAINS the substring "9:43 a." (the "a." inside "a.m."),
+  so the SECOND pass matched it again and appended another "m.", producing
+  "9:43 a.m.m." — with more repeated passes this cascaded into garbage like
+  "9:43 a.m.m..m.m.m.m.m.", scoring ZERO correct repairs on every row of that column.
+  Write every normalization regex ONCE, never copy-pasted a second/third time on the
+  same line pattern. If a value might already be in the target format, make the
+  pattern EXPLICITLY unable to re-match its own result — e.g. a negative lookahead
+  `r'(\d+):(\d{2})\s*([ap])\.(?!m\.)'` — or, more robustly, parse the components (hour,
+  minute, meridiem letter) with `re.match(...).groups()` into separate variables and
+  BUILD the final string fresh with an f-string (`f"{h}:{m} {ampm}.m."`) rather than
+  substituting into the existing text — a freshly built string can never accumulate
+  leftover fragments from a previous pass.
 - Parse dates with `pd.to_datetime(df[col], errors='coerce')`, trying multiple known
   formats if a single format fails, rather than crashing or leaving them unparsed.
 - MULTI-FORMAT DATE PARSING PATTERN (avoids a real crash observed: "Invalid value for
@@ -198,6 +301,12 @@ calendar date):
   reformatting (adding a leading zero, removing dots in 'a.m./p.m.', converting to
   24-hour time, converting to a datetime object) will make even already-correct values
   fail an exact match against the reference and will be counted as new errors.
+- NEVER call `pd.to_numeric(...)`, `float(...)`, or `.astype(float)` on this column
+  either — a time string like "7:10 a.m." is NOT a number and will crash with
+  "could not convert string to float". This column stays a plain string/object dtype
+  for its entire lifetime in your script; the only operations you should perform on
+  it are string cleaning (`.str.strip()`, `.replace()`, a validation regex) and
+  `.mode()` for imputation — never any numeric conversion of any kind.
 - Treat it as a plain text/categorical column. To impute a missing value, take the
   mode of the RAW STRING column directly (do NOT convert to datetime first):
   `mode_val = df[col].mode(dropna=True); df[col] = df[col].fillna(mode_val.iloc[0] if not mode_val.empty else df[col])`
@@ -230,13 +339,38 @@ OUTLIERS:
   (median for numeric columns, mode for categorical) — NOT to snap it to the range
   boundary:
   ```
+  df[col] = pd.to_numeric(df[col], errors='coerce')   # ALWAYS FIRST — see rule below
   is_outlier = (df[col] < plausible_min) | (df[col] > plausible_max)
   df.loc[is_outlier, col] = np.nan
   df[col] = df[col].fillna(df[col].median())   # or .mode().iloc[0] for categorical
   ```
+  CRITICAL — THE `pd.to_numeric(...)` CONVERSION LINE ABOVE IS NOT OPTIONAL AND MUST
+  COME BEFORE THE COMPARISON, EVERY SINGLE TIME, EVEN IF THE PROFILE SAYS THE COLUMN IS
+  ALREADY "numeric". A real, repeated crash seen in practice: writing
+  `df.loc[(df[col] < 0) | (df[col] > 100), col] = np.nan` BEFORE converting — while the
+  column still holds raw dirty strings (e.g. "50.0kg", "19.O", " ") mixed with numbers —
+  crashes with `TypeError: '<' not supported between instances of 'str' and 'int'`,
+  because you cannot compare a string to a number. This happens even on a column the
+  profile calls "numeric", because "numeric" there describes the column's INTENDED type,
+  not its current literal dtype while dirty values remain. The fix is always the same
+  order, with no exceptions: convert the ENTIRE column with `pd.to_numeric(df[col],
+  errors='coerce')` and reassign it to `df[col]` FIRST, and only write any `<`, `>`,
+  `<=`, or `>=` comparison against that column on a LATER line, never before.
   `.clip()` is only appropriate when you specifically want to compress a continuous
   range at its edges (rare for this task) — for correcting a clearly-wrong outlier
   value back to a plausible one, always use the missing-then-impute pattern above.
+- NEVER WRITE `.clip(lower=df[col].min(), upper=df[col].max())` — this is completely
+  USELESS even though it looks like proper outlier handling: clipping a column to ITS
+  OWN min and max can never change a single value, because every value in a column is
+  already within that column's own min/max by definition (including the outlier
+  itself — if 48 is the max, clipping to max=48 keeps it at 48, unchanged). A real,
+  severe bug seen in practice: this exact silent no-op pattern was applied to columns
+  with genuine outliers (e.g. a family-size count with an implausible max of 48), and
+  every single outlier passed through completely untouched, scoring 0% correct on
+  that column despite the code visually looking like it handles outliers. If you use
+  `.clip()` or `.loc[...] = np.nan` for outlier bounds, those bounds must come from
+  DOMAIN REASONING or a percentile (as in the rule above) — never from the same
+  column's own current min() or max().
 - NEVER PICK plausible_min/plausible_max AS A ROUND NUMBER YOU GUESSED — always derive
   them FROM the profile's own reported statistics for that exact column (its actual
   min/max, or a percentile like the 1st/99th, or median ± a few times the IQR). A real
@@ -359,7 +493,56 @@ GROUP-AWARE IMPUTATION (important for high-cardinality columns):
   "handled", check the key's typical group size (via n_unique of the key vs total row
   count in the profile) — if the group size is close to 1, that target column STILL
   needs its own dedicated typo-correction (regex/pattern-based, or fuzzy matching
-  against a known value list) exactly as if no dependency existed at all."""
+  against a known value list) exactly as if no dependency existed at all.
+- DISCOVER YOUR OWN GROUPING KEYS, DON'T ONLY RELY ON HINTS GIVEN TO YOU: any "KNOWN
+  GROUPING KEYS" section below (if present) lists dependencies already verified for
+  this dataset — but you should ALSO actively discover more yourself directly from
+  the data, in your own script, using this general technique that works on ANY
+  dataset (not just this one). For any column that's hard to fix with a plain global
+  mode/median (many distinct values, or errors that are hard to guess), test whether
+  another column (or a pair of columns) actually determines it, by computing this
+  directly in your script BEFORE trusting it — never assume a key works just because
+  it seems intuitive, always verify it programmatically first:
+  ```python
+  def key_purity(df, key_cols, target_col):
+      # Fraction of groups (by key_cols) with AT MOST 1 distinct value in target_col
+      # (ignoring NaN) -- 1.0 means the key perfectly determines the target.
+      grouped = df.groupby(key_cols)[target_col].nunique(dropna=True)
+      return (grouped <= 1).mean()
+
+  def group_sizes_ok(df, key_cols, min_median_size=2):
+      # CRITICAL: a key must also have MULTIPLE ROWS per group to provide any real
+      # correction power -- a key where every group has size 1 (e.g. a near-unique
+      # ID) gives trivial purity=1.0 but can NEVER outvote a wrong value, since
+      # there's nothing else in the group to compare against. This exact trap has
+      # caused a real bug before (a composite primary key looked "exact" but never
+      # helped, because every group was exactly 1 row).
+      return df.groupby(key_cols).size().median() >= min_median_size
+
+  # Try other columns (and a few sensible pairs of columns) as candidate keys for
+  # a specific troublesome target_col, keeping only the best verified one:
+  best_key, best_purity = None, 0
+  for candidate in [c for c in df.columns if c != target_col]:
+      if group_sizes_ok(df, candidate):
+          p = key_purity(df, candidate, target_col)
+          if p > best_purity:
+              best_key, best_purity = candidate, p
+
+  if best_key is not None and best_purity > 0.95:
+      # Verified (near-)exact dependency -> safe to overwrite the whole column
+      df[target_col] = df.groupby(best_key)[target_col].transform(
+          lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
+      )
+  elif best_key is not None and best_purity > 0.5:
+      # Real but imperfect signal -> only fill missing values, never overwrite
+      group_val = df.groupby(best_key)[target_col].transform(
+          lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
+      )
+      df[target_col] = df[target_col].fillna(group_val)
+  # else: no useful key found for this column -- fall back to global mode/median
+  ```
+  This lets you find genuinely useful keys the hints didn't already cover, and it
+  generalizes to any dataset you're given in the future, not just this one."""
 
 
 # ---------------------------------------------------------------------------
@@ -377,6 +560,29 @@ GROUP-AWARE IMPUTATION (important for high-cardinality columns):
 # pour certaines colonnes, et quelle technique utiliser a la place).
 # ---------------------------------------------------------------------------
 DATASET_NOTES = {
+    "titanic": (
+        "IMPORTANT NOTE ON Age: this column has BOTH missing values AND outliers "
+        "that are two SEPARATE problems needing two SEPARATE fixes — do not handle "
+        "only one. Real ages in this dataset are 0-100; before imputing anything, "
+        "first find and null out implausible present values (e.g. 205.57, 261.71, "
+        "179.2 have all appeared as corrupted-but-present Age values) with "
+        "`df.loc[(df['Age'] < 0) | (df['Age'] > 100), 'Age'] = np.nan`, THEN do "
+        "your missing-value imputation (group by Pclass, using median() — see "
+        "NUMERIC COLUMNS rule above, never mode() for this).\n"
+        "IMPORTANT NOTE ON Fare: same two-part issue — real fares are roughly "
+        "0-520 (the historical maximum first-class fare was 512.3292, a real, "
+        "documented value, not an outlier to remove); values far above that (e.g. "
+        "7508.47, 6678.82) are corrupted outliers, not real fares — null them out "
+        "with a similar range check BEFORE group-based imputation (group by "
+        "Ticket, using median(), never mode()).\n"
+        "IMPORTANT NOTE ON Cabin: this column is ~79% missing — measured on real "
+        "data: grouping by Ticket and leaving any STILL-missing rows as NaN scored "
+        "F1=0.81, while additionally applying a GLOBAL mode() fallback for the "
+        "remaining missing rows collapsed the score to F1=0.08. Do NOT add a "
+        "global mode() fallback for Cabin after the Ticket-group step — leave "
+        "whatever is still missing as NaN. This is the one column in this dataset "
+        "where leaving values missing is measurably better than guessing."
+    ),
     "hospital": (
         "IMPORTANT NOTE ON Score AND Sample: their only natural key, "
         "(ProviderNumber, MeasureCode), is this dataset's PRIMARY KEY — verified: "
@@ -393,6 +599,32 @@ DATASET_NOTES = {
         "effort on this regex/parsing logic for Score and Sample specifically — a "
         "single hardcoded `.replace('1xx%', '100%')` line is not enough to catch the "
         "many different corruption instances in the full column."
+    ),
+    "flights": (
+        "IMPORTANT NOTE ON act_dep_time / act_arr_time: use the composite keys "
+        "(flight, sched_dep_time) and (flight, sched_arr_time) listed above EXACTLY "
+        "as those two columns — do NOT add 'src' to either key. Verified on the real "
+        "data: adding 'src' collapses every group down to size 1 (each source only "
+        "reports each flight once), which destroys all the redundancy the majority-"
+        "vote technique depends on. 'src' explains WHY the redundancy exists in the "
+        "first place (several different travel websites independently report the "
+        "same real flight), but it must never be part of the groupby key itself — "
+        "only (flight, sched_dep_time) / (flight, sched_arr_time).\n"
+        "CRITICAL — CLEAN TIME STRINGS BEFORE THE EXACT-KEY GROUPBY, NOT AFTER (OR "
+        "NEVER): a real, severe regression was caused by skipping this step — "
+        "sched_dep_time's F1 collapsed from 0.99 down to 0.63 because corrupted "
+        "variants were left untouched and got counted in the mode()/majority-vote "
+        "calculation itself, diluting or outright replacing the true majority value. "
+        "Two concrete fixes, both required, BEFORE any groupby on a time column: "
+        "(1) your disguised-missing-value list must include 'Not Available' and "
+        "'Delayed' in addition to the generic NA/N/A/unknown/empty markers — these "
+        "are real corrupted values seen in this dataset that a short generic list "
+        "misses; (2) strip date suffixes and parenthetical notes from otherwise-"
+        "valid times (e.g. '8:35aDec 1' -> '8:35 a.m.', '9:52 p.m. (Estimated)' -> "
+        "'9:52 p.m.') so they can correctly match/vote with the clean version of the "
+        "same time instead of being treated as a distinct, rare, wrong value. Only "
+        "AFTER both of these steps should you run the groupby/mode() majority-vote "
+        "step on that column."
     ),
 }
 
@@ -465,11 +697,25 @@ FUNCTIONAL_DEPENDENCIES = {
         # marquer EXACT permet l'ecrasement de colonne entiere, qui corrige aussi les
         # valeurs presentes-mais-fausses par vote majoritaire (comme un correcteur de
         # coquilles), pas seulement les valeurs manquantes.
-        # act_dep_time / act_arr_time (heure REELLE) sont l'oppose : elles varient avec
-        # les retards du jour, il n'existe PAS de valeur constante par vol -> ne pas les
-        # ajouter ici, F1 faible (0.21 et 0.33) est une limite structurelle du dataset,
-        # pas un bug a corriger (comme adr pour hotel, Age pour titanic).
         ("flight", ["sched_dep_time", "sched_arr_time"], True),
+        # MISE A JOUR IMPORTANTE (suggestion de l'encadrante, verifiee empiriquement) :
+        # (flight, sched_dep_time) -> act_dep_time est une FD EXACTE A 100% (verifie :
+        # les 100 groupes (flight, sched_dep_time) ont chacun UNE SEULE valeur
+        # act_dep_time distincte, avec en moyenne ~24 lignes par groupe -- c'est cette
+        # redondance de lignes, due a plusieurs SOURCES ('src') qui rapportent
+        # independamment le meme vol programme, qui rend le vote majoritaire possible).
+        # Idem pour (flight, sched_arr_time) -> act_arr_time. C'est CETTE cle composite
+        # a 2 colonnes qui explique pourquoi act_dep_time/act_arr_time avaient un F1
+        # faible (0.19-0.33) auparavant -- ce n'est PAS une limite structurelle comme
+        # on le pensait, juste une cle qu'on n'avait pas encore trouvee.
+        # ATTENTION : NE PAS ajouter 'src' a la cle -- verifie empiriquement que cela
+        # detruit toute la redondance (chaque source ne rapporte chaque vol qu'UNE
+        # fois, donc ajouter 'src' fait tomber la taille de groupe a exactement 1
+        # partout, rendant le vote majoritaire totalement inutile). 'src' explique
+        # POURQUOI la redondance existe (plusieurs sites web rapportent le meme vol),
+        # mais ne doit jamais faire partie de la cle de groupby elle-meme.
+        (("flight", "sched_dep_time"), ["act_dep_time"], True),
+        (("flight", "sched_arr_time"), ["act_arr_time"], True),
     ],
 }
 

@@ -1,21 +1,10 @@
 Traceback (most recent call last):
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\indexes\range.py", line 521, in get_loc
-    return self._range.index(new_key)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-ValueError: 0 is not in range
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 300, in <module>
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\series.py", line 959, in __getitem__
-    return self._get_value(key)
-           ^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\series.py", line 1046, in _get_value
-    loc = self.index.get_loc(label)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\indexes\range.py", line 523, in get_loc
-    raise KeyError(key) from err
-KeyError: 0
+  File "<string>", line 31, in <module>
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 142, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 1790, in replace
+    raise TypeError("repl must be a string or callable")
+TypeError: repl must be a string or callable

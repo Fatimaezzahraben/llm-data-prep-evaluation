@@ -1,7 +1,26 @@
 Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 133, in <module>
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\tools\numeric.py", line 183, in to_numeric
-    raise ValueError("invalid error value specified")
-ValueError: invalid error value specified
+  File "<string>", line 23, in <module>
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\ops\common.py", line 85, in new_method
+    return method(self, other)
+           ^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arraylike.py", line 50, in __lt__
+    return self._cmp_method(other, operator.lt)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\series.py", line 6735, in _cmp_method
+    res_values = ops.comparison_op(lvalues, rvalues, op)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 341, in comparison_op
+    res_values = op(lvalues, rvalues)
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\ops\common.py", line 85, in new_method
+    return method(self, other)
+           ^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arraylike.py", line 50, in __lt__
+    return self._cmp_method(other, operator.lt)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arrays\string_.py", line 1226, in _cmp_method
+    result[valid] = op(self._ndarray[valid], other)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'str' and 'int'

@@ -71,6 +71,35 @@ KNOWN_CRASH_PATTERNS = [
      "violates the NUMERIC COLUMNS rule: before calling .median() on any column, "
      "always confirm pd.api.types.is_numeric_dtype(df[col]) is True first; if not, "
      "convert with pd.to_numeric(df[col], errors='coerce') before calling .median()."),
+    ("does not support operation 'median'",
+     "Same root cause as the 'Cannot perform reduction' string-dtype error, just a "
+     "different pandas wording (this exact phrasing is common on pandas' newer "
+     "string[python]/string[pyarrow] dtype rather than plain 'object') — you called "
+     ".median() on a column that is still text, not numeric. Before calling .median() "
+     "on ANY column, always confirm pd.api.types.is_numeric_dtype(df[col]) is True "
+     "first; if not, convert with pd.to_numeric(df[col], errors='coerce') and assign "
+     "the result back to df[col] BEFORE calling .median() on it."),
+    ("invalid group reference",
+     "You wrote a regex backreference like `\\1` immediately followed by a literal "
+     "digit inside a replacement string, e.g. `re.sub(r'(\\d)', r'\\10', text)` — "
+     "Python reads `\\10` as ONE THING, \"backreference to group 10\", not as "
+     "\"backreference to group 1, then the literal character 0\", and crashes because "
+     "there is no group 10. This commonly happens when padding/reformatting a number "
+     "(e.g. adding a trailing/leading zero after a captured digit). Fix: use the "
+     "unambiguous `\\g<1>` syntax instead of bare `\\1` whenever a literal digit "
+     "immediately follows the group number in your replacement string — write "
+     "`r'\\g<1>0'` instead of `r'\\10'`. Check every `re.sub(...)` call in your script "
+     "for a backslash-digit immediately followed by another digit."),
+    ("Can only use .str accessor with string values",
+     "You called a `.str.something()` method (e.g. `.str.strip()`, `.str.upper()`) "
+     "on a column that pandas has already converted to a numeric (float/int) dtype "
+     "at that point in your script — `.str` only works on text/object columns. This "
+     "usually means an earlier line in your OWN script already converted this same "
+     "column to numeric (e.g. via `pd.to_numeric(...)`), and a LATER line mistakenly "
+     "tries to still treat it as text. Check the column's dtype right before the "
+     "`.str` call (`pd.api.types.is_numeric_dtype(df[col])` should be False there), "
+     "and reorder your cleaning steps so all string cleaning happens BEFORE any "
+     "numeric conversion for that column, never after."),
     ("Invalid value for dtype 'str'",
      "You mixed string and Timestamp/datetime values back into the same column "
      "after casting it with .astype(str). Follow the MULTI-FORMAT DATE PARSING "
@@ -134,6 +163,57 @@ KNOWN_CRASH_PATTERNS = [
      "e.g. writing `df.loc[mask1, mask2, 'col']` (3 arguments) instead of combining "
      "the masks first: `df.loc[mask1 & mask2, 'col']`. Check every `.loc[`/`.iloc[` "
      "call in your script for exactly 2 comma-separated arguments, not 3 or more."),
+    ("is out of range",
+     "You likely passed a large raw number (e.g. a Unix timestamp in seconds, like "
+     "1431993600) directly into a datetime constructor or `pd.to_datetime(...)` "
+     "WITHOUT specifying `unit='s'` — without that, pandas/Python's datetime tries to "
+     "interpret the number itself as a literal YEAR (which must be between 1 and "
+     "9999), and a huge number like a Unix timestamp is nowhere close to a valid "
+     "year, hence the crash. This also happens from a DOUBLE-CONVERSION bug: parsing "
+     "a numeric column into real dates once (correctly, with unit='s'), then later "
+     "accidentally re-running `pd.to_numeric(...)` or `pd.to_datetime(...)` on that "
+     "ALREADY-CONVERTED result a second time. Fix: only ever call "
+     "`pd.to_datetime(numeric_series, unit='s', errors='coerce')` ONCE on the raw "
+     "numeric values, and make sure nothing downstream re-parses the already-"
+     "converted dates as if they were still raw numbers."),
+    ("for dtype 'int64'",
+     "You tried to assign a FLOAT value (almost always the result of `.median()` or "
+     "`.mean()`, which are never guaranteed to be whole numbers) into a column that "
+     "was already cast to a strict integer dtype (e.g. via `.astype('int64')` or "
+     "`.astype(int)`) earlier in your script — pandas refuses this assignment because "
+     "it would silently lose the fractional part. This happens with patterns like: "
+     "`df[col] = df[col].astype('int64')` followed later by "
+     "`df.loc[mask, col] = df[col].median()` (median can be e.g. 8617.83, not a "
+     "whole number). Fix EITHER by not casting the column to int64 until the very "
+     "END of your script (do all imputation/cleaning while it's still float, which "
+     "handles both whole and fractional intermediate values safely) OR by rounding "
+     "and casting the specific value before assignment: "
+     "`df.loc[mask, col] = int(round(df[col].median()))`. Check every `.astype(int)` "
+     "/ `.astype('int64')` call in your script and make sure nothing is assigned "
+     "into that column afterward without going through int()/round() first."),
+    ("bad directive in format",
+     "You used `.strftime('%s')` (or another non-portable directive) to format a "
+     "date. `%s` is NOT a standard/portable strftime directive — it happens to work "
+     "on Linux/Mac but crashes with \"bad directive\" on Windows, and this script may "
+     "run on either OS. If you intended a Unix timestamp, use "
+     "`(dt - pd.Timestamp('1970-01-01')) // pd.Timedelta('1s')` instead of "
+     "`.strftime('%s')`. But for this task you almost always just want a plain "
+     "calendar-date string, which means `.strftime('%Y-%m-%d')` — a standard, "
+     "portable directive — is what you actually need; replace `%s` with that unless "
+     "you specifically need a raw timestamp number."),
+    ("replace() argument 2 must be str, not float",
+     "You called Python's built-in str.replace(old, new) (e.g. inside a "
+     ".apply(lambda x: x.replace(...)) on individual string values) with a NUMBER "
+     "(like a computed median) as the second argument. str.replace() requires BOTH "
+     "arguments to be strings -- it cannot insert a float/int directly into text. "
+     "Required fix: NEVER pass a numeric value as the replacement in a string "
+     ".replace() call. Instead, separate the two steps -- first use .replace() only "
+     "to REMOVE non-numeric junk/units from the string (e.g. "
+     "x.replace('kg', '').replace('EUR', ''), replacing with an empty string, never "
+     "with a number), THEN convert the cleaned string to numeric with "
+     "pd.to_numeric(), and only AFTER that fill missing/invalid values with a "
+     "numeric fallback via .fillna(median_value) -- never inside the string "
+     ".replace() call itself."),
 ]
 # Note: a crash message that is just a bare column name in quotes (e.g. "'act_dep_time'"
 # with no other text) is a KeyError — it means you referenced a column that does not
@@ -141,7 +221,10 @@ KNOWN_CRASH_PATTERNS = [
 # There is no fixed substring to match here since the column name varies, so this is
 # not added as a KNOWN_CRASH_PATTERNS entry, but the same general guidance applies:
 # before referencing any column, make sure it was not renamed/dropped by an earlier
-# line in the same script.
+# line in the same script. This also covers case-sensitivity typos observed in
+# practice (e.g. referencing 'Sibsp' instead of the real column 'SibSp') — always
+# copy column names EXACTLY, character-for-character including case, from the
+# profile/schema given in the prompt rather than typing them from memory.
 
 
 def _match_known_crash(error_message: str):
@@ -235,6 +318,11 @@ def run_validation_loop(dataset_path: str, dataset_name: str, prompt_type: str,
     Le F1 rapporte a chaque iteration est calcule UNIQUEMENT sur held_out (jamais
     montre au LLM), pour mesurer une vraie generalisation et non de la memorisation.
 
+    NOTE : l'evaluation qualite (Agent C) est desormais COMPLETEMENT SEPAREE de
+    cette boucle -- voir app/services/agent_c.py et notebooks/run_agent_c.py,
+    a lancer independamment APRES coup sur le resultat final. Cette boucle ne
+    gere plus que generation -> execution -> F1 -> feedback bases sur l'erreur.
+
     Returns
     -------
     dict avec : best_iteration, best_f1, best_code, best_report, history (liste de
@@ -254,7 +342,22 @@ def run_validation_loop(dataset_path: str, dataset_name: str, prompt_type: str,
 
     for iteration in range(1, max_iterations + 1):
         print(f"  [iter {iteration}] generation...")
-        llm_result = call_llm(current_prompt, provider=provider, system_prompt=system_prompt)
+        try:
+            llm_result = call_llm(current_prompt, provider=provider, system_prompt=system_prompt)
+        except Exception as e:
+            # call_llm() a deja essaye plusieurs reessais en interne (jusqu'a ~8 min
+            # d'attente cumulee pour un rate limit) -- si ca echoue encore ICI, c'est
+            # un echec persistant (quota horaire/journalier epuise, ou probleme de
+            # compte). Un vrai crash observe en pratique : cette exception n'etait
+            # pas capturee, ce qui arretait TOUT LE SCRIPT (y compris les datasets
+            # suivants dans run_validation_loop_all.py) a cause d'UN SEUL echec API.
+            # On enregistre l'echec et on passe a l'iteration suivante -- qui aura
+            # son propre jeu complet de reessais, une nouvelle chance en cas de
+            # quota qui se libere entre-temps -- plutot que de tout arreter.
+            error_msg = f"{type(e).__name__}: {e}"
+            print(f"  [iter {iteration}] ECHEC APPEL LLM (apres tous les reessais) : {error_msg}")
+            history.append({"iteration": iteration, "f1": None, "error": error_msg})
+            continue
         code = extract_python_code(llm_result["text"])
 
         workflow_name = f"{dataset_name}_{prompt_type}_{provider}_iter{iteration}"

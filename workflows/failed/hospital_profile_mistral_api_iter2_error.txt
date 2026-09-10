@@ -1,7 +1,7 @@
 Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 57, in <module>
+  File "<string>", line 241, in <module>
   File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 142, in wrapper
     return func(self, *args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -34,4 +34,4 @@ Traceback (most recent call last):
     addgroup(int(this[1:]), len(this) - 1)
   File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\re\_parser.py", line 1017, in addgroup
     raise s.error("invalid group reference %d" % index, pos)
-re.error: invalid group reference 10 at position 2
+re.error: invalid group reference 10 at position 1

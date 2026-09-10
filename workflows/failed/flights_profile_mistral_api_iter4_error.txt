@@ -1,19 +1,10 @@
 Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 101, in <module>
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\frame.py", line 12435, in apply
-    return op.apply().__finalize__(self, method="apply")
-           ^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\apply.py", line 1015, in apply
-    return self.apply_standard()
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\apply.py", line 1167, in apply_standard
-    results, res_index = self.apply_series_generator()
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\apply.py", line 1183, in apply_series_generator
-    results[i] = self.func(v, *self.args, **self.kwargs)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<string>", line 101, in <lambda>
-  File "<string>", line 91, in impute_actual_time
-KeyError: 'act_dep_time'
+  File "<string>", line 84, in <module>
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 142, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 1790, in replace
+    raise TypeError("repl must be a string or callable")
+TypeError: repl must be a string or callable

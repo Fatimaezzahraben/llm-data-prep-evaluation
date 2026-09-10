@@ -3,182 +3,181 @@ import numpy as np
 import difflib
 import re
 
-# Helper: safe mode for any column
-def safe_mode(series, fallback=None):
-    _mode = series.mode(dropna=True)
-    return _mode.iloc[0] if not _mode.empty else fallback
+# Hotel column cleaning
+df['hotel'] = df['hotel'].str.strip().str.title().replace({
+    'City Hotel': 'City Hotel',
+    'Resort Hotel': 'Resort Hotel'
+})
 
-# Helper: fuzzy correction for very-low-cardinality columns
-def fuzzy_correct_low_card(col, valid_values):
-    def correct(val):
-        if pd.isna(val):
-            return val
-        val_norm = str(val).strip().lower()
-        if val_norm in [v.lower() for v in valid_values]:
-            return next(v for v in valid_values if v.lower() == val_norm)
-        match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_values], n=1, cutoff=0.6)
-        if match:
-            return next(v for v in valid_values if v.lower() == match[0])
-        return val
-    return col.apply(correct)
-
-# Disguised missing -> NaN
-disguised_missing = ["NA", "N/A", "unknown", "", " ", "NaN", "nan"]
-for col in df.columns:
-    df[col] = df[col].astype(str).replace({v: np.nan for v in disguised_missing}, regex=False)
-
-# --- hotel (categorical, 0% missing, 82 unique) ---
-valid_hotel = ['City Hotel', 'Resort Hotel']
-df['hotel'] = fuzzy_correct_low_card(df['hotel'], valid_hotel)
-df['hotel'] = df['hotel'].str.strip()
-
-# --- is_canceled (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- lead_time (categorical, 0% missing, 3708 unique) ---
-# Convert to numeric
-df['lead_time'] = pd.to_numeric(df['lead_time'].astype(str).str.replace(r'[^0-9]', '', regex=True), errors='coerce')
+# Lead time cleaning
+df['lead_time'] = pd.to_numeric(df['lead_time'], errors='coerce')
 df['lead_time'] = df['lead_time'].fillna(df['lead_time'].median())
 
-# --- arrival_date_year (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- arrival_date_month (categorical, 0% missing, 12 unique) ---
-month_map = {
-    'January': 'January', 'February': 'February', 'March': 'March', 'April': 'April',
-    'May': 'May', 'June': 'June', 'July': 'July', 'August': 'August',
-    'September': 'September', 'October': 'October', 'November': 'November', 'December': 'December'
-}
-df['arrival_date_month'] = df['arrival_date_month'].str.strip().replace(month_map)
-
-# --- arrival_date_week_number (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- arrival_date_day_of_month (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- stays_in_weekend_nights (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- stays_in_week_nights (numeric, 0% missing, 792 unique) ---
-# Cap extreme outlier (999 -> NaN, then median)
-df.loc[df['stays_in_week_nights'] > 30, 'stays_in_week_nights'] = np.nan
-df['stays_in_week_nights'] = df['stays_in_week_nights'].fillna(df['stays_in_week_nights'].median())
-
-# --- adults (categorical, 0% missing, 45 unique) ---
-# Convert to numeric, handle typos like '2O' -> '2'
-df['adults'] = pd.to_numeric(df['adults'].astype(str).str.replace(r'[^0-9]', '', regex=True), errors='coerce')
+# Adults column cleaning
+def fuzzy_adults(val):
+    if pd.isna(val):
+        return val
+    val_norm = str(val).strip().lower()
+    valid_values = ['1', '2', '3', '1o', '2o']
+    if val_norm in [v.lower() for v in valid_values]:
+        return next(v for v in valid_values if v.lower() == val_norm)
+    match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_values], n=1, cutoff=0.6)
+    if match:
+        return next(v for v in valid_values if v.lower() == match[0])
+    return val
+df['adults'] = df['adults'].apply(fuzzy_adults)
+df['adults'] = pd.to_numeric(df['adults'], errors='coerce')
 df['adults'] = df['adults'].fillna(df['adults'].median())
 
-# --- children (categorical, 10% missing, 7 unique) ---
-# Convert to numeric, handle 'unknown' and empty
-df['children'] = pd.to_numeric(df['children'].astype(str).str.replace(r'[^0-9.]', '', regex=True), errors='coerce')
-df['children'] = df['children'].fillna(df['children'].median())
+# Children column cleaning
+df['children'] = df['children'].str.strip().replace({
+    'unknown': np.nan,
+    ' ': np.nan
+})
+df['children'] = pd.to_numeric(df['children'], errors='coerce')
+df['children'] = df['children'].fillna(df['children'].mode().iloc[0] if not df['children'].mode().empty else 0.0)
 
-# --- babies (numeric, 0% missing) ---
-# Cap extreme outlier (49 -> NaN, then median)
-df.loc[df['babies'] > 10, 'babies'] = np.nan
-df['babies'] = df['babies'].fillna(df['babies'].median())
+# Meal column cleaning
+df['meal'] = df['meal'].str.strip().replace({
+    ' ': np.nan,
+    'unknown': np.nan
+})
+df['meal'] = df['meal'].fillna(df['meal'].mode().iloc[0] if not df['meal'].mode().empty else 'BB')
 
-# --- meal (categorical, 10% missing, 7 unique) ---
-valid_meal = ['BB', 'HB', 'SC']
-df['meal'] = fuzzy_correct_low_card(df['meal'], valid_meal)
-df['meal'] = df['meal'].fillna(safe_mode(df['meal']))
+# Country column cleaning
+df['country'] = df['country'].str.strip().replace({
+    ' ': np.nan
+})
+df['country'] = df['country'].fillna(df['country'].mode().iloc[0] if not df['country'].mode().empty else 'PRT')
 
-# --- country (categorical, 10.37% missing, 176 unique) ---
-# Normalize case and strip
-df['country'] = df['country'].str.strip().str.upper()
-df['country'] = df['country'].fillna(safe_mode(df['country']))
+# Market segment column cleaning
+df['market_segment'] = df['market_segment'].str.strip().replace({
+    ' ': np.nan
+})
+df['market_segment'] = df['market_segment'].fillna(df['market_segment'].mode().iloc[0] if not df['market_segment'].mode().empty else 'Online TA')
 
-# --- market_segment (categorical, 10% missing, 10 unique) ---
-valid_segment = ['Online TA', 'Offline TA/TO', 'Groups', 'Direct', 'Corporate']
-df['market_segment'] = fuzzy_correct_low_card(df['market_segment'], valid_segment)
-df['market_segment'] = df['market_segment'].fillna(safe_mode(df['market_segment']))
-
-# --- distribution_channel (categorical, 0% missing, 5 unique) ---
-valid_channel = ['TA/TO', 'Direct', 'Corporate', 'GDS', 'Undefined']
-df['distribution_channel'] = fuzzy_correct_low_card(df['distribution_channel'], valid_channel)
-
-# --- is_repeated_guest (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- previous_cancellations (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- previous_bookings_not_canceled (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- reserved_room_type (categorical, 0% missing, 10 unique) ---
-df['reserved_room_type'] = df['reserved_room_type'].str.strip().str.upper()
-df['reserved_room_type'] = df['reserved_room_type'].fillna(safe_mode(df['reserved_room_type']))
-
-# --- assigned_room_type (categorical, 0% missing, 12 unique) ---
-df['assigned_room_type'] = df['assigned_room_type'].str.strip().str.upper()
-df['assigned_room_type'] = df['assigned_room_type'].fillna(safe_mode(df['assigned_room_type']))
-
-# --- booking_changes (numeric, 0% missing) ---
-# Already numeric, no missing
-
-# --- deposit_type (categorical, 0% missing, 82 unique) ---
-valid_deposit = ['No Deposit', 'Non Refund']
-df['deposit_type'] = fuzzy_correct_low_card(df['deposit_type'], valid_deposit)
-df['deposit_type'] = df['deposit_type'].fillna(safe_mode(df['deposit_type']))
-
-# --- agent (categorical, 22.33% missing, 327 unique) ---
-# Convert to numeric
-df['agent'] = pd.to_numeric(df['agent'].astype(str).str.replace(r'[^0-9.]', '', regex=True), errors='coerce')
-# Group-aware impute (fillna only)
-group_val = df.groupby(['country', 'market_segment', 'distribution_channel'])['agent'].transform(
-    lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
-)
-df['agent'] = df['agent'].fillna(group_val)
+# Agent column cleaning
+df['agent'] = df['agent'].str.strip().replace({
+    ' ': np.nan
+})
+df['agent'] = pd.to_numeric(df['agent'], errors='coerce')
 df['agent'] = df['agent'].fillna(df['agent'].median())
 
-# --- company (numeric, 94.31% missing) ---
-# Convert to numeric
-df['company'] = pd.to_numeric(df['company'].astype(str).str.replace(r'[^0-9.]', '', regex=True), errors='coerce')
-# Leave as NaN (very high missing rate)
+# Company column cleaning
+df['company'] = pd.to_numeric(df['company'], errors='coerce')
+df['company'] = df['company'].fillna(df['company'].median())
 
-# --- days_in_waiting_list (numeric, 0% missing) ---
-# Cap extreme outlier (8996 -> NaN, then median)
-df.loc[df['days_in_waiting_list'] > 365, 'days_in_waiting_list'] = np.nan
+# Days in waiting list cleaning
+df['days_in_waiting_list'] = pd.to_numeric(df['days_in_waiting_list'], errors='coerce')
 df['days_in_waiting_list'] = df['days_in_waiting_list'].fillna(df['days_in_waiting_list'].median())
 
-# --- customer_type (categorical, 0% missing, 133 unique) ---
-valid_customer = ['Transient', 'Transient-Party', 'Contract', 'Group']
-df['customer_type'] = fuzzy_correct_low_card(df['customer_type'], valid_customer)
-df['customer_type'] = df['customer_type'].fillna(safe_mode(df['customer_type']))
-
-# --- adr (numeric, 0% missing) ---
-# Cap extreme outliers (negative and > 1000 -> NaN, then median)
-df.loc[(df['adr'] < 0) | (df['adr'] > 1000), 'adr'] = np.nan
-# Group-aware impute (fillna only)
-group_val = df.groupby(['hotel', 'market_segment', 'reserved_room_type'])['adr'].transform(
-    lambda s: s.median() if not s.empty else np.nan
-)
-df['adr'] = df['adr'].fillna(group_val)
+# ADR column cleaning
+df['adr'] = pd.to_numeric(df['adr'], errors='coerce')
+df['adr'] = df['adr'].fillna(df.groupby(['hotel', 'market_segment', 'reserved_room_type'])['adr'].transform(
+    lambda s: s.median() if not s.median().isna() else np.nan))
 df['adr'] = df['adr'].fillna(df['adr'].median())
 
-# --- required_car_parking_spaces (numeric, 0% missing) ---
-# Cap extreme outlier (8 -> NaN, then median)
-df.loc[df['required_car_parking_spaces'] > 3, 'required_car_parking_spaces'] = np.nan
-df['required_car_parking_spaces'] = df['required_car_parking_spaces'].fillna(df['required_car_parking_spaces'].median())
+# Deposit type cleaning
+df['deposit_type'] = df['deposit_type'].str.strip().replace({
+    'No Deposit': 'No Deposit',
+    'Non Refund': 'Non Refund',
+    '  No Deposit ': 'No Deposit',
+    'NO deposit': 'No Deposit',
+    '  Non Refund ': 'Non Refund'
+})
+df['deposit_type'] = df['deposit_type'].fillna(df['deposit_type'].mode().iloc[0] if not df['deposit_type'].mode().empty else 'No Deposit')
 
-# --- total_of_special_requests (numeric, 0% missing) ---
-# Already numeric, no missing
+# Customer type cleaning
+df['customer_type'] = df['customer_type'].str.strip().replace({
+    '  Transient ': 'Transient'
+})
+df['customer_type'] = df['customer_type'].fillna(df['customer_type'].mode().iloc[0] if not df['customer_type'].mode().empty else 'Transient')
 
-# --- reservation_status (categorical, 0% missing, 3 unique) ---
-valid_status = ['Check-Out', 'Canceled', 'No-Show']
-df['reservation_status'] = fuzzy_correct_low_card(df['reservation_status'], valid_status)
+# Date columns cleaning
+def clean_date(val):
+    if pd.isna(val):
+        return val
+    val = str(val).strip()
+    if val == '':
+        return np.nan
+    try:
+        return pd.to_datetime(val, format='%Y-%m-%d', errors='coerce')
+    except:
+        try:
+            return pd.to_datetime(val, format='%d/%m/%Y', errors='coerce')
+        except:
+            try:
+                return pd.to_datetime(val, format='%d-%m-%Y', errors='coerce')
+            except:
+                try:
+                    return pd.to_datetime(val, format='%m/%d/%Y', errors='coerce')
+                except:
+                    return np.nan
 
-# --- reservation_status_date (categorical, 0% missing, 5361 unique) ---
-# Parse multi-format dates
-parsed = pd.Series(pd.NaT, index=df.index)
-raw = df['reservation_status_date'].astype(str)
-for fmt in ['%Y-%m-%d', '%d/%m/%Y', '%d-%b-%Y', '%Y/%m/%d']:
-    still_missing = parsed.isna()
-    parsed.loc[still_missing] = pd.to_datetime(raw[still_missing], format=fmt, errors='coerce')
-df['reservation_status_date'] = parsed.dt.strftime('%Y-%m-%d')
-df['reservation_status_date'] = df['reservation_status_date'].fillna(safe_mode(df['reservation_status_date']))
+df['arrival_date_year'] = df['arrival_date_year'].astype(int)
+df['arrival_date_month'] = df['arrival_date_month'].str.strip().replace({
+    'December': 'December',
+    'July': 'July',
+    'May': 'May',
+    'October': 'October',
+    'April': 'April'
+})
+df['arrival_date_week_number'] = pd.to_numeric(df['arrival_date_week_number'], errors='coerce')
+df['arrival_date_day_of_month'] = pd.to_numeric(df['arrival_date_day_of_month'], errors='coerce')
 
-df
+# Create a combined date column for validation
+df['arrival_date'] = df.apply(lambda row: clean_date(f"{row['arrival_date_year']}-{row['arrival_date_month']}-{row['arrival_date_day_of_month']}"), axis=1)
+df['arrival_date'] = df['arrival_date'].dt.strftime('%Y-%m-%d')
+
+# Stays columns cleaning
+df['stays_in_weekend_nights'] = pd.to_numeric(df['stays_in_weekend_nights'], errors='coerce')
+df['stays_in_week_nights'] = pd.to_numeric(df['stays_in_week_nights'], errors='coerce')
+
+# Numeric columns outlier handling
+numeric_cols = ['lead_time', 'arrival_date_week_number', 'arrival_date_day_of_month',
+                'stays_in_weekend_nights', 'stays_in_week_nights', 'babies',
+                'previous_cancellations', 'previous_bookings_not_canceled',
+                'booking_changes', 'agent', 'days_in_waiting_list', 'adr',
+                'required_car_parking_spaces', 'total_of_special_requests']
+
+for col in numeric_cols:
+    if pd.api.types.is_numeric_dtype(df[col]):
+        min_val = df[col].quantile(0.01)
+        max_val = df[col].quantile(0.99)
+        df[col] = df[col].clip(lower=min_val, upper=max_val)
+
+# Reservation status date cleaning
+df['reservation_status_date'] = df['reservation_status_date'].str.strip().replace({
+    '16/07/2015': '2015-07-16',
+    '30-Dec-2016': '2016-12-30',
+    '2016-02-26': '2016-02-26'
+})
+df['reservation_status_date'] = pd.to_datetime(df['reservation_status_date'], errors='coerce')
+df['reservation_status_date'] = df['reservation_status_date'].dt.strftime('%Y-%m-%d')
+
+# Group aware imputation for agent
+group_val = df.groupby(['country', 'market_segment', 'distribution_channel'])['agent'].transform(
+    lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['agent'] = df['agent'].fillna(group_val)
+
+# Group aware imputation for lead_time
+group_val = df.groupby(['market_segment'])['lead_time'].transform(
+    lambda s: s.median() if not s.median().isna() else np.nan)
+df['lead_time'] = df['lead_time'].fillna(group_val)
+
+# Final cleaning for numeric columns
+for col in numeric_cols:
+    if pd.api.types.is_numeric_dtype(df[col]):
+        df[col] = df[col].fillna(df[col].median())
+
+# Final cleaning for categorical columns
+categorical_cols = ['hotel', 'lead_time', 'arrival_date_month', 'adults', 'children',
+                    'meal', 'country', 'market_segment', 'distribution_channel',
+                    'reserved_room_type', 'assigned_room_type', 'deposit_type',
+                    'agent', 'customer_type', 'reservation_status']
+
+for col in categorical_cols:
+    if col in ['lead_time', 'adults', 'children', 'agent']:
+        continue
+    if pd.api.types.is_string_dtype(df[col]):
+        df[col] = df[col].fillna(df[col].mode().iloc[0] if not df[col].mode().empty else 'Unknown')

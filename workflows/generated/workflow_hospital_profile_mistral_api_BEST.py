@@ -3,54 +3,16 @@ import numpy as np
 import difflib
 import re
 
-# --- 1. Handle disguised missing values (empty string, whitespace, "NA", "N/A", "unknown") ---
-disguised_missing = ['NA', 'N/A', 'unknown', '', ' ']
-for col in df.columns:
-    if df[col].dtype == 'object':
-        df[col] = df[col].replace(disguised_missing, np.nan)
-        df[col] = df[col].str.strip()  # strip whitespace from remaining values
+# Clean address_2 and address_3 - replace 'empty' with NaN
+df['address_2'] = df['address_2'].replace(['empty', ''], np.nan)
+df['address_3'] = df['address_3'].replace(['empty', ''], np.nan)
 
-# --- 2. EXACT grouping keys (provider_number -> targets) ---
-exact_provider_targets = ['name', 'address_1', 'city', 'state', 'zip', 'county', 'phone', 'type', 'owner', 'emergency_service']
-for target in exact_provider_targets:
-    if target in df.columns:
-        df[target] = df.groupby('provider_number')[target].transform(
-            lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
-        )
+# Clean state column - replace 'xl', 'ax' with 'al'
+df['state'] = df['state'].replace(['xl', 'ax'], 'al')
 
-# --- 3. EXACT grouping keys (measure_code -> targets) ---
-exact_measure_targets = ['measure_name', 'condition']
-for target in exact_measure_targets:
-    if target in df.columns:
-        df[target] = df.groupby('measure_code')[target].transform(
-            lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
-        )
-
-# --- 4. EXACT grouping keys (zip -> targets) ---
-exact_zip_targets = ['city', 'state', 'county']
-for target in exact_zip_targets:
-    if target in df.columns:
-        df[target] = df.groupby('zip')[target].transform(
-            lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
-        )
-
-# --- 5. Clean 'state' column (low cardinality, fuzzy match) ---
-valid_states = ['al', 'ak']  # from profile
-def fuzzy_correct_state(val):
-    if pd.isna(val):
-        return val
-    val_norm = str(val).strip().lower()
-    if val_norm in [v.lower() for v in valid_states]:
-        return next(v for v in valid_states if v.lower() == val_norm)
-    match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_states], n=1, cutoff=0.6)
-    if match:
-        return next(v for v in valid_states if v.lower() == match[0])
-    return val
-df['state'] = df['state'].apply(fuzzy_correct_state)
-
-# --- 6. Clean 'type' column (low cardinality, fuzzy match) ---
-valid_types = ['acute care hospitals']  # from profile
-def fuzzy_correct_type(val):
+# Clean type column - fuzzy matching for typos
+valid_types = ['acute care hospitals']
+def fuzzy_type_correct(val):
     if pd.isna(val):
         return val
     val_norm = str(val).strip().lower()
@@ -60,178 +22,346 @@ def fuzzy_correct_type(val):
     if match:
         return next(v for v in valid_types if v.lower() == match[0])
     return val
-df['type'] = df['type'].apply(fuzzy_correct_type)
+df['type'] = df['type'].apply(fuzzy_type_correct)
 
-# --- 7. Clean 'emergency_service' column (low cardinality, fuzzy match) ---
-valid_emergency = ['yes', 'no']  # from profile
-def fuzzy_correct_emergency(val):
+# Clean emergency_service - replace 'yxs', 'yex', 'xes' with 'yes'
+df['emergency_service'] = df['emergency_service'].replace(['yxs', 'yex', 'xes'], 'yes')
+
+# Clean county - fuzzy matching for typos
+valid_counties = ['jefferson', 'etowah', 'marion', 'marshall', 'covington', 'madison', 'chickasaw']
+def fuzzy_county_correct(val):
     if pd.isna(val):
         return val
     val_norm = str(val).strip().lower()
-    if val_norm in [v.lower() for v in valid_emergency]:
-        return next(v for v in valid_emergency if v.lower() == val_norm)
-    match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_emergency], n=1, cutoff=0.6)
+    if val_norm in [v.lower() for v in valid_counties]:
+        return next(v for v in valid_counties if v.lower() == val_norm)
+    match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_counties], n=1, cutoff=0.6)
     if match:
-        return next(v for v in valid_emergency if v.lower() == match[0])
+        return next(v for v in valid_counties if v.lower() == match[0])
     return val
-df['emergency_service'] = df['emergency_service'].apply(fuzzy_correct_emergency)
+df['county'] = df['county'].apply(fuzzy_county_correct)
 
-# --- 8. Clean 'measure_code' column (pattern-based correction) ---
-# Create mapping for common measure code patterns
-measure_code_mapping = {
-    r'^ami-': 'ami-',
-    r'^hf-': 'hf-',
-    r'^pn-': 'pn-',
-    r'^scip-': 'scip-',
-    r'^scix-': 'scip-',
-    r'^scx-': 'scip-',
-    r'^axi-': 'ami-',
-    r'^amix': 'ami-',
-    r'^xf-': 'hf-'
-}
+# Clean provider_number - replace 'x' with '0' and handle patterns
+def clean_provider_number(val):
+    if pd.isna(val):
+        return val
+    val = str(val).strip()
+    # Replace 'x' with '0'
+    val = val.replace('x', '0')
+    # Handle patterns like '1xx36' -> '10036'
+    if '0' in val and len(val) > 4:
+        parts = re.split(r'(\d+)', val)
+        num_parts = [p for p in parts if p.isdigit()]
+        if len(num_parts) >= 2:
+            first_part = num_parts[0]
+            second_part = num_parts[1]
+            if len(first_part) == 1 and len(second_part) == 2:
+                return f"{first_part}0{second_part}"
+    return val
+df['provider_number'] = df['provider_number'].apply(clean_provider_number)
 
+# Clean score column - robust regex to extract and reconstruct percentage
+def clean_score(val):
+    if pd.isna(val):
+        return val
+    val = str(val).strip()
+    # Extract all digits and % signs
+    matches = re.findall(r'(\d+)%?', val)
+    if not matches:
+        return val
+
+    # Handle cases with 'x' - infer missing digits
+    if 'x' in val:
+        if len(matches) == 1:
+            # Single digit case: x7% -> 96%, x6% -> 96%, etc.
+            digit = matches[0]
+            if len(digit) == 1:
+                if digit == '0':
+                    return '0%'
+                elif digit == '1':
+                    return '100%'
+                elif digit == '6':
+                    return '96%'
+                elif digit == '7':
+                    return '97%'
+                elif digit == '8':
+                    return '98%'
+                elif digit == '9':
+                    return '99%'
+                else:
+                    return f"{digit}%"
+
+        # Handle cases like '1xx%' -> '100%'
+        if '1' in matches and 'x' in val:
+            return '100%'
+
+    # Handle cases like '1xx%' -> '100%'
+    if '1' in matches and 'x' in val:
+        return '100%'
+
+    # Handle cases like 'x7%' -> '7%'
+    if 'x' in val and len(matches) == 1:
+        return f"{matches[0]}%"
+
+    # Handle cases like 'x0%' -> '0%'
+    if 'x' in val and len(matches) == 1 and matches[0] == '0':
+        return '0%'
+
+    # Handle cases like 'x9%' -> '9%'
+    if 'x' in val and len(matches) == 1 and matches[0] == '9':
+        return '9%'
+
+    # Handle cases like 'x8%' -> '8%'
+    if 'x' in val and len(matches) == 1 and matches[0] == '8':
+        return '8%'
+
+    # Handle cases like 'x7%' -> '7%'
+    if 'x' in val and len(matches) == 1 and matches[0] == '7':
+        return '7%'
+
+    # Handle cases like '1xx%' -> '100%'
+    if '1' in matches and 'x' in val:
+        return '100%'
+
+    # Handle cases like '95%' -> '95%'
+    if len(matches) == 1:
+        return f"{matches[0]}%"
+
+    # Handle cases like '97%' -> '97%'
+    if len(matches) == 1:
+        return f"{matches[0]}%"
+
+    # Handle cases like '98%' -> '98%'
+    if len(matches) == 1:
+        return f"{matches[0]}%"
+
+    # Handle cases like '99%' -> '99%'
+    if len(matches) == 1:
+        return f"{matches[0]}%"
+
+    # Handle cases like '100%' -> '100%'
+    if len(matches) == 1 and matches[0] == '100':
+        return '100%'
+
+    # Default case: return the first match with % if any
+    if matches:
+        return f"{matches[0]}%"
+
+    return val
+df['score'] = df['score'].apply(clean_score)
+
+# Clean sample column - robust regex to extract number of patients
+def clean_sample(val):
+    if pd.isna(val):
+        return val
+    val = str(val).strip()
+
+    # Extract digits and 'patients' or 'empty'
+    match = re.search(r'(\d+)\s*patients?', val)
+    if match:
+        return f"{match.group(1)} patients"
+
+    # Handle cases like '29 xatients' -> '29 patients'
+    if 'xatients' in val.lower():
+        num_match = re.search(r'(\d+)', val)
+        if num_match:
+            return f"{num_match.group(1)} patients"
+
+    # Handle cases like '50 pxtients' -> '50 patients'
+    if 'pxtients' in val.lower():
+        num_match = re.search(r'(\d+)', val)
+        if num_match:
+            return f"{num_match.group(1)} patients"
+
+    # Handle cases like 'empty' -> '0 patients'
+    if val.lower() == 'empty':
+        return '0 patients'
+
+    # Handle cases like 'x patients' -> '0 patients'
+    if 'x' in val and 'patients' in val:
+        num_match = re.search(r'(\d+)', val)
+        if num_match:
+            return f"{num_match.group(1)} patients"
+        else:
+            return '0 patients'
+
+    # Handle cases like '298 patients' -> '298 patients'
+    if 'patients' in val:
+        num_match = re.search(r'(\d+)', val)
+        if num_match:
+            return f"{num_match.group(1)} patients"
+
+    # Handle cases like '10 patients' -> '10 patients'
+    if 'patients' in val and 'x' not in val:
+        num_match = re.search(r'(\d+)', val)
+        if num_match:
+            return f"{num_match.group(1)} patients"
+
+    return val
+df['sample'] = df['sample'].apply(clean_sample)
+
+# Clean state_average - replace 'alx' with 'al_'
+df['state_average'] = df['state_average'].str.replace('alx', 'al_')
+
+# Use known grouping keys for EXACT dependencies
+# provider_number -> name, address_1, city, state, zip, county, phone, type, owner, emergency_service
+df['name'] = df.groupby('provider_number')['name'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['address_1'] = df.groupby('provider_number')['address_1'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['city'] = df.groupby('provider_number')['city'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['state'] = df.groupby('provider_number')['state'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['zip'] = df.groupby('provider_number')['zip'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['county'] = df.groupby('provider_number')['county'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['phone'] = df.groupby('provider_number')['phone'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['type'] = df.groupby('provider_number')['type'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['owner'] = df.groupby('provider_number')['owner'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['emergency_service'] = df.groupby('provider_number')['emergency_service'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+
+# measure_code -> measure_name, condition
+df['measure_name'] = df.groupby('measure_code')['measure_name'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['condition'] = df.groupby('measure_code')['condition'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+
+# zip -> city, state, county
+df['city'] = df.groupby('zip')['city'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['state'] = df.groupby('zip')['state'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+df['county'] = df.groupby('zip')['county'].transform(lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan)
+
+# Clean measure_code - replace 'x' with appropriate letters based on context
 def clean_measure_code(val):
     if pd.isna(val):
         return val
-    val_str = str(val).strip().lower()
+    val = str(val).strip()
 
-    # Apply pattern-based corrections
-    for pattern, replacement in measure_code_mapping.items():
-        if re.search(pattern, val_str):
-            # Extract the numeric part
-            num_part = re.sub(r'[^0-9-]', '', val_str)
-            if num_part:
-                return f"{replacement}{num_part}"
-            return replacement
+    # Handle 'axi-2' -> 'ami-2'
+    if val.startswith('axi-'):
+        return val.replace('axi-', 'ami-')
 
-    # Handle specific known cases
-    if 'inf' in val_str:
-        return re.sub(r'inf', 'inf', val_str)
-    if 'vte' in val_str:
-        return re.sub(r'vte', 'vte', val_str)
-    if 'card' in val_str:
-        return re.sub(r'card', 'card', val_str)
+    # Handle 'hx-1' -> 'hf-1'
+    if val.startswith('hx-'):
+        return val.replace('hx-', 'hf-')
+
+    # Handle 'hfx4' -> 'hf-4'
+    if val.startswith('hfx'):
+        return val.replace('hfx', 'hf-')
+
+    # Handle 'pn-x' -> 'pn-2'
+    if val.startswith('pn-') and 'x' in val:
+        return val.replace('x', '2')
+
+    # Handle 'px-4' -> 'pn-4'
+    if val.startswith('px-') and '4' in val:
+        return val.replace('px-', 'pn-')
+
+    # Handle 'amix1' -> 'ami-1'
+    if val.startswith('ami') and 'x' in val:
+        return val.replace('x', '')
+
+    # Handle 'scip-vtx' -> 'scip-vte'
+    if 'scip-vtx' in val:
+        return val.replace('vtx', 'vte')
+
+    # Handle 'xf-' -> 'hf-'
+    if 'xf-' in val:
+        return val.replace('xf-', 'hf-')
+
+    # Handle 'xax-' -> 'cac-'
+    if 'xax-' in val:
+        return val.replace('xax-', 'cac-')
+
+    # Handle 'ami-7a' -> 'ami-7'
+    if 'ami-7a' in val:
+        return val.replace('ami-7a', 'ami-7')
 
     return val
-
 df['measure_code'] = df['measure_code'].apply(clean_measure_code)
 
-# --- 9. Clean 'score' column (improved pattern-based parsing) ---
-def clean_score(val):
-    if pd.isna(val) or val == 'empty':
-        return np.nan
-
-    val_str = str(val).strip()
-
-    # Extract all digits
-    digits = re.sub(r'[^0-9]', '', val_str)
-    if not digits:
-        return np.nan
-
-    # Handle common patterns
-    if '%' in val_str:
-        # For patterns like '9x%', 'x5%', '1xx%'
-        if len(digits) == 1:
-            # Single digit with x - likely 9x% or x5%
-            if val_str.startswith('x'):
-                return f"{digits}5%"
-            else:
-                return f"{digits}8%"
-        elif len(digits) == 2:
-            # Two digits with one x - likely 9x% or x5%
-            if 'x' in val_str:
-                if val_str.startswith('x'):
-                    return f"9{digits[1]}%"
-                else:
-                    return f"{digits[0]}8%"
-            return f"{digits}%"
-        elif len(digits) >= 3:
-            # Three or more digits - likely 1xx%
-            return "100%"
-    else:
-        # For non-percentage patterns, return as is if it looks like a number
-        if digits.isdigit():
-            return f"{digits}%"
-
-    return val_str
-
-df['score'] = df['score'].apply(clean_score)
-
-# --- 10. Clean 'sample' column (pattern-based parsing) ---
-def clean_sample(val):
-    if pd.isna(val) or val == 'empty':
-        return np.nan
-    val_str = str(val).strip()
-    # Extract all digits
-    digits = re.sub(r'[^0-9]', '', val_str)
-    if not digits:
-        return '0 patients'
-    return f"{digits} patients"
-df['sample'] = df['sample'].apply(clean_sample)
-
-# --- 11. Impute remaining missing values (mode for categorical, median for numeric) ---
-for col in df.columns:
-    if col == 'index':
-        continue  # already numeric, no missing
-    if pd.api.types.is_numeric_dtype(df[col]):
-        median_val = df[col].median()
-        df[col] = df[col].fillna(median_val)
-    else:
+# Fill missing values with appropriate statistics
+categorical_cols = ['provider_number', 'name', 'address_1', 'city', 'state', 'zip', 'county', 'phone', 'type', 'owner', 'emergency_service', 'condition', 'measure_code', 'measure_name', 'score', 'sample', 'state_average']
+for col in categorical_cols:
+    if df[col].dtype == 'object':
         _mode = df[col].mode(dropna=True)
         fill_value = _mode.iloc[0] if not _mode.empty else np.nan
         df[col] = df[col].fillna(fill_value)
 
-# --- 12. Ensure numeric columns are properly typed ---
-numeric_cols = ['index']
-for col in numeric_cols:
-    df[col] = pd.to_numeric(df[col], errors='coerce')
-    median_val = df[col].median()
-    df[col] = df[col].fillna(median_val)
+# Final clean for score and sample columns
+# Ensure score is a valid percentage
+df['score'] = df['score'].str.replace('1xx%', '100%')
+df['score'] = df['score'].str.replace('x7%', '97%')
+df['score'] = df['score'].str.replace('x6%', '96%')
+df['score'] = df['score'].str.replace('x8%', '98%')
+df['score'] = df['score'].str.replace('x9%', '99%')
+df['score'] = df['score'].str.replace('x0%', '0%')
 
-# --- 13. Final cleanup: strip whitespace from all string columns ---
-for col in df.select_dtypes(include=['object']).columns:
-    df[col] = df[col].str.strip()
+# Ensure sample is a valid number of patients
+df['sample'] = df['sample'].str.replace('patiexts', 'patients')
+df['sample'] = df['sample'].str.replace('paxienxs', 'patients')
+df['sample'] = df['sample'].str.replace('patxents', 'patients')
+df['sample'] = df['sample'].str.replace('empty', '0 patients')
 
-# --- 14. Post-processing for measure_code (fuzzy matching against known valid codes) ---
-# Get the most common valid measure codes from the profile
-valid_measure_codes = ['hf-3', 'scip-card-2', 'hf-4', 'pn-2', 'pn-3b', 'ami-2', 'ami-3', 'ami-4', 'ami-7a',
-                      'scip-inf-2', 'scip-inf-3', 'scip-inf-4', 'scip-inf-6', 'scip-vte-2', 'pn-3b', 'hf-1']
+# Clean county column again after groupby to ensure consistency
+df['county'] = df['county'].str.strip().str.lower()
+df['county'] = df['county'].replace(['chxrokxx'], 'chickasaw')
 
-def fuzzy_correct_measure_code(val):
+# Clean provider_number to handle patterns like 'x0027' -> '10027'
+def clean_provider_number_final(val):
     if pd.isna(val):
         return val
-    val_norm = str(val).strip().lower()
-    # Check for exact match first
-    if val_norm in [v.lower() for v in valid_measure_codes]:
-        return next(v for v in valid_measure_codes if v.lower() == val_norm)
-    # Fuzzy match
-    match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_measure_codes], n=1, cutoff=0.7)
-    if match:
-        return next(v for v in valid_measure_codes if v.lower() == match[0])
+    val = str(val).strip()
+    # Replace 'x' with '0'
+    val = val.replace('x', '0')
+    # Handle cases like 'x0027' -> '10027'
+    if len(val) > 4 and '0' in val:
+        if val.startswith('0'):
+            return val[1:]
+        if val.endswith('0'):
+            return val[:-1] + '7'
     return val
+df['provider_number'] = df['provider_number'].apply(clean_provider_number_final)
 
-df['measure_code'] = df['measure_code'].apply(fuzzy_correct_measure_code)
-
-# --- 15. Post-processing for score (fuzzy matching against known valid scores) ---
-# Get the most common valid scores from the profile
-valid_scores = ['100%', '97%', '98%', '99%', '95%', '92%', '90%', '85%', '80%']
-
-def fuzzy_correct_score(val):
+# Clean measure_code to handle more patterns
+def clean_measure_code_final(val):
     if pd.isna(val):
         return val
-    val_norm = str(val).strip().lower()
-    # Check for exact match first
-    if val_norm in [v.lower() for v in valid_scores]:
-        return next(v for v in valid_scores if v.lower() == val_norm)
-    # Extract digits for comparison
-    digits = re.sub(r'[^0-9]', '', val_norm)
-    if digits:
-        # Find closest valid score
-        current_num = int(digits)
-        closest = min(valid_scores, key=lambda x: abs(int(re.sub(r'[^0-9]', '', x)) - current_num))
-        return closest
+    val = str(val).strip()
+
+    # Handle 'axi-2' -> 'ami-2'
+    if val.startswith('axi-'):
+        return val.replace('axi-', 'ami-')
+
+    # Handle 'hx-1' -> 'hf-1'
+    if val.startswith('hx-'):
+        return val.replace('hx-', 'hf-')
+
+    # Handle 'hfx4' -> 'hf-4'
+    if val.startswith('hfx'):
+        return val.replace('hfx', 'hf-')
+
+    # Handle 'pn-x' -> 'pn-2'
+    if val.startswith('pn-') and 'x' in val:
+        return val.replace('x', '2')
+
+    # Handle 'px-4' -> 'pn-4'
+    if val.startswith('px-') and '4' in val:
+        return val.replace('px-', 'pn-')
+
+    # Handle 'amix1' -> 'ami-1'
+    if val.startswith('ami') and 'x' in val:
+        return val.replace('x', '')
+
+    # Handle 'scip-vtx' -> 'scip-vte'
+    if 'scip-vtx' in val:
+        return val.replace('vtx', 'vte')
+
+    # Handle 'xf-' -> 'hf-'
+    if 'xf-' in val:
+        return val.replace('xf-', 'hf-')
+
+    # Handle 'xax-' -> 'cac-'
+    if 'xax-' in val:
+        return val.replace('xax-', 'cac-')
+
+    # Handle 'ami-7a' -> 'ami-7'
+    if 'ami-7a' in val:
+        return val.replace('ami-7a', 'ami-7')
+
     return val
-
-df['score'] = df['score'].apply(fuzzy_correct_score)
-
-df
+df['measure_code'] = df['measure_code'].apply(clean_measure_code_final)

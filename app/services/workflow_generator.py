@@ -20,13 +20,24 @@ GENERATED_DIR = Path("workflows/generated")
 def extract_python_code(llm_text: str) -> str:
     """
     Le LLM répond souvent avec du texte autour d'un bloc ```python ... ```.
-    On extrait uniquement le code ; si aucun bloc n'est trouvé, on retourne le texte
-    complet tel quel (au cas où le LLM aurait retourné du code brut sans balises).
+    On extrait uniquement le code ; si aucun bloc COMPLET (ouvert + ferme) n'est
+    trouve, on retombe sur le texte tel quel -- MAIS on retire quand meme un
+    eventuel fence d'OUVERTURE isole (```python ou ```) au debut/```  a la fin,
+    au cas ou la reponse ait ete tronquee avant la fermeture (ex: coupure reseau
+    en plein streaming, cf. retry ReadTimeout dans llm.py) : sans ce nettoyage,
+    la ligne litterale "```python" se retrouvait comme PREMIERE ligne du script
+    sauvegarde, provoquant un crash systematique "invalid syntax (<string>, line 1)"
+    a l'execution, alors que le reste du code genere etait parfaitement valide.
     """
     match = re.search(r"```(?:python)?\s*\n(.*?)```", llm_text, re.DOTALL)
     if match:
         return match.group(1).strip()
-    return llm_text.strip()
+    # Pas de bloc complet (fence de fermeture absent, ex: reponse tronquee) --
+    # on retire quand meme un fence d'ouverture/fermeture isole s'il existe.
+    text = llm_text.strip()
+    text = re.sub(r"^```(?:python)?\s*\n?", "", text)
+    text = re.sub(r"\n?```\s*$", "", text)
+    return text.strip()
 
 
 def generate_workflow(dataset_path: str, dataset_name: str, prompt_type: str,

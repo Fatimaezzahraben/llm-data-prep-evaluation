@@ -1,96 +1,58 @@
 {
-  "global_precision": 0.755,
-  "global_recall": 0.7536,
-  "global_f1": 0.7543,
+  "global_precision": 0.379,
+  "global_recall": 0.2584,
+  "global_f1": 0.3073,
   "global_initial_error_rate": 0.0106,
-  "global_final_error_rate": 0.0026,
+  "global_final_error_rate": 0.0079,
   "total_cells": 3820480,
   "total_errors_start": 40481,
-  "total_errors_end": 9976,
-  "total_fixed": 30505,
-  "total_regressions": 76,
+  "total_errors_end": 30019,
+  "total_fixed": 10462,
+  "total_regressions": 12879,
   "columns": {
     "adr": {
       "initial_error_rate": 0.006,
-      "final_error_rate": 0.0057,
+      "final_error_rate": 0.006,
       "total_errors": 717,
-      "correct_repairs": 36,
-      "failed_repair": 621,
-      "regressions": 60,
-      "precision": 0.0548,
-      "recall": 0.0502,
-      "f1_score": 0.0524,
-      "success_samples": [
-        {
-          "id": "23356",
-          "dirty": "8031.42",
-          "truth": "80.0",
-          "llm_output": "80.0"
-        },
-        {
-          "id": "112971",
-          "dirty": "5037.7",
-          "truth": "95.0",
-          "llm_output": "95.0"
-        },
-        {
-          "id": "116754",
-          "dirty": "2755.03",
-          "truth": "95.5",
-          "llm_output": "95.5"
-        }
-      ],
-      "failed_samples": [
+      "correct_repairs": 0,
+      "failed_repair": 0,
+      "regressions": 717,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [],
+      "regression_samples": [
         {
           "id": "20004",
           "dirty": "8761.89",
           "truth": "4.0",
-          "llm_output": "60.0"
+          "llm_output": "8761.89"
         },
         {
           "id": "77549",
           "dirty": "9339.16",
           "truth": "170.0",
-          "llm_output": "75.0"
+          "llm_output": "9339.16"
         },
         {
           "id": "2823",
           "dirty": "9480.21",
           "truth": "48.0",
-          "llm_output": "103.665"
-        }
-      ],
-      "regression_samples": [
-        {
-          "id": "22069",
-          "dirty": "758.73",
-          "truth": "54.0",
-          "llm_output": "758.73"
-        },
-        {
-          "id": "47276",
-          "dirty": "501.21",
-          "truth": "127.0",
-          "llm_output": "501.21"
-        },
-        {
-          "id": "45293",
-          "dirty": "251.67",
-          "truth": "85.67",
-          "llm_output": "251.67"
+          "llm_output": "9480.21"
         }
       ]
     },
     "adults": {
       "initial_error_rate": 0.024,
-      "final_error_rate": 0.0,
+      "final_error_rate": 0.0032,
       "total_errors": 2866,
-      "correct_repairs": 2861,
-      "failed_repair": 5,
+      "correct_repairs": 2479,
+      "failed_repair": 387,
       "regressions": 0,
-      "precision": 0.9983,
-      "recall": 0.9983,
-      "f1_score": 0.9983,
+      "precision": 0.865,
+      "recall": 0.865,
+      "f1_score": 0.865,
       "success_samples": [
         {
           "id": "42787",
@@ -113,21 +75,21 @@
       ],
       "failed_samples": [
         {
-          "id": "103714",
-          "dirty": "0kg",
-          "truth": "0",
+          "id": "114639",
+          "dirty": "3kg",
+          "truth": "3",
           "llm_output": "2.0"
         },
         {
-          "id": "42591",
-          "dirty": "0j",
-          "truth": "0",
+          "id": "53905",
+          "dirty": "1B",
+          "truth": "1",
           "llm_output": "2.0"
         },
         {
-          "id": "45158",
-          "dirty": "O",
-          "truth": "0",
+          "id": "51984",
+          "dirty": "3kg",
+          "truth": "3",
           "llm_output": "2.0"
         }
       ],
@@ -135,21 +97,15 @@
     },
     "agent": {
       "initial_error_rate": 0.03,
-      "final_error_rate": 0.013,
+      "final_error_rate": 0.018,
       "total_errors": 3582,
-      "correct_repairs": 2029,
-      "failed_repair": 1553,
+      "correct_repairs": 1432,
+      "failed_repair": 2150,
       "regressions": 0,
-      "precision": 0.5664,
-      "recall": 0.5664,
-      "f1_score": 0.5664,
+      "precision": 0.3998,
+      "recall": 0.3998,
+      "f1_score": 0.3998,
       "success_samples": [
-        {
-          "id": "45050",
-          "dirty": " ",
-          "truth": "6.0",
-          "llm_output": "6.0"
-        },
         {
           "id": "41135",
           "dirty": "unknown",
@@ -161,9 +117,21 @@
           "dirty": " ",
           "truth": "9.0",
           "llm_output": "9.0"
+        },
+        {
+          "id": "101182",
+          "dirty": null,
+          "truth": "9.0",
+          "llm_output": "9.0"
         }
       ],
       "failed_samples": [
+        {
+          "id": "45050",
+          "dirty": " ",
+          "truth": "6.0",
+          "llm_output": "28.0"
+        },
         {
           "id": "93211",
           "dirty": null,
@@ -174,168 +142,124 @@
           "id": "1418",
           "dirty": null,
           "truth": null,
-          "llm_output": "250.0"
-        },
-        {
-          "id": "63917",
-          "dirty": null,
-          "truth": "30.0",
-          "llm_output": "1.0"
+          "llm_output": "9.0"
         }
       ],
       "regression_samples": []
     },
     "babies": {
       "initial_error_rate": 0.006,
-      "final_error_rate": 0.0002,
+      "final_error_rate": 0.006,
       "total_errors": 717,
-      "correct_repairs": 698,
-      "failed_repair": 3,
-      "regressions": 16,
-      "precision": 0.9957,
-      "recall": 0.9735,
-      "f1_score": 0.9845,
-      "success_samples": [
+      "correct_repairs": 0,
+      "failed_repair": 0,
+      "regressions": 717,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [],
+      "regression_samples": [
         {
           "id": "32271",
           "dirty": "46.0",
           "truth": "0",
-          "llm_output": "0.0"
+          "llm_output": "46"
         },
         {
           "id": "66044",
           "dirty": "44.0",
           "truth": "0",
-          "llm_output": "0.0"
+          "llm_output": "44"
         },
         {
           "id": "108035",
           "dirty": "44.0",
           "truth": "0",
-          "llm_output": "0.0"
-        }
-      ],
-      "failed_samples": [
-        {
-          "id": "36870",
-          "dirty": "46.0",
-          "truth": "1",
-          "llm_output": "0.0"
-        },
-        {
-          "id": "23641",
-          "dirty": "27.0",
-          "truth": "1",
-          "llm_output": "0.0"
-        },
-        {
-          "id": "44774",
-          "dirty": "26.0",
-          "truth": "1",
-          "llm_output": "0.0"
-        }
-      ],
-      "regression_samples": [
-        {
-          "id": "97761",
-          "dirty": "10.0",
-          "truth": "0",
-          "llm_output": "10.0"
-        },
-        {
-          "id": "11554",
-          "dirty": "10.0",
-          "truth": "0",
-          "llm_output": "10.0"
-        },
-        {
-          "id": "24774",
-          "dirty": "10.0",
-          "truth": "0",
-          "llm_output": "10.0"
+          "llm_output": "44"
         }
       ]
     },
     "children": {
       "initial_error_rate": 0.03,
-      "final_error_rate": 0.0022,
+      "final_error_rate": 0.0288,
       "total_errors": 3582,
-      "correct_repairs": 3316,
-      "failed_repair": 266,
+      "correct_repairs": 147,
+      "failed_repair": 3435,
       "regressions": 0,
-      "precision": 0.9257,
-      "recall": 0.9257,
-      "f1_score": 0.9257,
+      "precision": 0.041,
+      "recall": 0.041,
+      "f1_score": 0.041,
       "success_samples": [
+        {
+          "id": "7304",
+          "dirty": " ",
+          "truth": "1.0",
+          "llm_output": "1.0"
+        },
+        {
+          "id": "93053",
+          "dirty": " ",
+          "truth": "1.0",
+          "llm_output": "1.0"
+        },
+        {
+          "id": "104575",
+          "dirty": null,
+          "truth": "1.0",
+          "llm_output": "1.0"
+        }
+      ],
+      "failed_samples": [
         {
           "id": "93757",
           "dirty": null,
           "truth": "0.0",
-          "llm_output": "0.0"
+          "llm_output": "1.0"
         },
         {
           "id": "6592",
           "dirty": null,
           "truth": "0.0",
-          "llm_output": "0.0"
+          "llm_output": "1.0"
         },
         {
           "id": "50459",
           "dirty": null,
           "truth": "0.0",
-          "llm_output": "0.0"
-        }
-      ],
-      "failed_samples": [
-        {
-          "id": "28331",
-          "dirty": " ",
-          "truth": "2.0",
-          "llm_output": "0.0"
-        },
-        {
-          "id": "7304",
-          "dirty": " ",
-          "truth": "1.0",
-          "llm_output": "0.0"
-        },
-        {
-          "id": "11418",
-          "dirty": "unknown",
-          "truth": "2.0",
-          "llm_output": "0.0"
+          "llm_output": "1.0"
         }
       ],
       "regression_samples": []
     },
     "country": {
       "initial_error_rate": 0.03,
-      "final_error_rate": 0.0176,
+      "final_error_rate": 0.0299,
       "total_errors": 3582,
-      "correct_repairs": 1475,
-      "failed_repair": 2107,
-      "regressions": 0,
-      "precision": 0.4118,
-      "recall": 0.4118,
-      "f1_score": 0.4118,
+      "correct_repairs": 17,
+      "failed_repair": 610,
+      "regressions": 2955,
+      "precision": 0.0271,
+      "recall": 0.0047,
+      "f1_score": 0.0081,
       "success_samples": [
         {
-          "id": "10643",
-          "dirty": "unknown",
-          "truth": "PRT",
-          "llm_output": "PRT"
-        },
-        {
-          "id": "13102",
+          "id": "14464",
           "dirty": null,
-          "truth": "PRT",
-          "llm_output": "PRT"
+          "truth": null,
+          "llm_output": null
         },
         {
-          "id": "63147",
-          "dirty": " ",
-          "truth": "PRT",
-          "llm_output": "PRT"
+          "id": "14015",
+          "dirty": null,
+          "truth": null,
+          "llm_output": null
+        },
+        {
+          "id": "14127",
+          "dirty": null,
+          "truth": null,
+          "llm_output": null
         }
       ],
       "failed_samples": [
@@ -343,33 +267,52 @@
           "id": "28540",
           "dirty": " ",
           "truth": "CN",
-          "llm_output": "PRT"
+          "llm_output": null
         },
+        {
+          "id": "63147",
+          "dirty": " ",
+          "truth": "PRT",
+          "llm_output": null
+        },
+        {
+          "id": "20489",
+          "dirty": " ",
+          "truth": "POL",
+          "llm_output": null
+        }
+      ],
+      "regression_samples": [
         {
           "id": "72029",
           "dirty": null,
           "truth": "DEU",
-          "llm_output": "PRT"
+          "llm_output": null
         },
         {
           "id": "107440",
           "dirty": "unknown",
           "truth": "GBR",
-          "llm_output": "PRT"
+          "llm_output": "unknown"
+        },
+        {
+          "id": "11481",
+          "dirty": null,
+          "truth": "DEU",
+          "llm_output": null
         }
-      ],
-      "regression_samples": []
+      ]
     },
     "customer_type": {
       "initial_error_rate": 0.024,
-      "final_error_rate": 0.0,
+      "final_error_rate": 0.0049,
       "total_errors": 2866,
-      "correct_repairs": 2866,
-      "failed_repair": 0,
+      "correct_repairs": 2285,
+      "failed_repair": 581,
       "regressions": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1_score": 1.0,
+      "precision": 0.7973,
+      "recall": 0.7973,
+      "f1_score": 0.7973,
       "success_samples": [
         {
           "id": "39962",
@@ -390,71 +333,71 @@
           "llm_output": "Transient"
         }
       ],
-      "failed_samples": [],
+      "failed_samples": [
+        {
+          "id": "14939",
+          "dirty": "Trnsient-Party",
+          "truth": "Transient-Party",
+          "llm_output": "Transient Party"
+        },
+        {
+          "id": "75194",
+          "dirty": "Transiet-Party",
+          "truth": "Transient-Party",
+          "llm_output": "Transient Party"
+        },
+        {
+          "id": "31962",
+          "dirty": "  Transient-Party ",
+          "truth": "Transient-Party",
+          "llm_output": "Transient Party"
+        }
+      ],
       "regression_samples": []
     },
     "days_in_waiting_list": {
       "initial_error_rate": 0.006,
-      "final_error_rate": 0.0001,
+      "final_error_rate": 0.006,
       "total_errors": 717,
-      "correct_repairs": 703,
-      "failed_repair": 14,
-      "regressions": 0,
-      "precision": 0.9805,
-      "recall": 0.9805,
-      "f1_score": 0.9805,
-      "success_samples": [
+      "correct_repairs": 0,
+      "failed_repair": 0,
+      "regressions": 717,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [],
+      "regression_samples": [
         {
           "id": "1814",
           "dirty": "8761.0",
           "truth": "0",
-          "llm_output": "0.0"
+          "llm_output": "8761.0"
         },
         {
           "id": "83439",
           "dirty": "3818.0",
           "truth": "0",
-          "llm_output": "0.0"
+          "llm_output": "3818.0"
         },
         {
           "id": "32646",
           "dirty": "3007.0",
           "truth": "0",
-          "llm_output": "0.0"
+          "llm_output": "3007.0"
         }
-      ],
-      "failed_samples": [
-        {
-          "id": "50038",
-          "dirty": "6332.0",
-          "truth": "48",
-          "llm_output": "0.0"
-        },
-        {
-          "id": "50608",
-          "dirty": "7661.0",
-          "truth": "60",
-          "llm_output": "0.0"
-        },
-        {
-          "id": "51441",
-          "dirty": "5494.0",
-          "truth": "98",
-          "llm_output": "0.0"
-        }
-      ],
-      "regression_samples": []
+      ]
     },
     "deposit_type": {
       "initial_error_rate": 0.024,
       "final_error_rate": 0.0,
       "total_errors": 2866,
-      "correct_repairs": 2866,
-      "failed_repair": 0,
+      "correct_repairs": 2865,
+      "failed_repair": 1,
       "regressions": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1_score": 1.0,
+      "precision": 0.9997,
+      "recall": 0.9997,
+      "f1_score": 0.9997,
       "success_samples": [
         {
           "id": "41644",
@@ -475,226 +418,252 @@
           "llm_output": "No Deposit"
         }
       ],
-      "failed_samples": [],
+      "failed_samples": [
+        {
+          "id": "22723",
+          "dirty": "REfundable",
+          "truth": "Refundable",
+          "llm_output": "Non Refund"
+        }
+      ],
       "regression_samples": []
     },
     "hotel": {
       "initial_error_rate": 0.024,
-      "final_error_rate": 0.0,
+      "final_error_rate": 0.0143,
       "total_errors": 2866,
-      "correct_repairs": 2866,
+      "correct_repairs": 1162,
       "failed_repair": 0,
-      "regressions": 0,
+      "regressions": 1704,
       "precision": 1.0,
-      "recall": 1.0,
-      "f1_score": 1.0,
+      "recall": 0.4054,
+      "f1_score": 0.577,
       "success_samples": [
-        {
-          "id": "69007",
-          "dirty": "City Hoetl",
-          "truth": "City Hotel",
-          "llm_output": "City Hotel"
-        },
-        {
-          "id": "86532",
-          "dirty": "Ciity Hotel",
-          "truth": "City Hotel",
-          "llm_output": "City Hotel"
-        },
         {
           "id": "54684",
           "dirty": "  City Hotel ",
           "truth": "City Hotel",
           "llm_output": "City Hotel"
+        },
+        {
+          "id": "73217",
+          "dirty": "CITY HOTel",
+          "truth": "City Hotel",
+          "llm_output": "City Hotel"
+        },
+        {
+          "id": "56208",
+          "dirty": "CIty hotel",
+          "truth": "City Hotel",
+          "llm_output": "City Hotel"
         }
       ],
       "failed_samples": [],
-      "regression_samples": []
+      "regression_samples": [
+        {
+          "id": "69007",
+          "dirty": "City Hoetl",
+          "truth": "City Hotel",
+          "llm_output": "City Hoetl"
+        },
+        {
+          "id": "86532",
+          "dirty": "Ciity Hotel",
+          "truth": "City Hotel",
+          "llm_output": "Ciity Hotel"
+        },
+        {
+          "id": "95511",
+          "dirty": "Ciity Hotel",
+          "truth": "City Hotel",
+          "llm_output": "Ciity Hotel"
+        }
+      ]
     },
     "lead_time": {
       "initial_error_rate": 0.024,
-      "final_error_rate": 0.0016,
+      "final_error_rate": 0.0238,
       "total_errors": 2866,
-      "correct_repairs": 2676,
-      "failed_repair": 190,
+      "correct_repairs": 28,
+      "failed_repair": 2838,
       "regressions": 0,
-      "precision": 0.9337,
-      "recall": 0.9337,
-      "f1_score": 0.9337,
+      "precision": 0.0098,
+      "recall": 0.0098,
+      "f1_score": 0.0098,
       "success_samples": [
+        {
+          "id": "2202",
+          "dirty": "7j",
+          "truth": "7",
+          "llm_output": "7.0"
+        },
+        {
+          "id": "82987",
+          "dirty": "0O",
+          "truth": "0",
+          "llm_output": "0.0"
+        },
+        {
+          "id": "108912",
+          "dirty": "3j",
+          "truth": "3",
+          "llm_output": "3.0"
+        }
+      ],
+      "failed_samples": [
         {
           "id": "40843",
           "dirty": "3O0",
           "truth": "30",
-          "llm_output": "30.0"
+          "llm_output": "162.0"
         },
         {
           "id": "109730",
           "dirty": "2kg03",
           "truth": "203",
-          "llm_output": "203.0"
+          "llm_output": "58.0"
         },
-        {
-          "id": "77187",
-          "dirty": "34O",
-          "truth": "34",
-          "llm_output": "34.0"
-        }
-      ],
-      "failed_samples": [
         {
           "id": "61172",
           "dirty": "O",
           "truth": "0",
-          "llm_output": "18.0"
-        },
-        {
-          "id": "46085",
-          "dirty": "1O6",
-          "truth": "106",
           "llm_output": "16.0"
-        },
-        {
-          "id": "6500",
-          "dirty": "5O",
-          "truth": "50",
-          "llm_output": "5.0"
         }
       ],
       "regression_samples": []
     },
     "market_segment": {
       "initial_error_rate": 0.03,
-      "final_error_rate": 0.0107,
+      "final_error_rate": 0.03,
       "total_errors": 3582,
-      "correct_repairs": 2304,
-      "failed_repair": 1278,
-      "regressions": 0,
-      "precision": 0.6432,
-      "recall": 0.6432,
-      "f1_score": 0.6432,
-      "success_samples": [
+      "correct_repairs": 0,
+      "failed_repair": 569,
+      "regressions": 3013,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [
         {
           "id": "117341",
           "dirty": " ",
           "truth": "Online TA",
-          "llm_output": "Online TA"
+          "llm_output": null
         },
+        {
+          "id": "114192",
+          "dirty": " ",
+          "truth": "Online TA",
+          "llm_output": null
+        },
+        {
+          "id": "34549",
+          "dirty": " ",
+          "truth": "Offline TA/TO",
+          "llm_output": null
+        }
+      ],
+      "regression_samples": [
         {
           "id": "97356",
           "dirty": null,
           "truth": "Direct",
-          "llm_output": "Direct"
+          "llm_output": null
         },
         {
           "id": "75139",
           "dirty": null,
           "truth": "Groups",
-          "llm_output": "Groups"
-        }
-      ],
-      "failed_samples": [
+          "llm_output": null
+        },
         {
           "id": "88842",
           "dirty": null,
           "truth": "Online TA",
-          "llm_output": "Groups"
-        },
-        {
-          "id": "57765",
-          "dirty": null,
-          "truth": "Offline TA/TO",
-          "llm_output": "Groups"
-        },
-        {
-          "id": "49078",
-          "dirty": null,
-          "truth": "Offline TA/TO",
-          "llm_output": "Groups"
+          "llm_output": null
         }
-      ],
-      "regression_samples": []
+      ]
     },
     "meal": {
       "initial_error_rate": 0.03,
-      "final_error_rate": 0.0063,
+      "final_error_rate": 0.03,
       "total_errors": 3582,
-      "correct_repairs": 2828,
-      "failed_repair": 754,
-      "regressions": 0,
-      "precision": 0.7895,
-      "recall": 0.7895,
-      "f1_score": 0.7895,
-      "success_samples": [
+      "correct_repairs": 0,
+      "failed_repair": 1243,
+      "regressions": 2339,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [
         {
           "id": "50270",
           "dirty": " ",
           "truth": "BB",
-          "llm_output": "BB"
+          "llm_output": null
         },
-        {
-          "id": "81807",
-          "dirty": null,
-          "truth": "BB",
-          "llm_output": "BB"
-        },
-        {
-          "id": "103262",
-          "dirty": null,
-          "truth": "BB",
-          "llm_output": "BB"
-        }
-      ],
-      "failed_samples": [
         {
           "id": "109823",
           "dirty": "unknown",
           "truth": "SC",
-          "llm_output": "BB"
-        },
-        {
-          "id": "81540",
-          "dirty": null,
-          "truth": "HB",
-          "llm_output": "BB"
+          "llm_output": null
         },
         {
           "id": "97196",
           "dirty": "unknown",
           "truth": "HB",
-          "llm_output": "BB"
+          "llm_output": null
         }
       ],
-      "regression_samples": []
+      "regression_samples": [
+        {
+          "id": "81540",
+          "dirty": null,
+          "truth": "HB",
+          "llm_output": null
+        },
+        {
+          "id": "81807",
+          "dirty": null,
+          "truth": "BB",
+          "llm_output": null
+        },
+        {
+          "id": "103262",
+          "dirty": null,
+          "truth": "BB",
+          "llm_output": null
+        }
+      ]
     },
     "reservation_status_date": {
       "initial_error_rate": 0.045,
-      "final_error_rate": 0.0218,
+      "final_error_rate": 0.0446,
       "total_errors": 5373,
-      "correct_repairs": 2769,
-      "failed_repair": 2604,
+      "correct_repairs": 47,
+      "failed_repair": 5326,
       "regressions": 0,
-      "precision": 0.5154,
-      "recall": 0.5154,
-      "f1_score": 0.5154,
+      "precision": 0.0087,
+      "recall": 0.0087,
+      "f1_score": 0.0087,
       "success_samples": [
         {
-          "id": "19621",
-          "dirty": "29-Dec-2015",
-          "truth": "2015-12-29",
-          "llm_output": "2015-12-29"
+          "id": "71414",
+          "dirty": "2016/10/10",
+          "truth": "2016-10-10",
+          "llm_output": "2016-10-10"
         },
         {
-          "id": "22875",
-          "dirty": "2016/04/09",
-          "truth": "2016-04-09",
-          "llm_output": "2016-04-09"
+          "id": "84782",
+          "dirty": "2016/05/05",
+          "truth": "2016-05-05",
+          "llm_output": "2016-05-05"
         },
         {
-          "id": "24030",
-          "dirty": "2016/05/10",
-          "truth": "2016-05-10",
-          "llm_output": "2016-05-10"
+          "id": "44562",
+          "dirty": "2015/10/10",
+          "truth": "2015-10-10",
+          "llm_output": "2015-10-10"
         }
       ],
       "failed_samples": [
@@ -702,77 +671,58 @@
           "id": "98336",
           "dirty": "1475020800",
           "truth": "2016-09-28",
-          "llm_output": "2015-10-21"
+          "llm_output": null
         },
         {
           "id": "77591",
           "dirty": "1459555200",
           "truth": "2016-04-02",
-          "llm_output": "2015-10-21"
+          "llm_output": null
         },
         {
-          "id": "77659",
-          "dirty": "October 06, 2016",
-          "truth": "2016-10-06",
-          "llm_output": "2015-10-21"
+          "id": "19621",
+          "dirty": "29-Dec-2015",
+          "truth": "2015-12-29",
+          "llm_output": null
         }
       ],
       "regression_samples": []
     },
     "stays_in_week_nights": {
       "initial_error_rate": 0.006,
-      "final_error_rate": 0.0042,
+      "final_error_rate": 0.006,
       "total_errors": 717,
-      "correct_repairs": 212,
-      "failed_repair": 505,
-      "regressions": 0,
-      "precision": 0.2957,
-      "recall": 0.2957,
-      "f1_score": 0.2957,
-      "success_samples": [
+      "correct_repairs": 0,
+      "failed_repair": 0,
+      "regressions": 717,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "success_samples": [],
+      "failed_samples": [],
+      "regression_samples": [
         {
           "id": "57149",
           "dirty": "687.0",
           "truth": "2",
-          "llm_output": "2.0"
+          "llm_output": "687.0"
         },
-        {
-          "id": "99911",
-          "dirty": "633.0",
-          "truth": "2",
-          "llm_output": "2.0"
-        },
-        {
-          "id": "31149",
-          "dirty": "696.0",
-          "truth": "2",
-          "llm_output": "2.0"
-        }
-      ],
-      "failed_samples": [
         {
           "id": "37132",
           "dirty": "243.0",
           "truth": "3",
-          "llm_output": "2.0"
+          "llm_output": "243.0"
         },
         {
           "id": "6710",
           "dirty": "465.0",
           "truth": "3",
-          "llm_output": "2.0"
-        },
-        {
-          "id": "6895",
-          "dirty": "344.0",
-          "truth": "8",
-          "llm_output": "2.0"
+          "llm_output": "465.0"
         }
-      ],
-      "regression_samples": []
+      ]
     }
   },
-  "pipeline_time_seconds": 78.86,
+  "pipeline_time_seconds": 80.11,
   "workflow_name": "hotel-booking-demand_profile_mistral_api_iter5",
   "rows_expected": 119390,
   "rows_remaining": 119390,
@@ -780,44 +730,44 @@
   "rows_lost_pct": 0.0,
   "errors_lost_with_deleted_rows": 0,
   "warning_over_cleaning": false,
-  "global_accuracy_all_cells": 0.9871,
-  "total_failed_repairs": 9900,
+  "global_accuracy_all_cells": 0.8531,
+  "total_failed_repairs": 17140,
   "by_error_family": {
     "outliers": {
       "total_errors": 2868,
-      "correct_repairs": 1649,
-      "failed_repair": 1143,
-      "regressions": 76,
-      "precision": 0.5906,
-      "recall": 0.575,
-      "f1_score": 0.5827
+      "correct_repairs": 0,
+      "failed_repair": 0,
+      "regressions": 2868,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
     },
     "typos": {
       "total_errors": 14330,
-      "correct_repairs": 14135,
-      "failed_repair": 195,
-      "regressions": 0,
-      "precision": 0.9864,
-      "recall": 0.9864,
-      "f1_score": 0.9864
+      "correct_repairs": 8819,
+      "failed_repair": 3807,
+      "regressions": 1704,
+      "precision": 0.6985,
+      "recall": 0.6154,
+      "f1_score": 0.6543
     },
     "missing_values": {
       "total_errors": 17910,
-      "correct_repairs": 11952,
-      "failed_repair": 5958,
-      "regressions": 0,
-      "precision": 0.6673,
-      "recall": 0.6673,
-      "f1_score": 0.6673
+      "correct_repairs": 1596,
+      "failed_repair": 8007,
+      "regressions": 8307,
+      "precision": 0.1662,
+      "recall": 0.0891,
+      "f1_score": 0.116
     },
     "format_errors": {
       "total_errors": 5373,
-      "correct_repairs": 2769,
-      "failed_repair": 2604,
+      "correct_repairs": 47,
+      "failed_repair": 5326,
       "regressions": 0,
-      "precision": 0.5154,
-      "recall": 0.5154,
-      "f1_score": 0.5154
+      "precision": 0.0087,
+      "recall": 0.0087,
+      "f1_score": 0.0087
     }
   }
 }

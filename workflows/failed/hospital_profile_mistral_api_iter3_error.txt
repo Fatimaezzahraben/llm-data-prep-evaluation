@@ -1,5 +1,7 @@
 Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 98, in <module>
-TypeError: clean_text_garbage() got an unexpected keyword argument 'regex'
+  File "<string>", line 172, in <module>
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\tools\numeric.py", line 212, in to_numeric
+    raise TypeError("arg must be a list, tuple, 1-d array, or Series")
+TypeError: arg must be a list, tuple, 1-d array, or Series

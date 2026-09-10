@@ -1,0 +1,144 @@
+{
+  "noisy_file": "datasets/flights/dirty.csv",
+  "cleaned_file": "workflows/executed/flights_profile_mistral_api_iter3_cleaned.csv",
+  "reference_file": "datasets/flights/clean.csv",
+  "valid": false,
+  "rule_issues": [
+    "Functional dependency violation: act_arr_time -> 'sched_arr_time' should map to exactly one value per group, but 1 group(s) have multiple different 'sched_arr_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+    "Functional dependency violation: ('sched_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+    "Functional dependency violation: ('sched_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+    "Functional dependency violation: ('act_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+    "Functional dependency violation: ('act_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+    "Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'sched_dep_time' should map to exactly one value per group, but 1 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+    "Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'act_dep_time' should map to exactly one value per group, but 1 group(s) have multiple different 'act_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared."
+  ],
+  "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Functional dependency violation: act_arr_time -> 'sched_arr_time' should map to exactly one value per group, but 1 group(s) have multiple different 'sched_arr_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('act_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('act_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'sched_dep_time' should map to exactly one value per group, but 1 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'act_dep_time' should map to exactly one value per group, but 1 group(s) have multiple different 'act_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+  "auto_discovered": {
+    "expected_columns": "from df_original.columns",
+    "numeric_columns": [],
+    "date_columns": {},
+    "fd_pairs": [
+      [
+        "flight",
+        "sched_dep_time"
+      ],
+      [
+        "flight",
+        "act_dep_time"
+      ],
+      [
+        "flight",
+        "sched_arr_time"
+      ],
+      [
+        "flight",
+        "act_arr_time"
+      ],
+      [
+        "act_arr_time",
+        "sched_arr_time"
+      ],
+      [
+        [
+          "sched_dep_time",
+          "sched_arr_time"
+        ],
+        "flight"
+      ],
+      [
+        [
+          "sched_dep_time",
+          "sched_arr_time"
+        ],
+        "act_dep_time"
+      ],
+      [
+        [
+          "sched_dep_time",
+          "sched_arr_time"
+        ],
+        "act_arr_time"
+      ],
+      [
+        [
+          "sched_dep_time",
+          "act_arr_time"
+        ],
+        "flight"
+      ],
+      [
+        [
+          "sched_dep_time",
+          "act_arr_time"
+        ],
+        "act_dep_time"
+      ],
+      [
+        [
+          "act_dep_time",
+          "sched_arr_time"
+        ],
+        "flight"
+      ],
+      [
+        [
+          "act_dep_time",
+          "sched_arr_time"
+        ],
+        "sched_dep_time"
+      ],
+      [
+        [
+          "act_dep_time",
+          "sched_arr_time"
+        ],
+        "act_arr_time"
+      ],
+      [
+        [
+          "act_dep_time",
+          "act_arr_time"
+        ],
+        "flight"
+      ],
+      [
+        [
+          "act_dep_time",
+          "act_arr_time"
+        ],
+        "sched_dep_time"
+      ],
+      [
+        [
+          "sched_arr_time",
+          "act_arr_time"
+        ],
+        "sched_dep_time"
+      ],
+      [
+        [
+          "sched_arr_time",
+          "act_arr_time"
+        ],
+        "act_dep_time"
+      ]
+    ]
+  },
+  "rule_based_percentage": 99.89,
+  "rule_based_breakdown": {
+    "data_loss": 100.0,
+    "column_preservation": 100.0,
+    "non_empty_columns": 100.0,
+    "functional_dependencies": 99.58
+  },
+  "reference_comparison_percentage": 42.86,
+  "reference_comparison_per_column": {
+    "tuple_id": 100.0,
+    "src": 100.0,
+    "flight": 100.0,
+    "sched_dep_time": 0.0,
+    "act_dep_time": 0.0,
+    "sched_arr_time": 0.0,
+    "act_arr_time": 0.0
+  }
+}

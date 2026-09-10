@@ -1,26 +1,15 @@
 Traceback (most recent call last):
   File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
     exec(script_code, exec_globals)
-  File "<string>", line 65, in <module>
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\ops\common.py", line 85, in new_method
-    return method(self, other)
-           ^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arraylike.py", line 58, in __gt__
-    return self._cmp_method(other, operator.gt)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\series.py", line 6735, in _cmp_method
-    res_values = ops.comparison_op(lvalues, rvalues, op)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 341, in comparison_op
-    res_values = op(lvalues, rvalues)
-                 ^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\ops\common.py", line 85, in new_method
-    return method(self, other)
-           ^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arraylike.py", line 58, in __gt__
-    return self._cmp_method(other, operator.gt)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arrays\string_.py", line 1226, in _cmp_method
-    result[valid] = op(self._ndarray[valid], other)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: '>' not supported between instances of 'str' and 'int'
+  File "<string>", line 76, in <module>
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\groupby\generic.py", line 786, in transform
+    return self._transform(
+           ^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\groupby\groupby.py", line 1823, in _transform
+    return self._transform_general(func, engine, engine_kwargs, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\groupby\generic.py", line 822, in _transform_general
+    res = func(group, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 77, in <lambda>
+AttributeError: 'numpy.float64' object has no attribute 'isna'

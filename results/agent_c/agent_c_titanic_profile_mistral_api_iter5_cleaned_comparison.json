@@ -1,0 +1,84 @@
+{
+  "noisy_file": "datasets\\titanic\\noisy_medium.csv",
+  "cleaned_file": "workflows\\executed\\titanic_profile_mistral_api_iter5_cleaned.csv",
+  "reference_file": "datasets\\titanic\\clean.csv",
+  "dataset_name": "titanic",
+  "dataset_hints_used": {
+    "semantic_hints": {
+      "Sex": "the passenger's sex.",
+      "Embarked": "the port of embarkation: C = Cherbourg, Q = Queenstown, S = Southampton.",
+      "Cabin": "a cabin identifier (a deck letter followed by a room number, e.g. 'C85') -- often missing, and a wide variety of real values is expected, do not flag an unfamiliar-but-plausible code.",
+      "Fare": "the ticket fare, a plain decimal number (e.g. '7.25', '71.2833') -- no currency symbol or unit suffix. A value with a trailing/embedded letter or symbol (e.g. '16.0kg', '8.4583B') is a real error, not a variant.",
+      "Age": "the passenger's age in years, a plain non-negative number (can be fractional for infants, e.g. '0.42') -- no unit suffix or extra characters."
+    },
+    "valid_values_map": {
+      "Sex": [
+        "female",
+        "male"
+      ],
+      "Embarked": [
+        "C",
+        "Q",
+        "S"
+      ]
+    }
+  },
+  "dirty_evaluation": {
+    "label": "DIRTY (avant nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Column 'Fare' should be numeric but contains non-numeric values: ['8.4583B', '16.0kg', '26€.0', '263.0B', '20.575l']"
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'Fare' should be numeric but contains non-numeric values: ['8.4583B', '16.0kg', '26€.0', '263.0B', '20.575l']",
+    "rule_based_percentage": 98.62,
+    "rule_based_breakdown": {
+      "semantic_correctness": 98.62
+    },
+    "reference_comparison_percentage": 95.83,
+    "reference_comparison_per_column": {
+      "PassengerId": 100.0,
+      "Survived": 100.0,
+      "Pclass": 100.0,
+      "Name": 100.0,
+      "Sex": 94.61,
+      "Age": 84.06,
+      "SibSp": 98.09,
+      "Parch": 98.09,
+      "Ticket": 100.0,
+      "Fare": 90.35,
+      "Cabin": 94.73,
+      "Embarked": 90.01
+    }
+  },
+  "cleaned_evaluation": {
+    "label": "CLEANED (apres nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Functional dependency violation: Ticket -> 'Fare' should map to exactly one value per group, but 1 group(s) have multiple different 'Fare' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared."
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Functional dependency violation: Ticket -> 'Fare' should map to exactly one value per group, but 1 group(s) have multiple different 'Fare' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+    "rule_based_percentage": 99.99,
+    "rule_based_breakdown": {
+      "data_loss": 100.0,
+      "column_preservation": 100.0,
+      "non_empty_columns": 100.0,
+      "numeric_validity": 100.0,
+      "functional_dependencies": 99.93
+    },
+    "reference_comparison_percentage": 95.75,
+    "reference_comparison_per_column": {
+      "PassengerId": 100.0,
+      "Survived": 100.0,
+      "Pclass": 100.0,
+      "Name": 100.0,
+      "Sex": 100.0,
+      "Age": 65.32,
+      "SibSp": 98.09,
+      "Parch": 98.09,
+      "Ticket": 100.0,
+      "Fare": 94.05,
+      "Cabin": 97.19,
+      "Embarked": 96.3
+    }
+  }
+}

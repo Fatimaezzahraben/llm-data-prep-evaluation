@@ -47,7 +47,7 @@ DATASETS = {
 }
 
 PROMPT_TYPE = "profile"   # le plus performant jusqu'ici
-PROVIDER = "mistral_api"
+PROVIDER = "ollama"
 MAX_ITERATIONS = 5   # valeur par defaut ; surchargeable avec --max-iterations
 TARGET_F1 = 0.90      # valeur par defaut ; surchargeable avec --target-f1
 
@@ -100,17 +100,29 @@ def main():
         df_clean = pd.read_csv(clean_path, low_memory=False)
         error_log = get_error_log(dataset_name, cfg)
 
-        result = run_validation_loop(
-            str(noisy_path), dataset_name, PROMPT_TYPE, df_clean, error_log,
-            provider=PROVIDER, max_iterations=max_iterations, target_f1=target_f1,
-        )
-        all_results[dataset_name] = {
-            "best_f1": result["best_f1"],
-            "best_iteration": result["best_iteration"],
-            "history": result["history"],
-            "saved_path": result["saved_path"],
-        }
-        print(f"  MEILLEUR : F1={result['best_f1']} (iteration {result['best_iteration']})")
+        try:
+            result = run_validation_loop(
+                str(noisy_path), dataset_name, PROMPT_TYPE, df_clean, error_log,
+                provider=PROVIDER, max_iterations=max_iterations, target_f1=target_f1,
+            )
+            all_results[dataset_name] = {
+                "best_f1": result["best_f1"],
+                "best_iteration": result["best_iteration"],
+                "history": result["history"],
+                "saved_path": result["saved_path"],
+            }
+            print(f"  MEILLEUR : F1={result['best_f1']} (iteration {result['best_iteration']})")
+        except Exception as e:
+            # Garde-fou supplementaire : un echec inattendu sur CE dataset (ex: appel
+            # LLM qui echoue meme apres tous les reessais internes) ne doit pas
+            # empecher les AUTRES datasets d'etre tentes -- un vrai crash observe en
+            # pratique arretait tout le batch a cause d'un seul dataset en echec.
+            print(f"  ECHEC sur {dataset_name} (voir ci-dessous) — passage au dataset suivant.")
+            print(f"    {type(e).__name__}: {e}")
+            all_results[dataset_name] = {
+                "best_f1": None, "best_iteration": None, "history": [],
+                "saved_path": None, "error": f"{type(e).__name__}: {e}",
+            }
 
     out_path = Path("results/metrics_tables/validation_loop_results.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)

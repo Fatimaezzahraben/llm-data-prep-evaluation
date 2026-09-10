@@ -1,14 +1,14 @@
 {
-  "global_precision": 0.9286,
-  "global_recall": 0.8553,
-  "global_f1": 0.8904,
+  "global_precision": 0.9103,
+  "global_recall": 0.8684,
+  "global_f1": 0.8889,
   "global_initial_error_rate": 0.0076,
-  "global_final_error_rate": 0.0011,
+  "global_final_error_rate": 0.001,
   "total_cells": 20000,
   "total_errors_start": 152,
-  "total_errors_end": 22,
-  "total_fixed": 130,
-  "total_regressions": 12,
+  "total_errors_end": 20,
+  "total_fixed": 132,
+  "total_regressions": 7,
   "columns": {
     "address_1": {
       "initial_error_rate": 0.01,
@@ -177,32 +177,20 @@
     },
     "measure_code": {
       "initial_error_rate": 0.009,
-      "final_error_rate": 0.005,
+      "final_error_rate": 0.008,
       "total_errors": 9,
-      "correct_repairs": 4,
+      "correct_repairs": 1,
       "failed_repair": 2,
-      "regressions": 3,
-      "precision": 0.6667,
-      "recall": 0.4444,
-      "f1_score": 0.5333,
+      "regressions": 6,
+      "precision": 0.3333,
+      "recall": 0.1111,
+      "f1_score": 0.1667,
       "success_samples": [
         {
-          "id": "694",
-          "dirty": "amx-4",
+          "id": "97",
+          "dirty": "axi-4",
           "truth": "ami-4",
           "llm_output": "ami-4"
-        },
-        {
-          "id": "190",
-          "dirty": "scip-inx-4",
-          "truth": "scip-inf-4",
-          "llm_output": "scip-inf-4"
-        },
-        {
-          "id": "718",
-          "dirty": "amx-3",
-          "truth": "ami-3",
-          "llm_output": "ami-3"
         }
       ],
       "failed_samples": [
@@ -210,13 +198,13 @@
           "id": "391",
           "dirty": "pn-xb",
           "truth": "pn-3b",
-          "llm_output": "pn-2"
+          "llm_output": "pn-2b"
         },
         {
           "id": "495",
           "dirty": "ami-x",
           "truth": "ami-5",
-          "llm_output": "ami-4"
+          "llm_output": "ami-"
         }
       ],
       "regression_samples": [
@@ -227,16 +215,16 @@
           "llm_output": "pnx6"
         },
         {
-          "id": "580",
-          "dirty": "px-5c",
-          "truth": "pn-5c",
-          "llm_output": "px-5c"
+          "id": "694",
+          "dirty": "amx-4",
+          "truth": "ami-4",
+          "llm_output": "amx-4"
         },
         {
-          "id": "108",
-          "dirty": "pnx5c",
-          "truth": "pn-5c",
-          "llm_output": "pnx5c"
+          "id": "190",
+          "dirty": "scip-inx-4",
+          "truth": "scip-inf-4",
+          "llm_output": "scip-inx-4"
         }
       ]
     },
@@ -374,36 +362,55 @@
     },
     "provider_number": {
       "initial_error_rate": 0.009,
-      "final_error_rate": 0.009,
+      "final_error_rate": 0.005,
       "total_errors": 9,
-      "correct_repairs": 0,
-      "failed_repair": 0,
-      "regressions": 9,
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1_score": 0.0,
-      "success_samples": [],
-      "failed_samples": [],
-      "regression_samples": [
+      "correct_repairs": 4,
+      "failed_repair": 5,
+      "regressions": 0,
+      "precision": 0.4444,
+      "recall": 0.4444,
+      "f1_score": 0.4444,
+      "success_samples": [
+        {
+          "id": "655",
+          "dirty": "1xx32",
+          "truth": "10032",
+          "llm_output": "10032"
+        },
+        {
+          "id": "933",
+          "dirty": "1xx47",
+          "truth": "10047",
+          "llm_output": "10047"
+        },
+        {
+          "id": "724",
+          "dirty": "1xx35",
+          "truth": "10035",
+          "llm_output": "10035"
+        }
+      ],
+      "failed_samples": [
         {
           "id": "955",
           "dirty": "1004x",
           "truth": "10049",
-          "llm_output": "1004x"
+          "llm_output": "10047"
         },
         {
           "id": "45",
           "dirty": "x0005",
           "truth": "10005",
-          "llm_output": "x0005"
+          "llm_output": "5"
         },
         {
-          "id": "655",
-          "dirty": "1xx32",
-          "truth": "10032",
-          "llm_output": "1xx32"
+          "id": "360",
+          "dirty": "100x6",
+          "truth": "10086",
+          "llm_output": "10006"
         }
-      ]
+      ],
+      "regression_samples": []
     },
     "sample": {
       "initial_error_rate": 0.01,
@@ -453,15 +460,21 @@
     },
     "score": {
       "initial_error_rate": 0.007,
-      "final_error_rate": 0.006,
+      "final_error_rate": 0.005,
       "total_errors": 7,
-      "correct_repairs": 1,
-      "failed_repair": 6,
-      "regressions": 0,
-      "precision": 0.1429,
-      "recall": 0.1429,
-      "f1_score": 0.1429,
+      "correct_repairs": 2,
+      "failed_repair": 4,
+      "regressions": 1,
+      "precision": 0.3333,
+      "recall": 0.2857,
+      "f1_score": 0.3077,
       "success_samples": [
+        {
+          "id": "711",
+          "dirty": "1xx%",
+          "truth": "100%",
+          "llm_output": "100%"
+        },
         {
           "id": "860",
           "dirty": "80x",
@@ -474,22 +487,29 @@
           "id": "163",
           "dirty": "x7%",
           "truth": "57%",
-          "llm_output": "80%"
+          "llm_output": "97%"
         },
         {
           "id": "888",
           "dirty": "x5%",
           "truth": "85%",
-          "llm_output": "80%"
+          "llm_output": "5%"
         },
         {
           "id": "120",
           "dirty": "x00%",
           "truth": "100%",
-          "llm_output": "90%"
+          "llm_output": "00%"
         }
       ],
-      "regression_samples": []
+      "regression_samples": [
+        {
+          "id": "238",
+          "dirty": "xx%",
+          "truth": "99%",
+          "llm_output": "xx%"
+        }
+      ]
     },
     "state": {
       "initial_error_rate": 0.008,
@@ -591,25 +611,25 @@
       "regression_samples": []
     }
   },
-  "pipeline_time_seconds": 62.24,
-  "workflow_name": "hospital_profile_mistral_api_iter2",
+  "pipeline_time_seconds": 475.31,
+  "workflow_name": "hospital_profile_mistral_api_iter5",
   "rows_expected": 1000,
   "rows_remaining": 1000,
   "rows_lost": 0,
   "rows_lost_pct": 0.0,
   "errors_lost_with_deleted_rows": 0,
   "warning_over_cleaning": false,
-  "global_accuracy_all_cells": 0.9362,
-  "total_failed_repairs": 10,
+  "global_accuracy_all_cells": 0.9833,
+  "total_failed_repairs": 13,
   "by_error_family": {
     "real_world_error": {
       "total_errors": 152,
-      "correct_repairs": 130,
-      "failed_repair": 10,
-      "regressions": 12,
-      "precision": 0.9286,
-      "recall": 0.8553,
-      "f1_score": 0.8904
+      "correct_repairs": 132,
+      "failed_repair": 13,
+      "regressions": 7,
+      "precision": 0.9103,
+      "recall": 0.8684,
+      "f1_score": 0.8889
     }
   }
 }

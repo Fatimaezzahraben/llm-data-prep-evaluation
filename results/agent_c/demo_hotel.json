@@ -1,0 +1,89 @@
+{
+  "noisy_file": "datasets/hotel-booking-demand/noisy_medium.csv",
+  "cleaned_file": "workflows/executed/hotel-booking-demand_profile_mistral_api_iter4_cleaned.csv",
+  "reference_file": "datasets/hotel-booking-demand/clean.csv",
+  "valid": false,
+  "rule_issues": [
+    "Column 'adults' should be numeric but contains non-numeric values: ['2kg', '3kg', '1kg', '55O', '0j']"
+  ],
+  "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'adults' should be numeric but contains non-numeric values: ['2kg', '3kg', '1kg', '55O', '0j']",
+  "auto_discovered": {
+    "expected_columns": "from df_original.columns",
+    "numeric_columns": [
+      "is_canceled",
+      "lead_time",
+      "arrival_date_year",
+      "arrival_date_week_number",
+      "arrival_date_day_of_month",
+      "stays_in_weekend_nights",
+      "stays_in_week_nights",
+      "adults",
+      "children",
+      "babies",
+      "is_repeated_guest",
+      "previous_cancellations",
+      "previous_bookings_not_canceled",
+      "booking_changes",
+      "agent",
+      "company",
+      "days_in_waiting_list",
+      "adr",
+      "required_car_parking_spaces",
+      "total_of_special_requests"
+    ],
+    "date_columns": {
+      "arrival_date_month": "month_name",
+      "reservation_status_date": "full_date"
+    },
+    "fd_pairs": [
+      [
+        "reservation_status",
+        "is_canceled"
+      ]
+    ]
+  },
+  "rule_based_percentage": 99.17,
+  "rule_based_breakdown": {
+    "data_loss": 100.0,
+    "column_preservation": 100.0,
+    "non_empty_columns": 100.0,
+    "functional_dependencies": 100.0,
+    "date_validity": 100.0,
+    "numeric_validity": 95.0
+  },
+  "reference_comparison_percentage": 94.37,
+  "reference_comparison_per_column": {
+    "hotel": 95.22,
+    "is_canceled": 100.0,
+    "lead_time": 90.19,
+    "arrival_date_year": 100.0,
+    "arrival_date_month": 100.0,
+    "arrival_date_week_number": 100.0,
+    "arrival_date_day_of_month": 100.0,
+    "stays_in_weekend_nights": 100.0,
+    "stays_in_week_nights": 98.0,
+    "adults": 98.94,
+    "children": 99.27,
+    "babies": 98.0,
+    "meal": 97.76,
+    "country": 90.03,
+    "market_segment": 90.0,
+    "distribution_channel": 100.0,
+    "is_repeated_guest": 100.0,
+    "previous_cancellations": 100.0,
+    "previous_bookings_not_canceled": 100.0,
+    "reserved_room_type": 100.0,
+    "assigned_room_type": 100.0,
+    "booking_changes": 100.0,
+    "deposit_type": 95.21,
+    "agent": 81.8,
+    "company": 5.69,
+    "days_in_waiting_list": 98.97,
+    "customer_type": 95.26,
+    "adr": 98.03,
+    "required_car_parking_spaces": 100.0,
+    "total_of_special_requests": 100.0,
+    "reservation_status": 100.0,
+    "reservation_status_date": 87.61
+  }
+}

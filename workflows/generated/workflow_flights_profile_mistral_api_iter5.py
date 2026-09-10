@@ -1,198 +1,123 @@
 import pandas as pd
+import difflib
 import numpy as np
 import re
-import difflib
 
-# tuple_id: numeric, 0% missing, no issues detected
+# Clean tuple_id (numeric, no missing values)
 df['tuple_id'] = pd.to_numeric(df['tuple_id'], errors='coerce')
-df['tuple_id'] = df['tuple_id'].fillna(df['tuple_id'].median())
 
-# src: categorical, 0% missing, but check for typos/near-duplicates
-valid_src = ['helloflight', 'boston', 'airtravelcenter', 'flightview', 'panynj']
-def fuzzy_correct_src(val):
-    if pd.isna(val):
-        return val
-    val_norm = str(val).strip().lower()
-    if val_norm in [v.lower() for v in valid_src]:
-        return next(v for v in valid_src if v.lower() == val_norm)
-    match = difflib.get_close_matches(val_norm, [v.lower() for v in valid_src], n=1, cutoff=0.6)
-    if match:
-        return next(v for v in valid_src if v.lower() == match[0])
-    return val
-df['src'] = df['src'].apply(fuzzy_correct_src)
+# Clean src (categorical, no missing values, standardize)
+src_mapping = {
+    'helloflight': 'helloflight',
+    'boston': 'boston',
+    'airtravelcenter': 'airtravelcenter',
+    'flightview': 'flightview',
+    'panynj': 'panynj',
+    'businesstravellogue': 'businesstravellogue',
+    'flylouisville': 'flylouisville',
+    'orbitz': 'orbitz',
+    'myrateplan': 'myrateplan',
+    'flightstats': 'flightstats',
+    'ua': 'ua'
+}
+df['src'] = df['src'].replace(src_mapping)
 
-# flight: categorical, 0% missing, no obvious typos in sample
-df['flight'] = df['flight'].astype(str).str.strip().str.upper()
+# Clean flight (categorical, no missing values, standardize format)
+flight_pattern = re.compile(r'^([A-Z]{2}-\d{1,4}-[A-Z]{3}-[A-Z]{3})$')
+def clean_flight(flight):
+    if pd.isna(flight):
+        return flight
+    flight = str(flight).strip()
+    if not re.match(r'^[A-Z]{2}-\d{1,4}-[A-Z]{3}-[A-Z]{3}$', flight, re.IGNORECASE):
+        return flight
+    return flight.upper()
+df['flight'] = df['flight'].apply(clean_flight)
 
-# Time cleaning function that preserves original formatting
-def clean_time(val):
-    if pd.isna(val):
-        return val
-    val = str(val).strip()
+# Clean sched_dep_time (categorical, 33% missing)
+# First handle disguised missing values
+disguised_missing = ['Not Available', 'Delayed', 'NA', 'N/A', 'unknown', '', ' ', 'NaN', 'nan']
+df['sched_dep_time'] = df['sched_dep_time'].replace(disguised_missing, np.nan)
 
-    # Handle disguised missing values
-    if val.lower() in ['na', 'n/a', 'unknown', '']:
-        return np.nan
-
-    # Handle 'Delayed' -> NaN
-    if val.lower() == 'delayed':
-        return np.nan
-
-    # Handle cases like '5:58aDec 1' -> '5:58 a.m.'
-    if re.match(r'^\d{1,2}:\d{2}[ap]m?\s*[a-zA-Z]', val, re.IGNORECASE):
-        val = re.sub(r'([ap]m?)\s*[a-zA-Z].*', r'\1', val, flags=re.IGNORECASE)
-        val = val.replace('a', ' a.m.').replace('p', ' p.m.')
-
-    # Handle cases like '5:58a' -> '5:58 a.m.'
-    if re.match(r'^\d{1,2}:\d{2}[ap]m?$', val, re.IGNORECASE):
-        val = val.replace('a', ' a.m.').replace('p', ' p.m.')
-
-    # Ensure consistent formatting (a.m./p.m. with dots, space before)
-    val = re.sub(r'([ap])(\.?m\.?)', r'\1.m.', val, flags=re.IGNORECASE)
-    val = re.sub(r'(\d)([ap]\.m\.)', r'\1 \2', val, flags=re.IGNORECASE)
-    val = re.sub(r'\s+', ' ', val).strip()
-
-    return val
-
-# Parse time to minutes since midnight for calculations
-def time_to_minutes(time_str):
+# Clean time strings by removing date suffixes and parenthetical notes
+def clean_time(time_str):
     if pd.isna(time_str):
-        return np.nan
-    time_str = str(time_str).strip().lower()
-    if 'a.m.' in time_str:
-        time_part = time_str.replace('a.m.', '').strip()
-        hour, minute = map(int, time_part.split(':'))
-        return hour * 60 + minute
-    elif 'p.m.' in time_str:
-        time_part = time_str.replace('p.m.', '').strip()
-        hour, minute = map(int, time_part.split(':'))
-        if hour != 12:
-            hour += 12
-        return hour * 60 + minute
-    else:
-        return np.nan
+        return time_str
+    time_str = str(time_str).strip()
+    # Remove date suffixes (e.g., 'aDec 1')
+    time_str = re.sub(r'\s+\w+\s*\d+', '', time_str)
+    # Remove parenthetical notes (e.g., '(Estimated)')
+    time_str = re.sub(r'\s*\(.*\)', '', time_str)
+    # Standardize time format (e.g., '6:00a' -> '6:00 a.m.')
+    time_str = re.sub(r'(\d+):(\d{2})([ap])\.', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    time_str = re.sub(r'(\d+):(\d{2})([ap])\.', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    time_str = re.sub(r'(\d+):(\d{2})([ap])\.', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    # Standardize time format (e.g., '6:00a' -> '6:00 a.m.')
+    time_str = re.sub(r'(\d+):(\d{2})([ap])', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    # Standardize time format (e.g., '6:00am' -> '6:00 a.m.')
+    time_str = re.sub(r'(\d+):(\d{2})([ap])$', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    # Standardize time format (e.g., '6:00am' -> '6:00 a.m.')
+    time_str = re.sub(r'(\d+):(\d{2})([ap])$', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    return time_str
 
-# Convert minutes back to time string
-def minutes_to_time(minutes):
-    if pd.isna(minutes):
-        return np.nan
-    hour = int(minutes // 60)
-    minute = int(minutes % 60)
-    if hour < 12:
-        period = 'a.m.'
-        if hour == 0:
-            hour = 12
-    else:
-        period = 'p.m.'
-        if hour > 12:
-            hour -= 12
-    return f"{hour}:{minute:02d} {period}"
-
-# sched_dep_time: categorical/text, 33% missing
-disguised_missing = df['sched_dep_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
-df.loc[disguised_missing, 'sched_dep_time'] = np.nan
 df['sched_dep_time'] = df['sched_dep_time'].apply(clean_time)
 
-# Apply EXACT dependency: flight -> sched_dep_time (whole column overwrite)
+# Use exact key to impute sched_dep_time
 df['sched_dep_time'] = df.groupby('flight')['sched_dep_time'].transform(
     lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
 )
+df['sched_dep_time'] = df['sched_dep_time'].fillna(df['sched_dep_time'].mode().iloc[0] if not df['sched_dep_time'].mode().empty else np.nan)
 
-# Global fallback for any remaining missing values
-_mode = df['sched_dep_time'].mode(dropna=True)
-fill_value = _mode.iloc[0] if not _mode.empty else '7:10 a.m.'
-df['sched_dep_time'] = df['sched_dep_time'].fillna(fill_value)
+# Clean act_dep_time (categorical, 15.82% missing)
+# First handle disguised missing values
+df['act_dep_time'] = df['act_dep_time'].replace(disguised_missing, np.nan)
 
-# sched_arr_time: categorical/text, 32.41% missing
-disguised_missing = df['sched_arr_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
-df.loc[disguised_missing, 'sched_arr_time'] = np.nan
+# Clean time strings by removing date suffixes and parenthetical notes
+df['act_dep_time'] = df['act_dep_time'].apply(clean_time)
+
+# Use exact key to impute act_dep_time
+df['act_dep_time'] = df.groupby(['flight', 'sched_dep_time'])['act_dep_time'].transform(
+    lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
+)
+df['act_dep_time'] = df['act_dep_time'].fillna(df['act_dep_time'].mode().iloc[0] if not df['act_dep_time'].mode().empty else np.nan)
+
+# Clean sched_arr_time (categorical, 32.41% missing)
+# First handle disguised missing values
+df['sched_arr_time'] = df['sched_arr_time'].replace(disguised_missing, np.nan)
+
+# Clean time strings by removing date suffixes and parenthetical notes
 df['sched_arr_time'] = df['sched_arr_time'].apply(clean_time)
 
-# Apply EXACT dependency: flight -> sched_arr_time (whole column overwrite)
+# Use exact key to impute sched_arr_time
 df['sched_arr_time'] = df.groupby('flight')['sched_arr_time'].transform(
     lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
 )
+df['sched_arr_time'] = df['sched_arr_time'].fillna(df['sched_arr_time'].mode().iloc[0] if not df['sched_arr_time'].mode().empty else np.nan)
 
-# Global fallback for any remaining missing values
-_mode = df['sched_arr_time'].mode(dropna=True)
-fill_value = _mode.iloc[0] if not _mode.empty else '2:35 p.m.'
-df['sched_arr_time'] = df['sched_arr_time'].fillna(fill_value)
+# Clean act_arr_time (categorical, 16.08% missing)
+# First handle disguised missing values
+df['act_arr_time'] = df['act_arr_time'].replace(disguised_missing, np.nan)
 
-# act_dep_time: categorical/text, 15.82% missing
-disguised_missing = df['act_dep_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
-df.loc[disguised_missing, 'act_dep_time'] = np.nan
-df['act_dep_time'] = df['act_dep_time'].apply(clean_time)
-
-# Calculate typical delay for each flight
-df['sched_dep_min'] = df['sched_dep_time'].apply(time_to_minutes)
-df['act_dep_min'] = df['act_dep_time'].apply(time_to_minutes)
-
-# Calculate median delay per flight
-median_delay = df.groupby('flight')['act_dep_min'].transform(
-    lambda x: x.median() if not x.isna().all() else np.nan
-) - df.groupby('flight')['sched_dep_min'].transform(
-    lambda x: x.median() if not x.isna().all() else np.nan
-)
-
-# For missing act_dep_time, use sched_dep_time + median delay for that flight
-missing_act_dep = df['act_dep_min'].isna()
-df.loc[missing_act_dep, 'act_dep_min'] = df.loc[missing_act_dep, 'sched_dep_min'] + median_delay[missing_act_dep]
-
-# Fallback to flight-only grouping for any remaining missing
-group_val = df.groupby('flight')['act_dep_min'].transform(
-    lambda s: s.median() if not s.isna().all() else np.nan
-)
-df['act_dep_min'] = df['act_dep_min'].fillna(group_val)
-
-# Global fallback for any remaining missing values
-global_median = df['act_dep_min'].median()
-df['act_dep_min'] = df['act_dep_min'].fillna(global_median)
-
-# Convert back to time string
-df['act_dep_time'] = df['act_dep_min'].apply(minutes_to_time)
-
-# act_arr_time: categorical/text, 16.08% missing
-disguised_missing = df['act_arr_time'].astype(str).str.strip().str.lower().isin(['na', 'n/a', 'unknown', ''])
-df.loc[disguised_missing, 'act_arr_time'] = np.nan
+# Clean time strings by removing date suffixes and parenthetical notes
 df['act_arr_time'] = df['act_arr_time'].apply(clean_time)
 
-# Calculate typical delay for each flight
-df['sched_arr_min'] = df['sched_arr_time'].apply(time_to_minutes)
-df['act_arr_min'] = df['act_arr_time'].apply(time_to_minutes)
-
-# Calculate median delay per flight
-median_arr_delay = df.groupby('flight')['act_arr_min'].transform(
-    lambda x: x.median() if not x.isna().all() else np.nan
-) - df.groupby('flight')['sched_arr_min'].transform(
-    lambda x: x.median() if not x.isna().all() else np.nan
+# Use exact key to impute act_arr_time
+df['act_arr_time'] = df.groupby(['flight', 'sched_arr_time'])['act_arr_time'].transform(
+    lambda s: s.mode().iloc[0] if not s.mode().empty else np.nan
 )
+df['act_arr_time'] = df['act_arr_time'].fillna(df['act_arr_time'].mode().iloc[0] if not df['act_arr_time'].mode().empty else np.nan)
 
-# For missing act_arr_time, use sched_arr_time + median delay for that flight
-missing_act_arr = df['act_arr_min'].isna()
-df.loc[missing_act_arr, 'act_arr_min'] = df.loc[missing_act_arr, 'sched_arr_min'] + median_arr_delay[missing_act_arr]
+# Final cleaning of time columns to ensure consistent formatting
+def final_time_clean(time_str):
+    if pd.isna(time_str):
+        return time_str
+    time_str = str(time_str).strip()
+    # Standardize time format (e.g., '6:00 a.m.' -> '6:00 a.m.')
+    time_str = re.sub(r'(\d+):(\d{2})\s*([ap])\.', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    # Standardize time format (e.g., '6:00am' -> '6:00 a.m.')
+    time_str = re.sub(r'(\d+):(\d{2})([ap])$', r'\1:\2 \3.m.', time_str, flags=re.IGNORECASE)
+    return time_str
 
-# Fallback to flight-only grouping for any remaining missing
-group_val = df.groupby('flight')['act_arr_min'].transform(
-    lambda s: s.median() if not s.isna().all() else np.nan
-)
-df['act_arr_min'] = df['act_arr_min'].fillna(group_val)
-
-# Global fallback for any remaining missing values
-global_median = df['act_arr_min'].median()
-df['act_arr_min'] = df['act_arr_min'].fillna(global_median)
-
-# Convert back to time string
-df['act_arr_time'] = df['act_arr_min'].apply(minutes_to_time)
-
-# Clean up temporary columns
-df = df.drop(columns=['sched_dep_min', 'act_dep_min', 'sched_arr_min', 'act_arr_min'])
-
-# Final type consistency and formatting
-for col in ['sched_dep_time', 'act_dep_time', 'sched_arr_time', 'act_arr_time']:
-    df[col] = df[col].astype(str).str.strip()
-    # Ensure consistent a.m./p.m. formatting with dots and space
-    df[col] = df[col].str.replace(r'([ap])m\.?', r'\1.m.', regex=True, flags=re.IGNORECASE)
-    df[col] = df[col].str.replace(r'(\d)([ap]\.m\.)', r'\1 \2', regex=True)
-    df[col] = df[col].str.replace(r'\s+', ' ', regex=True).str.strip()
-
-df
+df['sched_dep_time'] = df['sched_dep_time'].apply(final_time_clean)
+df['act_dep_time'] = df['act_dep_time'].apply(final_time_clean)
+df['sched_arr_time'] = df['sched_arr_time'].apply(final_time_clean)
+df['act_arr_time'] = df['act_arr_time'].apply(final_time_clean)

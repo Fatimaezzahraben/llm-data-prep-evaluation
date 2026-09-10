@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\app\services\safe_executor.py", line 156, in _run
+    exec(script_code, exec_globals)
+  File "<string>", line 56, in <module>
+  File "<string>", line 18, in harmonize_categories
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 142, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\accessor.py", line 1814, in replace
+    result = res_output.array._str_replace(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\object_array.py", line 196, in _str_replace
+    return self._str_map(f, dtype=str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arrays\string_.py", line 473, in _str_map
+    return self._str_map_nan_semantics(f, na_value=na_value, dtype=dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arrays\string_.py", line 600, in _str_map_nan_semantics
+    return self._str_map_str_or_object(dtype, na_value, arr, f, mask)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\arrays\string_.py", line 529, in _str_map_str_or_object
+    result = lib.map_infer_mask(
+             ^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 3023, in pandas._libs.lib.map_infer_mask
+  File "D:\MASTER_PFA\llm-data-prep-evaluation\.venv\Lib\site-packages\pandas\core\strings\object_array.py", line 194, in <lambda>
+    f = lambda x: x.replace(pat, repl, n)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: replace() argument 2 must be str, not float

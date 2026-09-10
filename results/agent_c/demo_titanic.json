@@ -1,0 +1,50 @@
+{
+  "noisy_file": "datasets/titanic/noisy_medium.csv",
+  "cleaned_file": "datasets/titanic/noisy_medium.csv",
+  "reference_file": "datasets/titanic/clean.csv",
+  "valid": false,
+  "rule_issues": [
+    "Column 'Fare' should be numeric but contains non-numeric values: ['8.4583B', '16.0kg', '26€.0', '263.0B', '20.575l']"
+  ],
+  "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'Fare' should be numeric but contains non-numeric values: ['8.4583B', '16.0kg', '26€.0', '263.0B', '20.575l']",
+  "auto_discovered": {
+    "expected_columns": "from df_original.columns",
+    "numeric_columns": [
+      "Survived",
+      "Pclass",
+      "SibSp",
+      "Parch",
+      "Fare"
+    ],
+    "date_columns": {},
+    "fd_pairs": [
+      [
+        "Ticket",
+        "Pclass"
+      ]
+    ]
+  },
+  "rule_based_percentage": 96.0,
+  "rule_based_breakdown": {
+    "data_loss": 100.0,
+    "column_preservation": 100.0,
+    "non_empty_columns": 100.0,
+    "functional_dependencies": 100.0,
+    "numeric_validity": 80.0
+  },
+  "reference_comparison_percentage": 95.83,
+  "reference_comparison_per_column": {
+    "PassengerId": 100.0,
+    "Survived": 100.0,
+    "Pclass": 100.0,
+    "Name": 100.0,
+    "Sex": 94.61,
+    "Age": 84.06,
+    "SibSp": 98.09,
+    "Parch": 98.09,
+    "Ticket": 100.0,
+    "Fare": 90.35,
+    "Cabin": 94.73,
+    "Embarked": 90.01
+  }
+}

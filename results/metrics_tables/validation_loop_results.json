@@ -1,130 +1,24 @@
 {
-  "hotel-booking-demand": {
-    "best_f1": 0.7543,
-    "best_iteration": 5,
-    "history": [
-      {
-        "iteration": 1,
-        "f1": null,
-        "error": "'>' not supported between instances of 'str' and 'int'"
-      },
-      {
-        "iteration": 2,
-        "f1": 0.726,
-        "error": null
-      },
-      {
-        "iteration": 3,
-        "f1": null,
-        "error": "invalid error value specified"
-      },
-      {
-        "iteration": 4,
-        "f1": null,
-        "error": "invalid error value specified"
-      },
-      {
-        "iteration": 5,
-        "f1": 0.7543,
-        "error": null
-      }
-    ],
-    "saved_path": "workflows\\generated\\workflow_hotel-booking-demand_profile_mistral_api_BEST.py"
-  },
   "titanic": {
-    "best_f1": 0.7147,
-    "best_iteration": 2,
+    "best_f1": -1,
+    "best_iteration": null,
     "history": [
       {
         "iteration": 1,
-        "f1": 0.5928,
-        "error": null
+        "f1": null,
+        "error": "replace() argument 2 must be str, not float"
       },
       {
         "iteration": 2,
-        "f1": 0.7147,
-        "error": null
-      },
-      {
-        "iteration": 3,
-        "f1": 0.7147,
-        "error": null
-      },
-      {
-        "iteration": 4,
-        "f1": 0.7091,
-        "error": null
-      },
-      {
-        "iteration": 5,
-        "f1": 0.7091,
-        "error": null
-      }
-    ],
-    "saved_path": "workflows\\generated\\workflow_titanic_profile_mistral_api_BEST.py"
-  },
-  "hospital": {
-    "best_f1": 0.8904,
-    "best_iteration": 2,
-    "history": [
-      {
-        "iteration": 1,
-        "f1": 0.8811,
-        "error": null
-      },
-      {
-        "iteration": 2,
-        "f1": 0.8904,
-        "error": null
-      },
-      {
-        "iteration": 3,
-        "f1": 0.8609,
-        "error": null
-      },
-      {
-        "iteration": 4,
-        "f1": 0.8609,
-        "error": null
-      },
-      {
-        "iteration": 5,
-        "f1": 0.8609,
-        "error": null
-      }
-    ],
-    "saved_path": "workflows\\generated\\workflow_hospital_profile_mistral_api_BEST.py"
-  },
-  "flights": {
-    "best_f1": 0.6268,
-    "best_iteration": 2,
-    "history": [
-      {
-        "iteration": 1,
-        "f1": 0.0,
-        "error": null
-      },
-      {
-        "iteration": 2,
-        "f1": 0.6268,
-        "error": null
+        "f1": null,
+        "error": "replace() argument 2 must be str, not float"
       },
       {
         "iteration": 3,
         "f1": null,
-        "error": "list index out of range"
-      },
-      {
-        "iteration": 4,
-        "f1": 0.6166,
-        "error": null
-      },
-      {
-        "iteration": 5,
-        "f1": null,
-        "error": "invalid literal for int() with base 10: '50  (+8'"
+        "error": "replace() argument 2 must be str, not float"
       }
     ],
-    "saved_path": "workflows\\generated\\workflow_flights_profile_mistral_api_BEST.py"
+    "saved_path": null
   }
 }
