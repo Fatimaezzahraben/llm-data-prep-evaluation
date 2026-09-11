@@ -38,7 +38,8 @@ from app.services.agent_c_dataset_hints import get_dataset_hints
 def evaluate_file(label: str, df_original: pd.DataFrame, df_to_check: pd.DataFrame,
                    df_reference: pd.DataFrame, provider: str, model: str,
                    skip_semantic: bool, semantic_hints: dict = None,
-                   valid_values_map: dict = None) -> dict:
+                   valid_values_map: dict = None, format_patterns_map: dict = None,
+                   sample_size: int = 25) -> dict:
     """
     Lance Agent C (regles + semantique + les deux pourcentages) sur UN fichier
     (df_to_check), et affiche un resume court prefixe par `label` (ex: "DIRTY"
@@ -63,6 +64,7 @@ def evaluate_file(label: str, df_original: pd.DataFrame, df_to_check: pd.DataFra
         skip_semantic_check=skip_semantic,
         skip_before_after_checks=is_self_evaluation,
         semantic_hints=semantic_hints, valid_values_map=valid_values_map,
+        format_patterns_map=format_patterns_map, sample_size=sample_size,
     )
     print(f"[Agent C] Valide (aucun probleme detecte) : {result['valid']}")
     if result["feedback_text"]:
@@ -73,6 +75,7 @@ def evaluate_file(label: str, df_original: pd.DataFrame, df_to_check: pd.DataFra
         provider=provider, model=model, skip_semantic_check=skip_semantic,
         skip_before_after_checks=is_self_evaluation,
         semantic_hints=semantic_hints, valid_values_map=valid_values_map,
+        format_patterns_map=format_patterns_map, sample_size=sample_size,
     )
 
     print(f"\nPourcentage 1 (respect des regles)      : {percentages['rule_based_percentage']}%")
@@ -133,6 +136,13 @@ def main():
     parser.add_argument("--model", default=None, help="Modele LLM specifique pour Agent C (optionnel, differe de l'Agent B)")
     parser.add_argument("--output", default=None, help="Chemin du rapport JSON de sortie")
     parser.add_argument("--skip-semantic", action="store_true", help="Desactive le controle LLM (rules only)")
+    parser.add_argument("--sample-size", type=int, default=25,
+                         help="Nombre de valeurs UNIQUES envoyees au LLM par colonne (defaut: 25). "
+                              "IMPORTANT : sur une colonne a forte cardinalite (ex: 70+ valeurs distinctes "
+                              "apres corruption sur 1000 lignes), 25 ne couvre qu'une petite fraction des "
+                              "lignes reelles -- le pourcentage semantique ne reflete alors que ce sous-"
+                              "echantillon, pas tout le fichier. Augmenter (ex: 80-100) pour une evaluation "
+                              "plus representative, au prix de plus d'appels LLM.")
     parser.add_argument("--dataset-name", default=None,
                          help="Nom du dataset pour charger des semantic_hints/valid_values_map optionnels "
                               "(app/services/agent_c_dataset_hints.py). Par defaut, deduit du dossier parent "
@@ -142,10 +152,11 @@ def main():
 
     dataset_name = args.dataset_name or Path(args.noisy_file).resolve().parent.name
     hints = get_dataset_hints(dataset_name)
-    if hints["semantic_hints"] or hints["valid_values_map"]:
+    if hints["semantic_hints"] or hints["valid_values_map"] or hints["format_patterns"]:
         print(f"[Agent C] Hints dataset trouves pour '{dataset_name}' : "
               f"{len(hints['semantic_hints'])} semantic_hints, "
-              f"{len(hints['valid_values_map'])} valid_values_map")
+              f"{len(hints['valid_values_map'])} valid_values_map, "
+              f"{len(hints['format_patterns'])} format_patterns")
     else:
         print(f"[Agent C] Aucun hint specifique pour '{dataset_name}' -- auto-decouverte seule.")
 
@@ -160,13 +171,17 @@ def main():
     dirty_result = evaluate_file("DIRTY (avant nettoyage)", df_noisy, df_noisy,
                                   df_reference, args.provider, args.model, args.skip_semantic,
                                   semantic_hints=hints["semantic_hints"],
-                                  valid_values_map=hints["valid_values_map"])
+                                  valid_values_map=hints["valid_values_map"],
+                                  format_patterns_map=hints["format_patterns"],
+                                  sample_size=args.sample_size)
 
     # Evaluation 2 : le fichier NETTOYE genere par le LLM.
     cleaned_result = evaluate_file("CLEANED (apres nettoyage)", df_noisy, df_cleaned,
                                     df_reference, args.provider, args.model, args.skip_semantic,
                                     semantic_hints=hints["semantic_hints"],
-                                    valid_values_map=hints["valid_values_map"])
+                                    valid_values_map=hints["valid_values_map"],
+                                    format_patterns_map=hints["format_patterns"],
+                                    sample_size=args.sample_size)
 
     print_comparison(dirty_result, cleaned_result)
 

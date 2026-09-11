@@ -274,6 +274,23 @@ def _call_provider_once(provider: str, model: str, prompt: str, system_prompt: s
             messages=messages,
             temperature=0,
         )
+        # IMPORTANT (crash reel observe) : OpenRouter peut repondre HTTP 200 avec
+        # un corps "en erreur" plutot que lever une exception SDK -- observe en
+        # pratique avec `result.choices` valant None (pas juste une liste vide)
+        # quand le modele choisi est indisponible/surcharge/en cours de
+        # moderation. `result.choices[0]` plante alors avec un TypeError brut
+        # ("'NoneType' object is not subscriptable") qui n'est PAS retryable
+        # (TypeError n'est pas dans _RETRYABLE_EXCEPTION_NAMES) -- ca faisait
+        # planter tout le run pour un seul appel malchanceux. Verifie choices
+        # AVANT d'indexer, et traite ce cas comme n'importe quelle reponse vide
+        # (EmptyResponseError, retryable) plutot que de laisser le TypeError
+        # remonter brut.
+        if not result.choices:
+            error_detail = getattr(result, "error", None)
+            raise EmptyResponseError(
+                f"Provider '{provider}' (model={model}) returned no choices "
+                f"(error={error_detail})"
+            )
         text = result.choices[0].message.content
         if not text:
             # openrouter/free choisit un modele ALEATOIRE a chaque appel -- un

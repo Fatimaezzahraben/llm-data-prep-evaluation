@@ -5,23 +5,23 @@
   "dataset_name": "hospital",
   "dataset_hints_used": {
     "semantic_hints": {
-      "ProviderNumber": "a 5-digit CMS hospital provider ID number, digits only, no letters -- a value with a stray letter/placeholder character (e.g. 'x') in place of a digit is a real error, not a variant.",
-      "HospitalName": "the legal name of a real hospital, one of a fixed set of 45 hospitals located in Alabama or Alaska.",
-      "Address1": "a US street address for one of the 45 hospitals in this dataset (Alabama or Alaska) -- e.g. '1720 university blvd'.",
-      "City": "a US city name, in Alabama or Alaska.",
-      "ZipCode": "a 5-digit US ZIP code, digits only, no letters.",
-      "CountyName": "a US county name, in Alabama or Alaska.",
-      "PhoneNumber": "a 10-digit US phone number, digits only, no formatting characters (no dashes/parentheses/spaces expected).",
-      "MeasureName": "the full official English description of a CMS hospital quality measure (a long sentence), one of a fixed set of 28.",
-      "Score": "a quality-measure score, either a percentage like '97%' (0%-100%) or the literal string 'empty' when not reported -- not a free-text field.",
-      "Sample": "the sample size behind a Score, formatted as '<N> patients' (e.g. '33 patients', '0 patients') or the literal string 'empty' when not reported."
+      "provider_number": "a 5-digit CMS hospital provider ID number, digits only, no letters -- a value with a stray letter/placeholder character (e.g. 'x') in place of a digit is a real error, not a variant.",
+      "name": "the legal name of a real hospital, one of a fixed set of 45 hospitals located in Alabama or Alaska.",
+      "address_1": "a US street address for one of the 45 hospitals in this dataset (Alabama or Alaska) -- e.g. '1720 university blvd'.",
+      "city": "a US city name, in Alabama or Alaska.",
+      "zip": "a 5-digit US ZIP code, digits only, no letters.",
+      "county": "a US county name, in Alabama or Alaska.",
+      "phone": "a 10-digit US phone number, digits only, no formatting characters (no dashes/parentheses/spaces expected).",
+      "measure_name": "the full official English description of a CMS hospital quality measure (a long sentence), one of a fixed set of 28.",
+      "score": "a quality-measure score, either a percentage like '97%' (0%-100%) or the literal string 'empty' when not reported -- not a free-text field.",
+      "sample": "the sample size behind a score, formatted as '<N> patients' (e.g. '33 patients', '0 patients') or the literal string 'empty' when not reported."
     },
     "valid_values_map": {
-      "State": [
+      "state": [
         "ak",
         "al"
       ],
-      "HospitalOwner": [
+      "owner": [
         "government - federal",
         "government - hospital district or authority",
         "government - local",
@@ -31,18 +31,18 @@
         "voluntary non-profit - other",
         "voluntary non-profit - private"
       ],
-      "EmergencyService": [
+      "emergency_service": [
         "no",
         "yes"
       ],
-      "Condition": [
+      "condition": [
         "children s asthma care",
         "heart attack",
         "heart failure",
         "pneumonia",
         "surgical infection prevention"
       ],
-      "MeasureCode": [
+      "measure_code": [
         "ami-1",
         "ami-2",
         "ami-3",
@@ -72,7 +72,7 @@
         "scip-vte-1",
         "scip-vte-2"
       ],
-      "Stateavg": [
+      "state_average": [
         "ak_ami-1",
         "ak_ami-2",
         "ak_hf-1",
@@ -122,7 +122,7 @@
         "al_scip-vte-1",
         "al_scip-vte-2"
       ],
-      "HospitalName": [
+      "name": [
         "alaska regional hospital",
         "andalusia regional hospital",
         "baptist medical center south",
@@ -169,7 +169,7 @@
         "wedowee hospital",
         "yukon kuskokwim delta reg hospital"
       ],
-      "Address1": [
+      "address_1": [
         "1000 first street north",
         "1007 goodyear avenue",
         "101 hospital circle",
@@ -216,7 +216,7 @@
         "987 drayton street",
         "po box 287"
       ],
-      "City": [
+      "city": [
         "alabaster",
         "anchorage",
         "andalusia",
@@ -257,7 +257,7 @@
         "wedowee",
         "winfield"
       ],
-      "CountyName": [
+      "county": [
         "anchorage",
         "autauga",
         "bethel",
@@ -292,7 +292,7 @@
         "shelby",
         "talladega"
       ],
-      "MeasureName": [
+      "measure_name": [
         "all heart surgery patients whose blood sugar (blood glucose) is kept under good control in the days right after surgery",
         "children and their caregivers who received a home management plan of care document while hospitalized for asthma",
         "children who received reliever medication while hospitalized for asthma",
@@ -324,55 +324,55 @@
       ]
     },
     "format_patterns": {
-      "ProviderNumber": [
+      "provider_number": [
         "^\\d{5}$"
       ],
-      "HospitalName": [
+      "name": [
         "^[a-zA-Z0-9\\s&\\-',.()]{3,100}$"
       ],
-      "Address1": [
+      "address_1": [
         "^[a-zA-Z0-9\\s.,#\\-]{5,100}$"
       ],
-      "City": [
+      "city": [
         "^[a-zA-Z\\s]{2,50}$"
       ],
-      "State": [
+      "state": [
         "^[A-Z]{2}$"
       ],
-      "ZipCode": [
+      "zip": [
         "^\\d{5}$"
       ],
-      "CountyName": [
+      "county": [
         "^[a-zA-Z\\s]{2,50}$"
       ],
-      "PhoneNumber": [
+      "phone": [
         "^\\d{10}$"
       ],
-      "HospitalType": [
+      "type": [
         "^[a-zA-Z\\s&\\-]{5,100}$"
       ],
-      "HospitalOwner": [
+      "owner": [
         "^[a-zA-Z\\s\\-&]{5,100}$"
       ],
-      "EmergencyService": [
+      "emergency_service": [
         "^(yes|no)$"
       ],
-      "Condition": [
+      "condition": [
         "^[a-zA-Z\\s&\\-',.()]{5,100}$"
       ],
-      "MeasureCode": [
+      "measure_code": [
         "^[a-zA-Z]{2,4}(-[a-zA-Z]+)?-\\d+[a-z]?$"
       ],
-      "MeasureName": [
+      "measure_name": [
         "^[a-zA-Z0-9\\s&\\-',./()]{10,500}$"
       ],
-      "Score": [
+      "score": [
         "^(\\d{1,3}%|empty)$"
       ],
-      "Sample": [
+      "sample": [
         "^(\\d+ patients|empty)$"
       ],
-      "Stateavg": [
+      "state_average": [
         "^[a-z]{2}_[a-z]{2,10}(-[a-z]+)?-\\d+[a-z]?$"
       ]
     }
@@ -383,12 +383,21 @@
     "rule_issues": [
       "Column 'provider_number' should be numeric but contains non-numeric values: ['1xx19', 'x0005', '1000x', 'x00xx', 'x00x5']",
       "Column 'zip' should be numeric but contains non-numeric values: ['x5957', '3595x', '3563x', '36x49', '360x9']",
-      "Column 'phone' should be numeric but contains non-numeric values: ['334793870x', 'xx479x8701', '2x6x938310', '2565x38310', '3344x33541']"
+      "Column 'phone' should be numeric but contains non-numeric values: ['334793870x', 'xx479x8701', '2x6x938310', '2565x38310', '3344x33541']",
+      "Column 'provider_number' contains values that do not match the expected format ['^\\\\d{5}$']: ['1xx19', 'x0005', '1000x', 'x00xx', 'x00x5']",
+      "Column 'zip' contains values that do not match the expected format ['^\\\\d{5}$']: ['x5957', '3595x', '3563x', '36x49', '360x9']",
+      "Column 'phone' contains values that do not match the expected format ['^\\\\d{10}$']: ['334793870x', 'xx479x8701', '2x6x938310', '2565x38310', '3344x33541']",
+      "Column 'emergency_service' contains values that do not match the expected format ['^(yes|no)$']: ['yxs', 'yex', 'xes', 'xo']",
+      "Column 'measure_code' contains values that do not match the expected format ['^[a-zA-Z]{2,4}(-[a-zA-Z]+)?-\\\\d+[a-z]?$']: ['hfx1', 'pnx5c', 'hf-x', 'amix2', 'pn-xb']",
+      "Column 'measure_name' contains values that do not match the expected format [\"^[a-zA-Z0-9\\\\s&\\\\-',./()]{10,500}$\"]: ['surgeryxpatientsxneedingxhairxremovedxfromxthexsurgicalxareaxbeforexsurgery& xwhoxhadxhairxremovedxusingxaxsaferxmethodx(electricxclippersxorxhairxremovalxcreamxï¿½cxnotxaxrazor)']",
+      "Column 'score' contains values that do not match the expected format ['^(\\\\d{1,3}%|empty)$']: ['x00%', '9x%', 'x7%', '95x', 'x5%']",
+      "Column 'sample' contains values that do not match the expected format ['^(\\\\d+ patients|empty)$']: ['3x patients', '619 paxienxs', '0 patixnts', '21 pxtients', 'xx patients']",
+      "Column 'state_average' contains values that do not match the expected format ['^[a-z]{2}_[a-z]{2,10}(-[a-z]+)?-\\\\d+[a-z]?$']: ['al_pn-xb', 'al_pnx2', 'al_scipxvtex2', 'alxpn-7', 'al_scipxvtex1']"
     ],
-    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'provider_number' should be numeric but contains non-numeric values: ['1xx19', 'x0005', '1000x', 'x00xx', 'x00x5']\n- Column 'zip' should be numeric but contains non-numeric values: ['x5957', '3595x', '3563x', '36x49', '360x9']\n- Column 'phone' should be numeric but contains non-numeric values: ['334793870x', 'xx479x8701', '2x6x938310', '2565x38310', '3344x33541']",
-    "rule_based_percentage": 96.93,
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'provider_number' should be numeric but contains non-numeric values: ['1xx19', 'x0005', '1000x', 'x00xx', 'x00x5']\n- Column 'zip' should be numeric but contains non-numeric values: ['x5957', '3595x', '3563x', '36x49', '360x9']\n- Column 'phone' should be numeric but contains non-numeric values: ['334793870x', 'xx479x8701', '2x6x938310', '2565x38310', '3344x33541']\n- Column 'provider_number' contains values that do not match the expected format ['^\\\\d{5}$']: ['1xx19', 'x0005', '1000x', 'x00xx', 'x00x5']\n- Column 'zip' contains values that do not match the expected format ['^\\\\d{5}$']: ['x5957', '3595x', '3563x', '36x49', '360x9']\n- Column 'phone' contains values that do not match the expected format ['^\\\\d{10}$']: ['334793870x', 'xx479x8701', '2x6x938310', '2565x38310', '3344x33541']\n- Column 'emergency_service' contains values that do not match the expected format ['^(yes|no)$']: ['yxs', 'yex', 'xes', 'xo']\n- Column 'measure_code' contains values that do not match the expected format ['^[a-zA-Z]{2,4}(-[a-zA-Z]+)?-\\\\d+[a-z]?$']: ['hfx1', 'pnx5c', 'hf-x', 'amix2', 'pn-xb']\n- Column 'measure_name' contains values that do not match the expected format [\"^[a-zA-Z0-9\\\\s&\\\\-',./()]{10,500}$\"]: ['surgeryxpatientsxneedingxhairxremovedxfromxthexsurgicalxareaxbeforexsurgery& xwhoxhadxhairxremovedxusingxaxsaferxmethodx(electricxclippersxorxhairxremovalxcreamxï¿½cxnotxaxrazor)']\n- Column 'score' contains values that do not match the expected format ['^(\\\\d{1,3}%|empty)$']: ['x00%', '9x%', 'x7%', '95x', 'x5%']\n- Column 'sample' contains values that do not match the expected format ['^(\\\\d+ patients|empty)$']: ['3x patients', '619 paxienxs', '0 patixnts', '21 pxtients', 'xx patients']\n- Column 'state_average' contains values that do not match the expected format ['^[a-z]{2}_[a-z]{2,10}(-[a-z]+)?-\\\\d+[a-z]?$']: ['al_pn-xb', 'al_pnx2', 'al_scipxvtex2', 'alxpn-7', 'al_scipxvtex1']",
+    "rule_based_percentage": 98.55,
     "rule_based_breakdown": {
-      "semantic_correctness": 96.93
+      "semantic_correctness": 98.55
     },
     "reference_comparison_percentage": 97.72,
     "reference_comparison_per_column": {
@@ -418,15 +427,21 @@
       "Functional dependency violation: ('address_1', 'condition') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
       "Functional dependency violation: ('address_1', 'score') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
       "Functional dependency violation: ('city', 'measure_name') -> 'measure_code' should map to exactly one value per group, but 1 group(s) have multiple different 'measure_code' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
-      "Functional dependency violation: ('city', 'state_average') -> 'measure_code' should map to exactly one value per group, but 1 group(s) have multiple different 'measure_code' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared."
+      "Functional dependency violation: ('city', 'state_average') -> 'measure_code' should map to exactly one value per group, but 1 group(s) have multiple different 'measure_code' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Column 'provider_number' contains values that do not match the expected format ['^\\\\d{5}$']: ['5', '0', '8', '27', '29']",
+      "Column 'measure_code' contains values that do not match the expected format ['^[a-zA-Z]{2,4}(-[a-zA-Z]+)?-\\\\d+[a-z]?$']: ['pnx5c', 'hf-x', 'ami2', 'scipxinfx1', 'ami-']",
+      "Column 'score' contains values that do not match the expected format ['^(\\\\d{1,3}%|empty)$']: ['xx%']",
+      "Column 'sample' contains values that do not match the expected format ['^(\\\\d+ patients|empty)$']: ['0 patixnts', '125 patixnts']",
+      "Column 'state_average' contains values that do not match the expected format ['^[a-z]{2}_[a-z]{2,10}(-[a-z]+)?-\\\\d+[a-z]?$']: ['al_pn-xb', 'al_pnx2', 'al_scipxvtex2', 'al_scipxvtex1', 'al_amix8a']"
     ],
-    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- CRITICAL: column 'address_2' is completely empty after cleaning (every value is missing) — this is almost certainly a bug, not a correct result.\n- CRITICAL: column 'address_3' is completely empty after cleaning (every value is missing) — this is almost certainly a bug, not a correct result.\n- Functional dependency violation: ('name', 'condition') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('name', 'score') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('address_1', 'condition') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('address_1', 'score') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('city', 'measure_name') -> 'measure_code' should map to exactly one value per group, but 1 group(s) have multiple different 'measure_code' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('city', 'state_average') -> 'measure_code' should map to exactly one value per group, but 1 group(s) have multiple different 'measure_code' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
-    "rule_based_percentage": 97.99,
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- CRITICAL: column 'address_2' is completely empty after cleaning (every value is missing) — this is almost certainly a bug, not a correct result.\n- CRITICAL: column 'address_3' is completely empty after cleaning (every value is missing) — this is almost certainly a bug, not a correct result.\n- Functional dependency violation: ('name', 'condition') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('name', 'score') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('address_1', 'condition') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('address_1', 'score') -> 'owner' should map to exactly one value per group, but 1 group(s) have multiple different 'owner' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('city', 'measure_name') -> 'measure_code' should map to exactly one value per group, but 1 group(s) have multiple different 'measure_code' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('city', 'state_average') -> 'measure_code' should map to exactly one value per group, but 1 group(s) have multiple different 'measure_code' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Column 'provider_number' contains values that do not match the expected format ['^\\\\d{5}$']: ['5', '0', '8', '27', '29']\n- Column 'measure_code' contains values that do not match the expected format ['^[a-zA-Z]{2,4}(-[a-zA-Z]+)?-\\\\d+[a-z]?$']: ['pnx5c', 'hf-x', 'ami2', 'scipxinfx1', 'ami-']\n- Column 'score' contains values that do not match the expected format ['^(\\\\d{1,3}%|empty)$']: ['xx%']\n- Column 'sample' contains values that do not match the expected format ['^(\\\\d+ patients|empty)$']: ['0 patixnts', '125 patixnts']\n- Column 'state_average' contains values that do not match the expected format ['^[a-z]{2}_[a-z]{2,10}(-[a-z]+)?-\\\\d+[a-z]?$']: ['al_pn-xb', 'al_pnx2', 'al_scipxvtex2', 'al_scipxvtex1', 'al_amix8a']",
+    "rule_based_percentage": 93.43,
     "rule_based_breakdown": {
       "data_loss": 100.0,
       "column_preservation": 100.0,
       "non_empty_columns": 90.0,
       "numeric_validity": 100.0,
+      "format_compliance": 70.59,
       "functional_dependencies": 99.97
     },
     "reference_comparison_percentage": 82.84,

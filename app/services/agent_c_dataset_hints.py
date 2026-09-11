@@ -18,6 +18,21 @@ Only genuinely closed/fixed vocabularies are listed in valid_values_map (codes l
 Sex, Embarked, meal type -- not open-ended real-world entities like hospital/city
 names, which get a semantic_hint instead so the LLM still uses judgment rather than
 being locked to a fixed list).
+
+`format_patterns` is a THIRD, separate kind of override, for `agent_c.py`'s
+rule-based `check_format_patterns()` (not the LLM) -- {col: [regex, ...]}, a value
+is valid if it matches AT LEAST ONE of the given patterns. This is a purely
+structural/shape check (e.g. "a ZIP code is exactly 5 digits"), independent of the
+LLM semantic check above. The hospital and flights patterns below come from
+column-format schemas the project supervisor supplied (matching her own
+`validator.py` reference implementation's `format_check` regex strategy) -- I
+re-mapped her column names to this project's actual column names (e.g. her
+`name`/`zip`/`phone` -> this dataset's `HospitalName`/`ZipCode`/`PhoneNumber`) and
+verified every pattern against every real value in each dataset's clean.csv,
+fixing a few that didn't actually match this project's real data (her
+`measure_code`/`state_average` patterns didn't allow multi-word codes like
+`scip-card-2`; her `score`/`sample` patterns didn't allow this dataset's literal
+`'empty'` missing-value marker).
 """
 
 DATASET_HINTS = {
@@ -70,57 +85,76 @@ DATASET_HINTS = {
             ),
         },
         "valid_values_map": {},
+        # From the supervisor's semantic_schema_Flights_pattern...json (format_check
+        # .valid_pattern per column) -- verified against every real value in
+        # datasets/flights/clean.csv, all matched as-is (column names already match).
+        "format_patterns": {
+            "flight": [r"^[A-Z]{2,3}-\d{1,4}-[A-Z]{3}-[A-Z]{3}$"],
+            "sched_dep_time": [r"^\d{1,2}:\d{2}\s*[ap]\.?m\.?$", r"^\d{1,2}:\d{2}$"],
+            "act_dep_time": [r"^\d{1,2}:\d{2}\s*[ap]\.?m\.?$", r"^\d{1,2}:\d{2}$"],
+            "sched_arr_time": [r"^\d{1,2}:\d{2}\s*[ap]\.?m\.?$", r"^\d{1,2}:\d{2}$"],
+            "act_arr_time": [r"^\d{1,2}:\d{2}\s*[ap]\.?m\.?$", r"^\d{1,2}:\d{2}$"],
+        },
     },
 
     # -------------------------------------------------------------------
     # hospital (20 cols) -- CMS hospital-quality benchmark limited to a
     # fixed, closed universe of 45 real hospitals in Alabama + Alaska
-    # (the classic HoloClean/BigDansing "Hospital" dataset). No
-    # metadata.json, but a real run's DIRTY evaluation (OpenRouter, see
-    # conversation) confirmed corruption hits HospitalName ("name"),
-    # Address1, City, State, ProviderNumber, ZipCode and PhoneNumber via
-    # character-substitution typos (e.g. 'o'->'x': "hxspital").
+    # (the classic HoloClean/BigDansing "Hospital" dataset).
+    #
+    # IMPORTANT: datasets/hospital/clean.csv uses CamelCase column names
+    # (ProviderNumber, HospitalName, Address1, ...) but datasets/hospital/
+    # dirty.csv AND every real cleaned output (workflows/executed/hospital_
+    # *_cleaned.csv) use lowercase snake_case (provider_number, name,
+    # address_1, ...) -- the SAME two files disagree on column naming. Since
+    # semantic_hints/valid_values_map/format_patterns are looked up by EXACT
+    # column name against the file actually being evaluated (dirty/cleaned,
+    # never clean.csv directly), they must be keyed in snake_case here, or
+    # they silently never match and do nothing (a real bug this file had
+    # until caught by a live test run). This also happens to be exactly the
+    # naming the supervisor's own schema file uses, so no renaming is needed
+    # to reuse her format_check patterns below.
     # -------------------------------------------------------------------
     "hospital": {
         "semantic_hints": {
-            "ProviderNumber": (
+            "provider_number": (
                 "a 5-digit CMS hospital provider ID number, digits only, no "
                 "letters -- a value with a stray letter/placeholder character "
                 "(e.g. 'x') in place of a digit is a real error, not a variant."
             ),
-            "HospitalName": (
+            "name": (
                 "the legal name of a real hospital, one of a fixed set of 45 "
                 "hospitals located in Alabama or Alaska."
             ),
-            "Address1": (
+            "address_1": (
                 "a US street address for one of the 45 hospitals in this "
                 "dataset (Alabama or Alaska) -- e.g. '1720 university blvd'."
             ),
-            "City": "a US city name, in Alabama or Alaska.",
-            "ZipCode": "a 5-digit US ZIP code, digits only, no letters.",
-            "CountyName": "a US county name, in Alabama or Alaska.",
-            "PhoneNumber": (
+            "city": "a US city name, in Alabama or Alaska.",
+            "zip": "a 5-digit US ZIP code, digits only, no letters.",
+            "county": "a US county name, in Alabama or Alaska.",
+            "phone": (
                 "a 10-digit US phone number, digits only, no formatting "
                 "characters (no dashes/parentheses/spaces expected)."
             ),
-            "MeasureName": (
+            "measure_name": (
                 "the full official English description of a CMS hospital "
                 "quality measure (a long sentence), one of a fixed set of 28."
             ),
-            "Score": (
+            "score": (
                 "a quality-measure score, either a percentage like '97%' "
                 "(0%-100%) or the literal string 'empty' when not reported -- "
                 "not a free-text field."
             ),
-            "Sample": (
-                "the sample size behind a Score, formatted as '<N> patients' "
+            "sample": (
+                "the sample size behind a score, formatted as '<N> patients' "
                 "(e.g. '33 patients', '0 patients') or the literal string "
                 "'empty' when not reported."
             ),
         },
         "valid_values_map": {
-            "State": ["ak", "al"],
-            "HospitalOwner": [
+            "state": ["ak", "al"],
+            "owner": [
                 "government - federal",
                 "government - hospital district or authority",
                 "government - local",
@@ -130,15 +164,15 @@ DATASET_HINTS = {
                 "voluntary non-profit - other",
                 "voluntary non-profit - private",
             ],
-            "EmergencyService": ["no", "yes"],
-            "Condition": [
+            "emergency_service": ["no", "yes"],
+            "condition": [
                 "children s asthma care",
                 "heart attack",
                 "heart failure",
                 "pneumonia",
                 "surgical infection prevention",
             ],
-            "MeasureCode": [
+            "measure_code": [
                 "ami-1", "ami-2", "ami-3", "ami-4", "ami-5", "ami-7a", "ami-8a",
                 "cac-1", "cac-2", "cac-3",
                 "hf-1", "hf-2", "hf-3", "hf-4",
@@ -146,7 +180,7 @@ DATASET_HINTS = {
                 "scip-card-2", "scip-inf-1", "scip-inf-2", "scip-inf-3",
                 "scip-inf-4", "scip-inf-6", "scip-vte-1", "scip-vte-2",
             ],
-            "Stateavg": [
+            "state_average": [
                 "ak_ami-1", "ak_ami-2", "ak_hf-1", "ak_hf-2", "ak_hf-3", "ak_hf-4",
                 "ak_pn-2", "ak_pn-3b", "ak_pn-4", "ak_pn-5c", "ak_pn-6", "ak_pn-7",
                 "ak_scip-card-2", "ak_scip-inf-1", "ak_scip-inf-2", "ak_scip-inf-3",
@@ -158,7 +192,7 @@ DATASET_HINTS = {
                 "al_scip-inf-1", "al_scip-inf-2", "al_scip-inf-3", "al_scip-inf-4",
                 "al_scip-inf-6", "al_scip-vte-1", "al_scip-vte-2",
             ],
-            "HospitalName": [
+            "name": [
                 "alaska regional hospital", "andalusia regional hospital",
                 "baptist medical center south", "callahan eye foundation hospital",
                 "cherokee medical center", "chilton medical center",
@@ -185,7 +219,7 @@ DATASET_HINTS = {
                 "university of alabama hospital", "wedowee hospital",
                 "yukon kuskokwim delta reg hospital",
             ],
-            "Address1": [
+            "address_1": [
                 "1000 first street north", "1007 goodyear avenue",
                 "101 hospital circle", "101 sivley rd", "1010 lay dam road",
                 "1108 ross clark circle", "1201 7th street se",
@@ -209,7 +243,7 @@ DATASET_HINTS = {
                 "849 south three notch street", "987 drayton street",
                 "po box 287",
             ],
-            "City": [
+            "city": [
                 "alabaster", "anchorage", "andalusia", "anniston", "bethel",
                 "birmingham", "boaz", "centre", "clanton", "cullman", "decatur",
                 "dothan", "elba", "enterprise", "fayette", "florence",
@@ -219,7 +253,7 @@ DATASET_HINTS = {
                 "russellville", "sheffield", "sylacauga", "tallassee",
                 "thomasville", "valley", "wedowee", "winfield",
             ],
-            "CountyName": [
+            "county": [
                 "anchorage", "autauga", "bethel", "blount", "butler", "calhoun",
                 "chambers", "cherokee", "chilton", "clarke", "coffee",
                 "covington", "crenshaw", "cullman", "dale", "de kalb", "elmore",
@@ -227,7 +261,7 @@ DATASET_HINTS = {
                 "lauderdale", "lee", "madison", "marion", "marshall", "mobile",
                 "montgomery", "morgan", "randolph", "shelby", "talladega",
             ],
-            "MeasureName": [
+            "measure_name": [
                 "all heart surgery patients whose blood sugar (blood glucose) is kept under good control in the days right after surgery",
                 "children and their caregivers who received a home management plan of care document while hospitalized for asthma",
                 "children who received reliever medication while hospitalized for asthma",
@@ -257,6 +291,43 @@ DATASET_HINTS = {
                 "surgery patients whose doctors ordered treatments to prevent blood clots after certain types of surgeries",
                 "surgery patients whose preventive antibiotics were stopped at the right time (within 24 hours after surgery)",
             ],
+        },
+        # From the supervisor's semantic_schema_Hospital_pattern...json (format_check
+        # .pattern/.valid_pattern per column) -- column names already match here
+        # (both her schema and the real dirty/cleaned files use snake_case).
+        # CORRECTED 3 patterns that didn't match this dataset's real values
+        # (verified against every value in datasets/hospital/clean.csv, whose
+        # values -- just not its column NAMES, see note above -- match dirty.csv):
+        #  - measure_code/state_average: her pattern only allowed a single hyphen
+        #    segment (e.g. 'ami-1'), which rejects real multi-word codes like
+        #    'scip-card-2' -- widened to allow an optional extra hyphenated word.
+        #  - measure_name: her pattern didn't allow '/' (rejects real values like
+        #    'heart attack patients given ... smoking cessation advice/counseling').
+        #  - score/sample: her pattern didn't allow this dataset's literal 'empty'
+        #    string, which is how a missing score/sample is represented here
+        #    (not NaN) -- added as an explicit alternative.
+        "format_patterns": {
+            "provider_number": [r"^\d{5}$"],
+            "name": [r"^[a-zA-Z0-9\s&\-',.()]{3,100}$"],
+            "address_1": [r"^[a-zA-Z0-9\s.,#\-]{5,100}$"],
+            "city": [r"^[a-zA-Z\s]{2,50}$"],
+            # [A-Za-z] (pas [A-Z]) -- la CASSE n'importe pas ici, seule la forme
+            # "2 lettres" compte (ce dataset stocke 'state' en minuscules par
+            # convention ('al'/'ak'), contrairement a d'autres colonnes comme
+            # hotel-booking-demand ou la casse EST une erreur reelle a detecter).
+            "state": [r"^[A-Za-z]{2}$"],
+            "zip": [r"^\d{5}$"],
+            "county": [r"^[a-zA-Z\s]{2,50}$"],
+            "phone": [r"^\d{10}$"],
+            "type": [r"^[a-zA-Z\s&\-]{5,100}$"],
+            "owner": [r"^[a-zA-Z\s\-&]{5,100}$"],
+            "emergency_service": [r"^(yes|no)$"],
+            "condition": [r"^[a-zA-Z\s&\-',.()]{5,100}$"],
+            "measure_code": [r"^[a-zA-Z]{2,4}(-[a-zA-Z]+)?-\d+[a-z]?$"],
+            "measure_name": [r"^[a-zA-Z0-9\s&\-',./()]{10,500}$"],
+            "score": [r"^(\d{1,3}%|empty)$"],
+            "sample": [r"^(\d+ patients|empty)$"],
+            "state_average": [r"^[a-z]{2}_[a-z]{2,10}(-[a-z]+)?-\d+[a-z]?$"],
         },
     },
 
@@ -300,6 +371,50 @@ DATASET_HINTS = {
             "customer_type": ["Contract", "Group", "Transient", "Transient-Party"],
             "reservation_status": ["Canceled", "Check-Out", "No-Show"],
         },
+        # Derived the same way as hospital/flights (no schema was supplied for
+        # this dataset): built from real column contents, verified against every
+        # value in datasets/hotel-booking-demand/clean.csv, and spot-checked
+        # against noisy_medium.csv to confirm real injected corruption is caught.
+        #
+        # CASE MATTERS HERE (unlike hospital's lowercase 'state') -- the typo
+        # injector produces case-mangled values like 'RESORT HOTEL'/'City hotel'
+        # for hotel/deposit_type/customer_type, which ARE real errors, so these
+        # patterns are intentionally case-SENSITIVE (exact canonical casing only).
+        #
+        # 'country' allows 2-OR-3 uppercase letters, not just 3 (alpha-3) --
+        # clean.csv itself legitimately contains the alpha-2 code 'CN' (1279
+        # rows), so a strict alpha-3-only pattern would have flagged real,
+        # correct reference data as an error.
+        #
+        # 'reservation_status_date' targets exactly what metadata.json calls out
+        # as this dataset's dedicated "format_errors" family: the canonical shape
+        # is 'YYYY-MM-DD', but the noisy files contain fully re-parsable-but-
+        # wrong-shaped dates (e.g. '01-Apr-2016', '2015/07/01', '09/07/2015')
+        # that check_date_validity's lenient pd.to_datetime() never flags since
+        # it happily parses them anyway -- this is the one column here where the
+        # new format check catches something no existing check could.
+        "format_patterns": {
+            "hotel": [r"^(City Hotel|Resort Hotel)$"],
+            "deposit_type": [r"^(No Deposit|Non Refund|Refundable)$"],
+            "customer_type": [r"^(Contract|Group|Transient|Transient-Party)$"],
+            "meal": [r"^(BB|FB|HB|SC|Undefined)$"],
+            "market_segment": [
+                r"^(Aviation|Complementary|Corporate|Direct|Groups|"
+                r"Offline TA/TO|Online TA|Undefined)$"
+            ],
+            "distribution_channel": [r"^(Corporate|Direct|GDS|TA/TO|Undefined)$"],
+            "reserved_room_type": [r"^(A|B|C|D|E|F|G|H|L|P)$"],
+            "assigned_room_type": [r"^(A|B|C|D|E|F|G|H|I|K|L|P)$"],
+            "reservation_status": [r"^(Canceled|Check-Out|No-Show)$"],
+            "arrival_date_month": [
+                r"^(January|February|March|April|May|June|July|August|"
+                r"September|October|November|December)$"
+            ],
+            "lead_time": [r"^\d+$"],
+            "adults": [r"^\d+$"],
+            "reservation_status_date": [r"^\d{4}-\d{2}-\d{2}$"],
+            "country": [r"^[A-Z]{2,3}$"],
+        },
     },
 
     # -------------------------------------------------------------------
@@ -333,27 +448,45 @@ DATASET_HINTS = {
             "Sex": ["female", "male"],
             "Embarked": ["C", "Q", "S"],
         },
+        # Same derive-and-verify approach as hotel-booking-demand (no schema
+        # supplied for this dataset either) -- verified against every value in
+        # datasets/titanic/clean.csv, spot-checked against noisy_medium.csv
+        # (correctly caught corruption like 'FEMAle'/'mle', '/A'/'unknown',
+        # '35.0l'/'4.O', '8.4583B'/'16.0kg'). Cabin/Ticket/Name are deliberately
+        # NOT given a pattern: no error family targets their format (metadata.json
+        # only injects typos into Sex/Embarked/Fare/Age), and Cabin/Ticket's real
+        # format is too open-ended (multi-cabin entries, mixed alnum codes) to
+        # constrain without risking false positives on legitimate values.
+        "format_patterns": {
+            "Sex": [r"^(female|male)$"],
+            "Embarked": [r"^[CQS]$"],
+            "Age": [r"^\d+(\.\d+)?$"],
+            "Fare": [r"^\d+(\.\d+)?$"],
+        },
     },
 }
 
 
 def get_dataset_hints(dataset_name: str) -> dict:
     """
-    Returns the optional {"semantic_hints": {...}, "valid_values_map": {...}}
-    overrides for a known dataset name (case/hyphen/underscore-insensitive).
+    Returns the optional {"semantic_hints": {...}, "valid_values_map": {...},
+    "format_patterns": {...}} overrides for a known dataset name (case/hyphen/
+    underscore-insensitive).
 
     For any dataset name not listed in DATASET_HINTS -- including a totally new
     dataset never seen before -- this returns empty dicts, so agent_c.validate()'s
     own auto-discovery handles everything on its own, exactly as if this module
     didn't exist.
     """
+    empty = {"semantic_hints": {}, "valid_values_map": {}, "format_patterns": {}}
     if not dataset_name:
-        return {"semantic_hints": {}, "valid_values_map": {}}
+        return empty
     key_norm = dataset_name.strip().lower().replace("_", "-")
     for name, hints in DATASET_HINTS.items():
         if name.lower().replace("_", "-") == key_norm:
             return {
                 "semantic_hints": dict(hints.get("semantic_hints", {})),
                 "valid_values_map": dict(hints.get("valid_values_map", {})),
+                "format_patterns": dict(hints.get("format_patterns", {})),
             }
-    return {"semantic_hints": {}, "valid_values_map": {}}
+    return empty

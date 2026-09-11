@@ -426,6 +426,86 @@ def _count_numeric_issues(df_cleaned: pd.DataFrame, numeric_columns: list) -> tu
     return total_checked, total_invalid
 
 
+def _value_matches_any_pattern(value: str, patterns: list) -> bool:
+    """Une valeur est valide si elle correspond a AU MOINS UN des patterns donnes
+    (plusieurs formats alternatifs peuvent etre legitimes pour une meme colonne,
+    ex: 'H:MM a.m.' OU 'H:MM' pour une heure).
+
+    SENSIBLE A LA CASSE PAR DEFAUT (pas de re.IGNORECASE global) -- un vrai cas
+    observe montre pourquoi : sur hotel-booking-demand, une casse incoherente
+    EST elle-meme une erreur reelle a detecter (ex: 'RESORT HOTEL' ou 'City
+    hotel' sont des corruptions du typo-injector, pas des variantes valides de
+    'Resort Hotel'/'City Hotel') -- les accepter silencieusement en etant
+    insensible a la casse manquerait exactement le type d'erreur que ce
+    controle doit attraper. A l'inverse, quand la casse n'a AUCUNE importance
+    pour une colonne donnee (ex: 'state' du dataset hospital, stocke en
+    minuscules par convention mais dont la forme correcte est juste "2
+    lettres"), c'est au PATTERN lui-meme de l'exprimer explicitement via une
+    classe de caracteres couvrant les deux casses (ex: '^[A-Za-z]{2}$'), plutot
+    qu'un flag global qui affaiblirait aussi les colonnes ou la casse compte."""
+    return any(re.match(pattern, value) for pattern in patterns)
+
+
+def check_format_patterns(df_cleaned: pd.DataFrame, format_patterns_map: dict) -> list:
+    """
+    Verifie que chaque valeur d'une colonne respecte AU MOINS UN des formats
+    (regex) attendus pour cette colonne -- complementaire aux controles
+    numeric/date deja existants : ceux-la verifient un TYPE ("est-ce parsable
+    comme un nombre/une date"), celui-ci verifie une FORME precise ("un code
+    postal a exactement 5 chiffres", "un code mesure a la forme 'xxx-1'")
+    qu'aucun des deux autres controles ne peut exprimer.
+
+    format_patterns_map : dict optionnel {nom_colonne: [pattern_regex, ...]}
+        -- fourni par l'appelant (ex: agent_c_dataset_hints.py), PAS auto-
+        decouvert : contrairement aux types numeric/date/FD, la FORME exacte
+        attendue d'une colonne (ex: "10 chiffres" pour un telephone) n'est pas
+        quelque chose qu'on peut deviner de facon fiable a partir des donnees
+        seules -- une colonne sans entree dans ce dict n'est simplement pas
+        verifiee ici (comportement inchange, comme pour semantic_hints).
+
+    Ne signale QUE les valeurs qui ne correspondent a AUCUN des patterns donnes
+    pour leur colonne -- une colonne avec plusieurs formats alternatifs valides
+    (ex: sched_dep_time accepte 'H:MM a.m.' ET 'H:MM') n'est en erreur que si
+    une valeur ne correspond a AUCUN des deux.
+    """
+    issues = []
+    for col, patterns in format_patterns_map.items():
+        if col not in df_cleaned.columns or not patterns:
+            continue
+        non_null = df_cleaned[col].dropna().astype(str)
+        if len(non_null) == 0:
+            continue
+        bad_mask = ~non_null.apply(lambda v: _value_matches_any_pattern(v, patterns))
+        if bad_mask.any():
+            bad_values = non_null[bad_mask].unique()[:5].tolist()
+            issues.append(f"Column '{col}' contains values that do not match the "
+                           f"expected format {patterns}: {bad_values}")
+    return issues
+
+
+def _count_format_pattern_issues(df_cleaned: pd.DataFrame, format_patterns_map: dict) -> tuple:
+    """Meme verification que check_format_patterns(), mais au niveau de chaque
+    VALEUR individuelle -- meme raison que _count_numeric_issues() : permet de
+    fusionner ce compte dans le MEME ratio numerateur/denominateur que
+    semantic_correctness pour l'evaluation du fichier brut seul.
+
+    Returns
+    -------
+    (total_checked, total_invalid) : nombre total de valeurs non-nulles
+    examinees (parmi les colonnes ayant des patterns fournis), et combien
+    d'entre elles ne correspondent a AUCUN pattern attendu.
+    """
+    total_checked, total_invalid = 0, 0
+    for col, patterns in format_patterns_map.items():
+        if col not in df_cleaned.columns or not patterns:
+            continue
+        non_null = df_cleaned[col].dropna().astype(str)
+        total_checked += len(non_null)
+        bad_mask = ~non_null.apply(lambda v: _value_matches_any_pattern(v, patterns))
+        total_invalid += int(bad_mask.sum())
+    return total_checked, total_invalid
+
+
 def check_functional_dependencies(df_cleaned: pd.DataFrame, fd_pairs: list) -> list:
     """
     fd_pairs : liste de (source, target) ou (source_tuple, target) -- verifie que
@@ -766,7 +846,7 @@ def validate(df_original: pd.DataFrame, df_cleaned: pd.DataFrame,
              expected_columns: list = None, date_columns: dict = None,
              numeric_columns: list = None, fd_pairs: list = None,
              semantic_columns: list = None, semantic_hints: dict = None,
-             valid_values_map: dict = None,
+             valid_values_map: dict = None, format_patterns_map: dict = None,
              data_loss_threshold: float = 0.30, sample_size: int = 25,
              provider: str = None, model: str = None,
              skip_semantic_check: bool = False,
@@ -785,6 +865,12 @@ def validate(df_original: pd.DataFrame, df_cleaned: pd.DataFrame,
     ligne de configuration specifique a ce dataset. Passer un parametre
     explicitement le remplace toujours (utile pour forcer/completer une
     decouverte automatique imparfaite), mais ce n'est plus jamais REQUIS.
+
+    format_patterns_map ({col: [regex, ...]}) est la SEULE exception a l'auto-
+    decouverte : la forme exacte attendue d'une colonne (ex: "un code postal a
+    5 chiffres") n'est pas quelque chose qu'on peut deviner de facon fiable a
+    partir des donnees seules -- si non fourni, ce controle est simplement
+    desactive (comportement inchange), voir check_format_patterns().
 
     IMPORTANT — LA VERIFICATION LLM S'EXECUTE PAR DEFAUT SUR TOUTES LES COLONNES
     CATEGORIELLES PERTINENTES, PAS SEULEMENT SUR CE QUI EST EXPLICITEMENT LISTE.
@@ -849,6 +935,8 @@ def validate(df_original: pd.DataFrame, df_cleaned: pd.DataFrame,
         rule_issues += check_numeric_validity(df_cleaned, numeric_columns)
     if fd_pairs:
         rule_issues += check_functional_dependencies(df_cleaned, fd_pairs)
+    if format_patterns_map:
+        rule_issues += check_format_patterns(df_cleaned, format_patterns_map)
 
     semantic_result = None
     if not skip_semantic_check:
@@ -883,6 +971,7 @@ def validate(df_original: pd.DataFrame, df_cleaned: pd.DataFrame,
             "numeric_columns": numeric_columns,
             "date_columns": date_columns,
             "fd_pairs": fd_pairs,
+            "format_patterns_map": format_patterns_map,
         },
     }
 
@@ -906,7 +995,7 @@ def compute_rule_based_cleanliness(df_original: pd.DataFrame, df_cleaned: pd.Dat
                                     expected_columns: list = None, date_columns: dict = None,
                                     numeric_columns: list = None, fd_pairs: list = None,
                                     semantic_columns: list = None, semantic_hints: dict = None,
-                                    valid_values_map: dict = None,
+                                    valid_values_map: dict = None, format_patterns_map: dict = None,
                                     data_loss_threshold: float = 0.30, sample_size: int = 25,
                                     provider: str = None, model: str = None,
                                     skip_semantic_check: bool = False,
@@ -932,7 +1021,8 @@ def compute_rule_based_cleanliness(df_original: pd.DataFrame, df_cleaned: pd.Dat
         expected_columns=expected_columns, date_columns=date_columns,
         numeric_columns=numeric_columns, fd_pairs=fd_pairs,
         semantic_columns=semantic_columns, semantic_hints=semantic_hints,
-        valid_values_map=valid_values_map, data_loss_threshold=data_loss_threshold,
+        valid_values_map=valid_values_map, format_patterns_map=format_patterns_map,
+        data_loss_threshold=data_loss_threshold,
         sample_size=sample_size, provider=provider, model=model,
         skip_semantic_check=skip_semantic_check,
         skip_before_after_checks=skip_before_after_checks,
@@ -948,6 +1038,7 @@ def compute_rule_based_cleanliness(df_original: pd.DataFrame, df_cleaned: pd.Dat
     numeric_columns = resolved["numeric_columns"]
     date_columns = resolved["date_columns"]
     fd_pairs = resolved["fd_pairs"]
+    format_patterns_map = resolved["format_patterns_map"]
 
     breakdown = {}
 
@@ -1000,6 +1091,19 @@ def compute_rule_based_cleanliness(df_original: pd.DataFrame, df_cleaned: pd.Dat
             100.0 * (1 - numeric_issue_count / max(len(numeric_columns), 1)), 2
         )
 
+    # --- Format/pattern (regex) : meme traitement que numeric_validity juste
+    # au-dessus -- categorie separee (au niveau colonne) pour l'evaluation
+    # CLEANED normale, fusionnee au niveau VALEUR dans le pool semantique plus
+    # bas pour l'evaluation DIRTY seul (meme raison : eviter qu'une categorie
+    # quasi-100% dilue le score de facon incoherente avec le Pourcentage 2).
+    if format_patterns_map and not skip_before_after_checks:
+        format_issue_count = len(check_format_patterns(df_cleaned, format_patterns_map))
+        checked_cols = [c for c in format_patterns_map if c in df_cleaned.columns]
+        if checked_cols:
+            breakdown["format_compliance"] = round(
+                100.0 * (1 - format_issue_count / len(checked_cols)), 2
+            )
+
     # --- Semantique (LLM) + dependances fonctionnelles ---
     # IMPORTANT (consigne de l'encadrante) : pour l'evaluation "DIRTY seul"
     # (skip_before_after_checks=True), les violations de dependances
@@ -1041,6 +1145,11 @@ def compute_rule_based_cleanliness(df_original: pd.DataFrame, df_cleaned: pd.Dat
         numeric_checked, numeric_invalid = _count_numeric_issues(df_cleaned, numeric_columns)
         total_checked += numeric_checked
         total_errors += numeric_invalid
+
+    if format_patterns_map and skip_before_after_checks:
+        format_checked, format_invalid = _count_format_pattern_issues(df_cleaned, format_patterns_map)
+        total_checked += format_checked
+        total_errors += format_invalid
 
     if fd_pairs and skip_before_after_checks:
         fd_total_groups, fd_violated_groups = 0, 0
@@ -1177,8 +1286,9 @@ def compute_cleanliness_percentages(df_original: pd.DataFrame, df_cleaned: pd.Da
         n'existe pas.
     **rule_kwargs : tous les parametres de compute_rule_based_cleanliness()
         (expected_columns, date_columns, numeric_columns, fd_pairs,
-        semantic_columns, semantic_hints, valid_values_map, provider, model,
-        auto_discover, include_composite_fds...).
+        semantic_columns, semantic_hints, valid_values_map,
+        format_patterns_map, provider, model, auto_discover,
+        include_composite_fds...).
 
     Returns
     -------
