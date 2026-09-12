@@ -309,22 +309,106 @@ def check_column_preservation(df_original: pd.DataFrame, df_cleaned: pd.DataFram
     return issues
 
 
-def check_empty_columns(df_cleaned: pd.DataFrame, columns_to_check: list = None) -> list:
+def _is_effectively_empty(series: pd.Series) -> bool:
+    """Vrai si TOUTES les valeurs sont NaN ou une chaine "vide" deguisee (ex:
+    'nan', 'null', ''). Factorise entre check_empty_columns() et sa comparaison
+    avant/apres ci-dessous."""
+    invalid_null_strings = {"nan", "null", "none", "<na>", "", " ", "empty", "n/a", "unknown"}
+    is_string_null = series.astype(str).str.lower().str.strip().isin(invalid_null_strings)
+    is_real_null = series.isna()
+    return bool((is_real_null | is_string_null).all())
+
+
+def check_empty_columns(df_cleaned: pd.DataFrame, columns_to_check: list = None,
+                         df_original: pd.DataFrame = None) -> list:
     """Detecte une colonne totalement videe (toutes les valeurs sont NaN ou une
-    chaine "vide" deguisee) -- signe d'un bug de nettoyage trop agressif."""
+    chaine "vide" deguisee) -- signe d'un bug de nettoyage trop agressif.
+
+    IMPORTANT (bug corrige, cas reel observe sur hospital) : ne regarde QUE
+    df_cleaned par defaut, sans jamais se demander si la colonne etait DEJA
+    entierement vide/placeholder AVANT le nettoyage -- un faux positif reel a
+    ete observe sur les colonnes address_2/address_3 d'hospital, dont la SEULE
+    valeur legitime dans clean.csv est la chaine litterale 'empty' (pas de
+    vraie donnee d'adresse secondaire dans ce dataset) : le script de
+    nettoyage a converti ce marqueur textuel en vrai NaN pandas, ce qui
+    declenchait a tort un "CRITICAL: bug" alors que la colonne etait deja
+    100% vide/placeholder dans le fichier BRUT aussi -- ce n'est pas une
+    perte de donnees, juste une normalisation d'un marqueur deja vide.
+
+    Si df_original est fourni, une colonne deja entierement vide/placeholder
+    dans df_original n'est PLUS signalee ici (comportement inchange si
+    df_original est omis, pour la retrocompatibilite) -- seule une colonne
+    qui avait de VRAIES donnees avant et n'en a plus apres est une regression
+    reelle."""
     issues = []
-    invalid_null_strings = {"nan", "null", "none", "<na>", "", " "}
     columns = columns_to_check if columns_to_check is not None else list(df_cleaned.columns)
     for col in columns:
         if col not in df_cleaned.columns:
             continue
-        is_string_null = df_cleaned[col].astype(str).str.lower().str.strip().isin(invalid_null_strings)
-        is_real_null = df_cleaned[col].isna()
-        if (is_real_null | is_string_null).all():
-            issues.append(f"CRITICAL: column '{col}' is completely empty after "
-                           f"cleaning (every value is missing) — this is almost "
-                           f"certainly a bug, not a correct result.")
+        if not _is_effectively_empty(df_cleaned[col]):
+            continue
+        if df_original is not None and col in df_original.columns \
+                and _is_effectively_empty(df_original[col]):
+            continue
+        issues.append(f"CRITICAL: column '{col}' is completely empty after "
+                       f"cleaning (every value is missing) — this is almost "
+                       f"certainly a bug, not a correct result.")
     return issues
+
+
+def _date_bad_mask(series: pd.Series, subtype: str):
+    """Retourne (bad_mask, label) -- bad_mask est un booleen par ligne, VRAI pour
+    une valeur non-nulle mais invalide pour le sous-type donne (jamais VRAI pour
+    une valeur manquante -- geree separement par l'appelant). Factorise entre
+    check_date_validity() (liste de problemes lisibles) et _count_date_issues()
+    (comptage au niveau VALEUR pour le score) pour eviter que les deux divergent."""
+    current_year = pd.Timestamp.now().year
+
+    if subtype == "year":
+        numeric = pd.to_numeric(series, errors="coerce")
+        return ((numeric < 1900) | (numeric > current_year + 2)) & numeric.notna(), \
+            f"out-of-range year values (plausible range is 1900-{current_year + 2})"
+
+    if subtype == "day":
+        numeric = pd.to_numeric(series, errors="coerce")
+        return ((numeric < 1) | (numeric > 31)) & numeric.notna(), \
+            "invalid day-of-month values (must be 1-31)"
+
+    if subtype == "month_num":
+        numeric = pd.to_numeric(series, errors="coerce")
+        return ((numeric < 1) | (numeric > 12)) & numeric.notna(), \
+            "invalid month numbers (must be 1-12)"
+
+    if subtype == "month_name":
+        import calendar
+        valid_months = ([m.lower() for m in calendar.month_name if m] +
+                         [m.lower() for m in calendar.month_abbr if m])
+        clean_series = series.astype(str).str.strip().str.lower()
+        clean_series = clean_series.replace(
+            {"": None, "null": None, "nan": None, "none": None}
+        )
+        return ~clean_series.isin(valid_months) & clean_series.notna(), \
+            "invalid month names"
+
+    if subtype == "full_date":
+        if pd.api.types.is_datetime64_any_dtype(series):
+            return pd.Series(False, index=series.index), "unparseable date values"
+        # IMPORTANT (bug corrige, cas reel observe sur hotel-booking-demand) :
+        # sans format="mixed", pd.to_datetime INFERE un seul format a partir de
+        # la PREMIERE valeur non-nulle, puis l'applique tel quel a TOUTE la
+        # colonne -- une colonne qui melange legitimement plusieurs formats de
+        # date (ex: '2015/07/01' ET '2015-07-01', les deux parfaitement
+        # valides) voit alors la majorite de ses valeurs marquees NaT a tort
+        # des que le format devine ne correspond pas (observe : 116395/119390
+        # lignes faussement signalees "unparseable", y compris des dates ISO
+        # bien formees, simplement parce que la toute premiere ligne utilisait
+        # des slashes). format="mixed" parse chaque valeur INDEPENDAMMENT -- ne
+        # reste alors NaT que ce qui n'est vraiment AUCUNE forme de date valide
+        # (ex: un timestamp unix brut comme '1431993600').
+        coerced = pd.to_datetime(series, errors="coerce", format="mixed")
+        return coerced.isna() & series.notna(), "unparseable date values"
+
+    return pd.Series(False, index=series.index), ""
 
 
 def check_date_validity(df_cleaned: pd.DataFrame, date_columns: dict) -> list:
@@ -334,56 +418,45 @@ def check_date_validity(df_cleaned: pd.DataFrame, date_columns: dict) -> list:
     Verifie que les valeurs sont dans une plage plausible / un format valide.
     """
     issues = []
-    current_year = pd.Timestamp.now().year
+    for col, subtype in date_columns.items():
+        if col not in df_cleaned.columns:
+            continue
+        bad_mask, label = _date_bad_mask(df_cleaned[col], subtype)
+        if bad_mask.any():
+            bad_values = df_cleaned[col][bad_mask].unique()[:5].tolist()
+            issues.append(f"Column '{col}' contains {label}: {bad_values}")
+    return issues
 
+
+def _count_date_issues(df_cleaned: pd.DataFrame, date_columns: dict) -> tuple:
+    """Meme verification que check_date_validity(), mais au niveau de chaque
+    VALEUR individuelle plutot que "la colonne a au moins un probleme" --
+    necessaire pour un score proportionnel a la vraie part d'erreurs (une
+    colonne avec 3010 valeurs invalides sur 119390 ne merite pas la MEME
+    penalite qu'une colonne ou TOUT est invalide -- bug reel observe sur
+    hotel-booking-demand : date_validity restait bloque a 50% qu'il y ait 1 ou
+    116395 valeurs invalides dans l'unique colonne fautive, puisque le calcul
+    precedent ne comptait que "colonnes avec >=1 probleme / total colonnes").
+
+    Compte aussi les valeurs MANQUANTES comme invalides, memes raisons et meme
+    convention que _count_numeric_issues()/_count_format_pattern_issues().
+
+    Returns
+    -------
+    (total_checked, total_invalid) : nombre total de lignes examinees (NaN
+    inclus) et combien d'entre elles sont invalides (NaN, OU presentes mais
+    hors plage/format attendu).
+    """
+    total_checked, total_invalid = 0, 0
     for col, subtype in date_columns.items():
         if col not in df_cleaned.columns:
             continue
         series = df_cleaned[col]
-
-        if subtype == "year":
-            numeric = pd.to_numeric(series, errors="coerce")
-            bad_mask = ((numeric < 1900) | (numeric > current_year + 2)) & numeric.notna()
-            if bad_mask.any():
-                bad_values = numeric[bad_mask].unique()[:5].tolist()
-                issues.append(f"Column '{col}' contains out-of-range year values: "
-                               f"{bad_values}. Plausible range is 1900-{current_year + 2}.")
-
-        elif subtype == "day":
-            numeric = pd.to_numeric(series, errors="coerce")
-            bad_mask = ((numeric < 1) | (numeric > 31)) & numeric.notna()
-            if bad_mask.any():
-                issues.append(f"Column '{col}' contains invalid day-of-month values "
-                               f"(must be 1-31): {numeric[bad_mask].unique()[:5].tolist()}")
-
-        elif subtype == "month_num":
-            numeric = pd.to_numeric(series, errors="coerce")
-            bad_mask = ((numeric < 1) | (numeric > 12)) & numeric.notna()
-            if bad_mask.any():
-                issues.append(f"Column '{col}' contains invalid month numbers "
-                               f"(must be 1-12): {numeric[bad_mask].unique()[:5].tolist()}")
-
-        elif subtype == "month_name":
-            import calendar
-            valid_months = ([m.lower() for m in calendar.month_name if m] +
-                             [m.lower() for m in calendar.month_abbr if m])
-            clean_series = series.astype(str).str.strip().str.lower()
-            clean_series = clean_series.replace(
-                {"": None, "null": None, "nan": None, "none": None}
-            )
-            invalid_mask = ~clean_series.isin(valid_months) & clean_series.notna()
-            if invalid_mask.any():
-                issues.append(f"Column '{col}' contains invalid month names: "
-                               f"{clean_series[invalid_mask].unique()[:5].tolist()}")
-
-        elif subtype == "full_date":
-            if not pd.api.types.is_datetime64_any_dtype(series):
-                coerced = pd.to_datetime(series, errors="coerce")
-                bad_mask = coerced.isna() & series.notna()
-                if bad_mask.any():
-                    issues.append(f"Column '{col}' contains unparseable date values: "
-                                   f"{series[bad_mask].unique()[:5].tolist()}")
-    return issues
+        total_checked += len(series)
+        null_count = int(series.isna().sum())
+        bad_mask, _ = _date_bad_mask(series, subtype)
+        total_invalid += null_count + int(bad_mask.sum())
+    return total_checked, total_invalid
 
 
 def check_numeric_validity(df_cleaned: pd.DataFrame, numeric_columns: list) -> list:
@@ -410,19 +483,30 @@ def _count_numeric_issues(df_cleaned: pd.DataFrame, numeric_columns: list) -> tu
     le MEME ratio numerateur/denominateur (meme granularite), comme demande par
     l'encadrante pour l'evaluation du fichier brut seul.
 
+    IMPORTANT (bug corrige) : compte aussi les valeurs MANQUANTES (NaN) comme
+    des erreurs, plutot que de les exclure silencieusement via dropna() comme
+    avant. Une cellule vide est un defaut de qualite reel et detectable SANS
+    aucune reference verite-terrain -- l'ignorer faisait paraitre le fichier
+    brut artificiellement "propre" (ex: observe en pratique sur flights, ou
+    ~33% de sched_dep_time est manquant mais le score de regles restait proche
+    de 96% car ces cellules vides n'etaient jamais comptees ni au numerateur
+    ni au denominateur).
+
     Returns
     -------
-    (total_checked, total_invalid) : nombre total de valeurs non-nulles
-    examinees, et combien d'entre elles ne sont PAS numeriques.
+    (total_checked, total_invalid) : nombre total de lignes examinees (NaN
+    inclus) et combien d'entre elles sont invalides (NaN, OU non-NaN mais pas
+    numerique).
     """
     total_checked, total_invalid = 0, 0
     for col in numeric_columns:
         if col not in df_cleaned.columns:
             continue
-        non_null = df_cleaned[col].dropna()
-        total_checked += len(non_null)
-        numeric = pd.to_numeric(non_null, errors="coerce")
-        total_invalid += int(numeric.isna().sum())
+        series = df_cleaned[col]
+        total_checked += len(series)
+        null_count = int(series.isna().sum())
+        numeric = pd.to_numeric(series.dropna(), errors="coerce")
+        total_invalid += null_count + int(numeric.isna().sum())
     return total_checked, total_invalid
 
 
@@ -489,20 +573,30 @@ def _count_format_pattern_issues(df_cleaned: pd.DataFrame, format_patterns_map: 
     fusionner ce compte dans le MEME ratio numerateur/denominateur que
     semantic_correctness pour l'evaluation du fichier brut seul.
 
+    IMPORTANT (bug corrige, meme raison que _count_numeric_issues() ci-dessus) :
+    compte aussi les valeurs MANQUANTES (NaN) comme des erreurs plutot que de
+    les exclure via dropna(). Sans ca, une colonne massivement vide passait
+    pour "100% conforme au format" puisque le format n'est verifie que sur les
+    valeurs presentes -- alors qu'une cellule vide est elle-meme un vrai
+    defaut, detectable sans reference verite-terrain.
+
     Returns
     -------
-    (total_checked, total_invalid) : nombre total de valeurs non-nulles
-    examinees (parmi les colonnes ayant des patterns fournis), et combien
-    d'entre elles ne correspondent a AUCUN pattern attendu.
+    (total_checked, total_invalid) : nombre total de lignes examinees (NaN
+    inclus, parmi les colonnes ayant des patterns fournis), et combien d'entre
+    elles sont invalides (NaN, OU presentes mais ne correspondant a AUCUN
+    pattern attendu).
     """
     total_checked, total_invalid = 0, 0
     for col, patterns in format_patterns_map.items():
         if col not in df_cleaned.columns or not patterns:
             continue
-        non_null = df_cleaned[col].dropna().astype(str)
-        total_checked += len(non_null)
+        series = df_cleaned[col]
+        total_checked += len(series)
+        null_count = int(series.isna().sum())
+        non_null = series.dropna().astype(str)
         bad_mask = ~non_null.apply(lambda v: _value_matches_any_pattern(v, patterns))
-        total_invalid += int(bad_mask.sum())
+        total_invalid += null_count + int(bad_mask.sum())
     return total_checked, total_invalid
 
 
@@ -928,7 +1022,7 @@ def validate(df_original: pd.DataFrame, df_cleaned: pd.DataFrame,
     if not skip_before_after_checks:
         rule_issues += check_data_loss(df_original, df_cleaned, threshold=data_loss_threshold)
         rule_issues += check_column_preservation(df_original, df_cleaned, expected_columns)
-    rule_issues += check_empty_columns(df_cleaned, expected_columns)
+    rule_issues += check_empty_columns(df_cleaned, expected_columns, df_original=df_original)
     if date_columns:
         rule_issues += check_date_validity(df_cleaned, date_columns)
     if numeric_columns:
@@ -1064,17 +1158,19 @@ def compute_rule_based_cleanliness(df_original: pd.DataFrame, df_cleaned: pd.Dat
         # le score global vers le haut sans refleter la vraie proportion d'erreurs
         # -- meme logique que pour data_loss/column_preservation ci-dessus.
         if expected_columns:
-            empty_issues = check_empty_columns(df_cleaned, expected_columns)
+            empty_issues = check_empty_columns(df_cleaned, expected_columns, df_original=df_original)
             breakdown["non_empty_columns"] = round(
                 100.0 * (1 - len(empty_issues) / len(expected_columns)), 2
             )
 
-    # --- Dates : % de valeurs dans une plage plausible ---
+    # --- Dates : % de VALEURS dans une plage plausible (pas % de colonnes
+    # sans aucun probleme -- bug corrige, voir _count_date_issues()) ---
     if date_columns:
-        date_issue_count = len(check_date_validity(df_cleaned, date_columns))
-        breakdown["date_validity"] = round(
-            100.0 * (1 - date_issue_count / max(len(date_columns), 1)), 2
-        )
+        date_checked, date_invalid = _count_date_issues(df_cleaned, date_columns)
+        if date_checked > 0:
+            breakdown["date_validity"] = round(
+                100.0 * (1 - date_invalid / date_checked), 2
+            )
 
     # --- Numerique : % de colonnes reellement numeriques ---
     # Pour l'evaluation CLEANED normale, reste une categorie separee (colonne
@@ -1298,9 +1394,22 @@ def compute_cleanliness_percentages(df_original: pd.DataFrame, df_cleaned: pd.Da
             "rule_based_breakdown": {...},
             "reference_comparison_percentage": float | None,   # 0-100, pourcentage 2 global
             "reference_comparison_per_column": {...} | None,   # 0-100 PAR COLONNE (style describe())
+            "valid": bool,               # sortie brute de validate() (voir "details"
+            "rule_issues": list,         # ci-dessous) EXPOSEE directement ici -- evite
+            "feedback_text": str | None, # a l'appelant d'avoir a rappeler validate()
+                                          # une seconde fois juste pour ces 3 champs (bug
+                                          # reel corrige : validate() -- controles regles
+                                          # ET appel LLM semantique compris -- tournait
+                                          # DEUX FOIS par evaluation avant ce correctif,
+                                          # une fois ici et une fois dans run_agent_c.py,
+                                          # doublant a la fois le temps de calcul (ex:
+                                          # decouverte de dependances fonctionnelles sur
+                                          # 119390 lignes) ET le nombre d'appels LLM/quota
+                                          # consommee pour un seul dataset).
         }
     """
     rule_result = compute_rule_based_cleanliness(df_original, df_cleaned, **rule_kwargs)
+    details = rule_result["details"]
 
     reference_percentage = None
     reference_per_column = None
@@ -1315,4 +1424,7 @@ def compute_cleanliness_percentages(df_original: pd.DataFrame, df_cleaned: pd.Da
         "rule_based_breakdown": rule_result["breakdown"],
         "reference_comparison_percentage": reference_percentage,
         "reference_comparison_per_column": reference_per_column,
+        "valid": details["valid"],
+        "rule_issues": details["rule_issues"],
+        "feedback_text": details["feedback_text"],
     }

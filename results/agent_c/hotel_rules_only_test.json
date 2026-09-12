@@ -1,0 +1,267 @@
+{
+  "noisy_file": "datasets/hotel-booking-demand/noisy_medium.csv",
+  "cleaned_file": "workflows/executed/hotel-booking-demand_profile_mistral_api_iter5_cleaned.csv",
+  "reference_file": "datasets/hotel-booking-demand/clean.csv",
+  "dataset_name": "hotel-booking-demand",
+  "dataset_hints_used": {
+    "semantic_hints": {
+      "country": "an ISO 3166-1 alpha-3 country code (e.g. 'PRT', 'GBR', 'USA').",
+      "agent": "a numeric travel agent ID -- a plain integer-like number.",
+      "company": "a numeric company ID -- a plain integer-like number.",
+      "lead_time": "the number of days between the booking date and the arrival date, a plain non-negative integer with no unit suffix or extra characters.",
+      "adults": "the number of adult guests on the booking, a plain non-negative integer with no unit suffix or extra characters."
+    },
+    "valid_values_map": {
+      "hotel": [
+        "City Hotel",
+        "Resort Hotel"
+      ],
+      "arrival_date_month": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      "meal": [
+        "BB",
+        "FB",
+        "HB",
+        "SC",
+        "Undefined"
+      ],
+      "market_segment": [
+        "Aviation",
+        "Complementary",
+        "Corporate",
+        "Direct",
+        "Groups",
+        "Offline TA/TO",
+        "Online TA",
+        "Undefined"
+      ],
+      "distribution_channel": [
+        "Corporate",
+        "Direct",
+        "GDS",
+        "TA/TO",
+        "Undefined"
+      ],
+      "reserved_room_type": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "L",
+        "P"
+      ],
+      "assigned_room_type": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "K",
+        "L",
+        "P"
+      ],
+      "deposit_type": [
+        "No Deposit",
+        "Non Refund",
+        "Refundable"
+      ],
+      "customer_type": [
+        "Contract",
+        "Group",
+        "Transient",
+        "Transient-Party"
+      ],
+      "reservation_status": [
+        "Canceled",
+        "Check-Out",
+        "No-Show"
+      ]
+    },
+    "format_patterns": {
+      "hotel": [
+        "^(City Hotel|Resort Hotel)$"
+      ],
+      "deposit_type": [
+        "^(No Deposit|Non Refund|Refundable)$"
+      ],
+      "customer_type": [
+        "^(Contract|Group|Transient|Transient-Party)$"
+      ],
+      "meal": [
+        "^(BB|FB|HB|SC|Undefined)$"
+      ],
+      "market_segment": [
+        "^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$"
+      ],
+      "distribution_channel": [
+        "^(Corporate|Direct|GDS|TA/TO|Undefined)$"
+      ],
+      "reserved_room_type": [
+        "^(A|B|C|D|E|F|G|H|L|P)$"
+      ],
+      "assigned_room_type": [
+        "^(A|B|C|D|E|F|G|H|I|K|L|P)$"
+      ],
+      "reservation_status": [
+        "^(Canceled|Check-Out|No-Show)$"
+      ],
+      "arrival_date_month": [
+        "^(January|February|March|April|May|June|July|August|September|October|November|December)$"
+      ],
+      "lead_time": [
+        "^\\d+$"
+      ],
+      "adults": [
+        "^\\d+$"
+      ],
+      "reservation_status_date": [
+        "^\\d{4}-\\d{2}-\\d{2}$"
+      ],
+      "country": [
+        "^[A-Z]{2,3}$"
+      ]
+    }
+  },
+  "dirty_evaluation": {
+    "label": "DIRTY (avant nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Column 'reservation_status_date' contains unparseable date values: ['1431993600', '1436054400', '1435968000', '1436227200', '1436140800']",
+      "Column 'lead_time' should be numeric but contains non-numeric values: ['0kg', '3l7', '48S', '45O', '7l0']",
+      "Column 'adults' should be numeric but contains non-numeric values: ['2O', '2€', '2l', '1B', '2S']",
+      "Column 'children' should be numeric but contains non-numeric values: [' ', 'unknown']",
+      "Column 'agent' should be numeric but contains non-numeric values: [' ', 'unknown']",
+      "Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'RESOrt hotel', 'Resor Hotel', 'Resort Hottel', 'RESORT HOtel']",
+      "Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['NoD eposit', '  No Deposit ', 'NO DEPOsit', 'No Depoit', 'NO Deposit']",
+      "Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['  Transient ', 'CONtract', 'Transiet', 'Tranisent', 'Trasnient']",
+      "Column 'meal' contains values that do not match the expected format ['^(BB|FB|HB|SC|Undefined)$']: ['unknown', ' ']",
+      "Column 'market_segment' contains values that do not match the expected format ['^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$']: ['unknown', ' ']",
+      "Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['0kg', '3l7', '48S', '45O', '7l0']",
+      "Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['2O', '2€', '2l', '1B', '2S']",
+      "Column 'reservation_status_date' contains values that do not match the expected format ['^\\\\d{4}-\\\\d{2}-\\\\d{2}$']: ['2015/07/01', '1431993600', '09/07/2015', '09-Jul-2015', '04-Jul-2015']",
+      "Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: [' ', 'unknown']"
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'reservation_status_date' contains unparseable date values: ['1431993600', '1436054400', '1435968000', '1436227200', '1436140800']\n- Column 'lead_time' should be numeric but contains non-numeric values: ['0kg', '3l7', '48S', '45O', '7l0']\n- Column 'adults' should be numeric but contains non-numeric values: ['2O', '2€', '2l', '1B', '2S']\n- Column 'children' should be numeric but contains non-numeric values: [' ', 'unknown']\n- Column 'agent' should be numeric but contains non-numeric values: [' ', 'unknown']\n- Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'RESOrt hotel', 'Resor Hotel', 'Resort Hottel', 'RESORT HOtel']\n- Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['NoD eposit', '  No Deposit ', 'NO DEPOsit', 'No Depoit', 'NO Deposit']\n- Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['  Transient ', 'CONtract', 'Transiet', 'Tranisent', 'Trasnient']\n- Column 'meal' contains values that do not match the expected format ['^(BB|FB|HB|SC|Undefined)$']: ['unknown', ' ']\n- Column 'market_segment' contains values that do not match the expected format ['^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$']: ['unknown', ' ']\n- Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['0kg', '3l7', '48S', '45O', '7l0']\n- Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['2O', '2€', '2l', '1B', '2S']\n- Column 'reservation_status_date' contains values that do not match the expected format ['^\\\\d{4}-\\\\d{2}-\\\\d{2}$']: ['2015/07/01', '1431993600', '09/07/2015', '09-Jul-2015', '04-Jul-2015']\n- Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: [' ', 'unknown']",
+    "rule_based_percentage": 96.02,
+    "rule_based_breakdown": {
+      "date_validity": 98.74,
+      "semantic_correctness": 93.3
+    },
+    "reference_comparison_percentage": 96.8,
+    "reference_comparison_per_column": {
+      "hotel": 95.22,
+      "is_canceled": 100.0,
+      "lead_time": 92.0,
+      "arrival_date_year": 100.0,
+      "arrival_date_month": 100.0,
+      "arrival_date_week_number": 100.0,
+      "arrival_date_day_of_month": 100.0,
+      "stays_in_weekend_nights": 100.0,
+      "stays_in_week_nights": 98.0,
+      "adults": 92.0,
+      "children": 90.0,
+      "babies": 98.0,
+      "meal": 90.0,
+      "country": 90.02,
+      "market_segment": 90.0,
+      "distribution_channel": 100.0,
+      "is_repeated_guest": 100.0,
+      "previous_cancellations": 100.0,
+      "previous_bookings_not_canceled": 100.0,
+      "reserved_room_type": 100.0,
+      "assigned_room_type": 100.0,
+      "booking_changes": 100.0,
+      "deposit_type": 95.21,
+      "agent": 90.89,
+      "company": 100.0,
+      "days_in_waiting_list": 98.0,
+      "customer_type": 95.26,
+      "adr": 98.0,
+      "required_car_parking_spaces": 100.0,
+      "total_of_special_requests": 100.0,
+      "reservation_status": 100.0,
+      "reservation_status_date": 85.0
+    }
+  },
+  "cleaned_evaluation": {
+    "label": "CLEANED (apres nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'Resor Hotel', 'Resort Hottel', 'Resorrt Hotel', 'Reort Hotel']",
+      "Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['reffundable', 'refundaable', 'rfundable']",
+      "Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['Transient Party']",
+      "Column 'meal' contains values that do not match the expected format ['^(BB|FB|HB|SC|Undefined)$']: ['Bb', 'Hb', 'fb', 'Sc', 'undefined']",
+      "Column 'market_segment' contains values that do not match the expected format ['^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$']: ['Online Ta', 'Offline Ta/to', 'unknown', 'complementary', 'undefined']",
+      "Column 'distribution_channel' contains values that do not match the expected format ['^(Corporate|Direct|GDS|TA/TO|Undefined)$']: ['DIRECT', 'CORPORATE', 'TA TO', 'UNDEFINED']",
+      "Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['342.0', '737.0', '7.0', '13.0', '14.0']",
+      "Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['2.0', '1.0', '3.0', '4.0', '40.0']",
+      "Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: ['usa', 'irl', 'rou', 'nor', 'omn']"
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'Resor Hotel', 'Resort Hottel', 'Resorrt Hotel', 'Reort Hotel']\n- Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['reffundable', 'refundaable', 'rfundable']\n- Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['Transient Party']\n- Column 'meal' contains values that do not match the expected format ['^(BB|FB|HB|SC|Undefined)$']: ['Bb', 'Hb', 'fb', 'Sc', 'undefined']\n- Column 'market_segment' contains values that do not match the expected format ['^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$']: ['Online Ta', 'Offline Ta/to', 'unknown', 'complementary', 'undefined']\n- Column 'distribution_channel' contains values that do not match the expected format ['^(Corporate|Direct|GDS|TA/TO|Undefined)$']: ['DIRECT', 'CORPORATE', 'TA TO', 'UNDEFINED']\n- Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['342.0', '737.0', '7.0', '13.0', '14.0']\n- Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['2.0', '1.0', '3.0', '4.0', '40.0']\n- Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: ['usa', 'irl', 'rou', 'nor', 'omn']",
+    "rule_based_percentage": 83.75,
+    "rule_based_breakdown": {
+      "data_loss": 100.0,
+      "column_preservation": 100.0,
+      "non_empty_columns": 100.0,
+      "date_validity": 50.52,
+      "numeric_validity": 100.0,
+      "format_compliance": 35.71,
+      "functional_dependencies": 100.0
+    },
+    "reference_comparison_percentage": 85.31,
+    "reference_comparison_per_column": {
+      "hotel": 95.22,
+      "is_canceled": 100.0,
+      "lead_time": 92.09,
+      "arrival_date_year": 100.0,
+      "arrival_date_month": 100.0,
+      "arrival_date_week_number": 100.0,
+      "arrival_date_day_of_month": 100.0,
+      "stays_in_weekend_nights": 100.0,
+      "stays_in_week_nights": 98.0,
+      "adults": 98.92,
+      "children": 6.87,
+      "babies": 98.0,
+      "meal": 90.0,
+      "country": 80.52,
+      "market_segment": 90.0,
+      "distribution_channel": 18.02,
+      "is_repeated_guest": 100.0,
+      "previous_cancellations": 100.0,
+      "previous_bookings_not_canceled": 100.0,
+      "reserved_room_type": 100.0,
+      "assigned_room_type": 100.0,
+      "booking_changes": 100.0,
+      "deposit_type": 99.86,
+      "agent": 81.54,
+      "company": 5.69,
+      "days_in_waiting_list": 98.0,
+      "customer_type": 78.96,
+      "adr": 98.0,
+      "required_car_parking_spaces": 100.0,
+      "total_of_special_requests": 100.0,
+      "reservation_status": 100.0,
+      "reservation_status_date": 0.12
+    }
+  }
+}

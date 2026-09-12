@@ -1,0 +1,105 @@
+{
+  "noisy_file": "datasets\\flights\\dirty.csv",
+  "cleaned_file": "workflows\\executed\\flights_profile_mistral_api_iter2_cleaned.csv",
+  "reference_file": "datasets\\flights\\clean.csv",
+  "dataset_name": "flights",
+  "dataset_hints_used": {
+    "semantic_hints": {
+      "src": "the name/code of the website or system that reported this flight status row (airline sites, airport codes, or news/travel aggregators, e.g. 'aa', 'ord', 'flightaware', 'orbitz'). Many different legitimate sources exist here by design -- this is NOT a single category to normalize. Only flag a value if it looks like corrupted/garbled text, never merely because it is an unfamiliar source name.",
+      "flight": "a flight identifier in the format '<AIRLINE>-<FLIGHT NUMBER>-<ORIGIN AIRPORT CODE>-<DEST AIRPORT CODE>' (e.g. 'AA-3859-IAH-ORD'). Flag it only if the structure itself is broken (missing a segment, garbled characters) -- the specific airline/number/airport combination is not something to judge.",
+      "sched_dep_time": "a scheduled departure time of day in 'H:MM a.m.'/'H:MM p.m.' format (e.g. '7:10 a.m.', '11:45 p.m.'), hour 1-12 and minute 00-59, or a missing-value marker. Flag only a genuinely broken time (impossible hour/minute, garbled text), not a merely unusual-but-valid time of day.",
+      "act_dep_time": "an actual departure time of day, same 'H:MM a.m./p.m.' format as sched_dep_time -- naturally differs from the scheduled time (that is the point of this column), do not flag a difference from sched_dep_time as an error, only a broken/garbled format.",
+      "sched_arr_time": "a scheduled arrival time of day, same 'H:MM a.m./p.m.' format as sched_dep_time.",
+      "act_arr_time": "an actual arrival time of day, same 'H:MM a.m./p.m.' format as sched_dep_time -- naturally differs from the scheduled arrival time, do not flag that difference, only a broken/garbled format."
+    },
+    "valid_values_map": {},
+    "format_patterns": {
+      "flight": [
+        "^[A-Z]{2,3}-\\d{1,4}-[A-Z]{3}-[A-Z]{3}$"
+      ],
+      "sched_dep_time": [
+        "^\\d{1,2}:\\d{2}\\s*[ap]\\.?m\\.?$",
+        "^\\d{1,2}:\\d{2}$"
+      ],
+      "act_dep_time": [
+        "^\\d{1,2}:\\d{2}\\s*[ap]\\.?m\\.?$",
+        "^\\d{1,2}:\\d{2}$"
+      ],
+      "sched_arr_time": [
+        "^\\d{1,2}:\\d{2}\\s*[ap]\\.?m\\.?$",
+        "^\\d{1,2}:\\d{2}$"
+      ],
+      "act_arr_time": [
+        "^\\d{1,2}:\\d{2}\\s*[ap]\\.?m\\.?$",
+        "^\\d{1,2}:\\d{2}$"
+      ]
+    }
+  },
+  "dirty_evaluation": {
+    "label": "DIRTY (avant nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Functional dependency violation: ('flight', 'act_dep_time') -> 'sched_dep_time' should map to exactly one value per group, but 3 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('sched_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('sched_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('act_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('act_dep_time', 'act_arr_time') -> 'sched_dep_time' should map to exactly one value per group, but 6 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Column 'sched_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['9:05 a.m. (-00:00)', 'Thu  20:00', 'Not Available', '12:00noon', '7:10aDec 1']",
+      "Column 'act_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['1:50 p.m. (+8:00)', 'Not Available', '6:47 p.m. (Estimated runway)', '11:29 p.m. (Estimated runway)', '7:15 p.m. (Estimated)']",
+      "Column 'sched_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/02/2011 6:55 a.m.', '12/02/2011 5:50 a.m.', '12/02/2011 12:15 a.m.', '12/2/11 12:21 a.m.', '12/2/11 5:11 a.m.']",
+      "Column 'act_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/2/11 6:35 a.m.', '12/2/11 12:01 a.m.', '10:39 p.m.&nbsp(Estimated)', 'Not Available', '10:30 p.m. (Estimated)']"
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Functional dependency violation: ('flight', 'act_dep_time') -> 'sched_dep_time' should map to exactly one value per group, but 3 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('act_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('act_dep_time', 'act_arr_time') -> 'sched_dep_time' should map to exactly one value per group, but 6 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Column 'sched_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['9:05 a.m. (-00:00)', 'Thu  20:00', 'Not Available', '12:00noon', '7:10aDec 1']\n- Column 'act_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['1:50 p.m. (+8:00)', 'Not Available', '6:47 p.m. (Estimated runway)', '11:29 p.m. (Estimated runway)', '7:15 p.m. (Estimated)']\n- Column 'sched_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/02/2011 6:55 a.m.', '12/02/2011 5:50 a.m.', '12/02/2011 12:15 a.m.', '12/2/11 12:21 a.m.', '12/2/11 5:11 a.m.']\n- Column 'act_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/2/11 6:35 a.m.', '12/2/11 12:01 a.m.', '10:39 p.m.&nbsp(Estimated)', 'Not Available', '10:30 p.m. (Estimated)']\n\nSEMANTIC REVIEW FEEDBACK (from a second LLM inspecting your cleaned output for genuinely wrong values, not just formatting differences):\n\nColumn 'sched_dep_time':\n  - 'Thu  20:00' is wrong: Contains day of week and 24-hour time -> likely correct value: '8:00 p.m.'\n  - '12:30' is wrong: Missing am/pm suffix\n  - '6:40aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '6:40 a.m.'\n  - '8:19aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '8:19 a.m.'\n  - '6:14aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '6:14 a.m.'\n  - '10:00aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '10:00 a.m.'\n  - '8:15aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '8:15 a.m.'\n  - '10:45aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '10:45 a.m.'\n  - '8:05aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '8:05 a.m.'\n  - '11:50aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '11:50 a.m.'\n  - '8:40aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '8:40 a.m.'\n  - '10:15aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '10:15 a.m.'\n  - '7:53aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:53 a.m.'\n  - '12:00noon' is wrong: Invalid suffix 'noon' instead of 'p.m.' -> likely correct value: '12:00 p.m.'\n  - '8:41aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '8:41 a.m.'\n  - '10:39aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '10:39 a.m.'\n  - '12:30aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '12:30 a.m.'\n  - '7:35aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:35 a.m.'\n  - '9:45aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '9:45 a.m.'\n  - '7:00aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:00 a.m.'\n  - '11:40aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '11:40 a.m.'\n  - '11:05aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '11:05 a.m.'\n  - '11:45aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '11:45 a.m.'\n  - '7:15aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:15 a.m.'\n  - '7:05aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:05 a.m.'\n  - '6:59aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '6:59 a.m.'\n  - '9:05aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '9:05 a.m.'\n  - '7:30aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:30 a.m.'\n  - '7:25aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:25 a.m.'\n  - '6:45aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '6:45 a.m.'\n  - '8:35aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '8:35 a.m.'\n  - '7:10aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '7:10 a.m.'\n  - '6:00aDec 1' is wrong: Invalid suffix 'aDec 1' instead of 'a.m.' -> likely correct value: '6:00 a.m.'\n  - '9:05 a.m. (-00:00)' is wrong: Extra timezone offset -> likely correct value: '9:05 a.m.'\n  - '11/30 8:00 p.m.' is wrong: Includes date prefix -> likely correct value: '8:00 p.m.'\n  - '11/30 4:16 p.m.' is wrong: Includes date prefix -> likely correct value: '4:16 p.m.'\n  - '11/30 6:45 p.m.' is wrong: Includes date prefix -> likely correct value: '6:45 p.m.'\n  - '11/30 4:00 p.m.' is wrong: Includes date prefix -> likely correct value: '4:00 p.m.'\n  - '11/30 11:55 p.m.' is wrong: Includes date prefix -> likely correct value: '11:55 p.m.'\n  - '11/30 11:25 a.m.' is wrong: Includes date prefix -> likely correct value: '11:25 a.m.'\n  - '11/30 7:45 p.m.' is wrong: Includes date prefix -> likely correct value: '7:45 p.m.'\n  - '11/30 11:08 p.m.' is wrong: Includes date prefix -> likely correct value: '11:08 p.m.'\n  - '11/30 12:57 p.m.' is wrong: Includes date prefix -> likely correct value: '12:57 p.m.'\n  - '11/30 1:55 p.m.' is wrong: Includes date prefix -> likely correct value: '1:55 p.m.'\n\nThese are confirmed real errors (not stylistic variations, not abbreviations) — fix these specific values in your next version. Do NOT change any value not listed above; other values in these columns were reviewed and found acceptable, including abbreviations and alternate valid formats.",
+    "rule_based_percentage": 84.4,
+    "rule_based_breakdown": {
+      "semantic_correctness": 84.4
+    },
+    "reference_comparison_percentage": 70.42,
+    "reference_comparison_per_column": {
+      "tuple_id": 100.0,
+      "src": 100.0,
+      "flight": 100.0,
+      "sched_dep_time": 61.66,
+      "act_dep_time": 34.43,
+      "sched_arr_time": 53.7,
+      "act_arr_time": 43.14
+    }
+  },
+  "cleaned_evaluation": {
+    "label": "CLEANED (apres nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Functional dependency violation: ('flight', 'act_dep_time') -> 'sched_dep_time' should map to exactly one value per group, but 1 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('sched_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('sched_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('act_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('act_dep_time', 'act_arr_time') -> 'sched_dep_time' should map to exactly one value per group, but 4 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.",
+      "Column 'sched_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['9:05 a.m. (-00:00)', 'Thu  20:00', '12:00noon', '7:10aDec 1', '6:40aDec 1']",
+      "Column 'act_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['1:50 p.m. (+8:00)', 'Not Available', '6:47 p.m. (Estimated runway)', '11:29 p.m. (Estimated runway)', '7:15 p.m. (Estimated)']",
+      "Column 'sched_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/02/2011 6:55 a.m.', '12/02/2011 5:50 a.m.', '12/02/2011 12:15 a.m.', '12/2/11 12:21 a.m.', '12/2/11 5:11 a.m.']",
+      "Column 'act_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/2/11 6:35 a.m.', '12/2/11 12:01 a.m.', '10:39 p.m.&nbsp(Estimated)', 'Not Available', '10:30 p.m. (Estimated)']"
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Functional dependency violation: ('flight', 'act_dep_time') -> 'sched_dep_time' should map to exactly one value per group, but 1 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_dep_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('act_dep_time', 'sched_arr_time') -> 'flight' should map to exactly one value per group, but 1 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('act_dep_time', 'act_arr_time') -> 'sched_dep_time' should map to exactly one value per group, but 4 group(s) have multiple different 'sched_dep_time' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Functional dependency violation: ('sched_arr_time', 'act_arr_time') -> 'flight' should map to exactly one value per group, but 2 group(s) have multiple different 'flight' values. This means the whole-column-overwrite technique either wasn't applied here, or a different key was used than declared.\n- Column 'sched_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['9:05 a.m. (-00:00)', 'Thu  20:00', '12:00noon', '7:10aDec 1', '6:40aDec 1']\n- Column 'act_dep_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['1:50 p.m. (+8:00)', 'Not Available', '6:47 p.m. (Estimated runway)', '11:29 p.m. (Estimated runway)', '7:15 p.m. (Estimated)']\n- Column 'sched_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/02/2011 6:55 a.m.', '12/02/2011 5:50 a.m.', '12/02/2011 12:15 a.m.', '12/2/11 12:21 a.m.', '12/2/11 5:11 a.m.']\n- Column 'act_arr_time' contains values that do not match the expected format ['^\\\\d{1,2}:\\\\d{2}\\\\s*[ap]\\\\.?m\\\\.?$', '^\\\\d{1,2}:\\\\d{2}$']: ['12/2/11 6:35 a.m.', '12/2/11 12:01 a.m.', '10:39 p.m.&nbsp(Estimated)', 'Not Available', '10:30 p.m. (Estimated)']",
+    "rule_based_percentage": 86.23,
+    "rule_based_breakdown": {
+      "data_loss": 100.0,
+      "column_preservation": 100.0,
+      "non_empty_columns": 100.0,
+      "format_compliance": 20.0,
+      "functional_dependencies": 99.56,
+      "semantic_correctness": 97.8
+    },
+    "reference_comparison_percentage": 70.42,
+    "reference_comparison_per_column": {
+      "tuple_id": 100.0,
+      "src": 100.0,
+      "flight": 100.0,
+      "sched_dep_time": 61.66,
+      "act_dep_time": 34.43,
+      "sched_arr_time": 53.7,
+      "act_arr_time": 43.14
+    }
+  }
+}

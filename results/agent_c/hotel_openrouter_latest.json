@@ -1,0 +1,266 @@
+{
+  "noisy_file": "datasets\\hotel-booking-demand\\noisy_medium.csv",
+  "cleaned_file": "workflows\\executed\\hotel-booking-demand_profile_mistral_api_iter3_cleaned.csv",
+  "reference_file": "datasets\\hotel-booking-demand\\clean.csv",
+  "dataset_name": "hotel-booking-demand",
+  "dataset_hints_used": {
+    "semantic_hints": {
+      "country": "an ISO 3166-1 alpha-3 country code (e.g. 'PRT', 'GBR', 'USA').",
+      "agent": "a numeric travel agent ID -- a plain integer-like number.",
+      "company": "a numeric company ID -- a plain integer-like number.",
+      "lead_time": "the number of days between the booking date and the arrival date, a plain non-negative integer with no unit suffix or extra characters.",
+      "adults": "the number of adult guests on the booking, a plain non-negative integer with no unit suffix or extra characters."
+    },
+    "valid_values_map": {
+      "hotel": [
+        "City Hotel",
+        "Resort Hotel"
+      ],
+      "arrival_date_month": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      "meal": [
+        "BB",
+        "FB",
+        "HB",
+        "SC",
+        "Undefined"
+      ],
+      "market_segment": [
+        "Aviation",
+        "Complementary",
+        "Corporate",
+        "Direct",
+        "Groups",
+        "Offline TA/TO",
+        "Online TA",
+        "Undefined"
+      ],
+      "distribution_channel": [
+        "Corporate",
+        "Direct",
+        "GDS",
+        "TA/TO",
+        "Undefined"
+      ],
+      "reserved_room_type": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "L",
+        "P"
+      ],
+      "assigned_room_type": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "K",
+        "L",
+        "P"
+      ],
+      "deposit_type": [
+        "No Deposit",
+        "Non Refund",
+        "Refundable"
+      ],
+      "customer_type": [
+        "Contract",
+        "Group",
+        "Transient",
+        "Transient-Party"
+      ],
+      "reservation_status": [
+        "Canceled",
+        "Check-Out",
+        "No-Show"
+      ]
+    },
+    "format_patterns": {
+      "hotel": [
+        "^(City Hotel|Resort Hotel)$"
+      ],
+      "deposit_type": [
+        "^(No Deposit|Non Refund|Refundable)$"
+      ],
+      "customer_type": [
+        "^(Contract|Group|Transient|Transient-Party)$"
+      ],
+      "meal": [
+        "^(BB|FB|HB|SC|Undefined)$"
+      ],
+      "market_segment": [
+        "^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$"
+      ],
+      "distribution_channel": [
+        "^(Corporate|Direct|GDS|TA/TO|Undefined)$"
+      ],
+      "reserved_room_type": [
+        "^(A|B|C|D|E|F|G|H|L|P)$"
+      ],
+      "assigned_room_type": [
+        "^(A|B|C|D|E|F|G|H|I|K|L|P)$"
+      ],
+      "reservation_status": [
+        "^(Canceled|Check-Out|No-Show)$"
+      ],
+      "arrival_date_month": [
+        "^(January|February|March|April|May|June|July|August|September|October|November|December)$"
+      ],
+      "lead_time": [
+        "^\\d+$"
+      ],
+      "adults": [
+        "^\\d+$"
+      ],
+      "reservation_status_date": [
+        "^\\d{4}-\\d{2}-\\d{2}$"
+      ],
+      "country": [
+        "^[A-Z]{2,3}$"
+      ]
+    }
+  },
+  "dirty_evaluation": {
+    "label": "DIRTY (avant nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Column 'reservation_status_date' contains unparseable date values: ['1431993600', '1436054400', '1435968000', '1436227200', '1436140800']",
+      "Column 'lead_time' should be numeric but contains non-numeric values: ['0kg', '3l7', '48S', '45O', '7l0']",
+      "Column 'adults' should be numeric but contains non-numeric values: ['2O', '2€', '2l', '1B', '2S']",
+      "Column 'children' should be numeric but contains non-numeric values: [' ', 'unknown']",
+      "Column 'agent' should be numeric but contains non-numeric values: [' ', 'unknown']",
+      "Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'RESOrt hotel', 'Resor Hotel', 'Resort Hottel', 'RESORT HOtel']",
+      "Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['NoD eposit', '  No Deposit ', 'NO DEPOsit', 'No Depoit', 'NO Deposit']",
+      "Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['  Transient ', 'CONtract', 'Transiet', 'Tranisent', 'Trasnient']",
+      "Column 'meal' contains values that do not match the expected format ['^(BB|FB|HB|SC|Undefined)$']: ['unknown', ' ']",
+      "Column 'market_segment' contains values that do not match the expected format ['^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$']: ['unknown', ' ']",
+      "Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['0kg', '3l7', '48S', '45O', '7l0']",
+      "Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['2O', '2€', '2l', '1B', '2S']",
+      "Column 'reservation_status_date' contains values that do not match the expected format ['^\\\\d{4}-\\\\d{2}-\\\\d{2}$']: ['2015/07/01', '1431993600', '09/07/2015', '09-Jul-2015', '04-Jul-2015']",
+      "Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: [' ', 'unknown']"
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'reservation_status_date' contains unparseable date values: ['1431993600', '1436054400', '1435968000', '1436227200', '1436140800']\n- Column 'lead_time' should be numeric but contains non-numeric values: ['0kg', '3l7', '48S', '45O', '7l0']\n- Column 'adults' should be numeric but contains non-numeric values: ['2O', '2€', '2l', '1B', '2S']\n- Column 'children' should be numeric but contains non-numeric values: [' ', 'unknown']\n- Column 'agent' should be numeric but contains non-numeric values: [' ', 'unknown']\n- Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'RESOrt hotel', 'Resor Hotel', 'Resort Hottel', 'RESORT HOtel']\n- Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['NoD eposit', '  No Deposit ', 'NO DEPOsit', 'No Depoit', 'NO Deposit']\n- Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['  Transient ', 'CONtract', 'Transiet', 'Tranisent', 'Trasnient']\n- Column 'meal' contains values that do not match the expected format ['^(BB|FB|HB|SC|Undefined)$']: ['unknown', ' ']\n- Column 'market_segment' contains values that do not match the expected format ['^(Aviation|Complementary|Corporate|Direct|Groups|Offline TA/TO|Online TA|Undefined)$']: ['unknown', ' ']\n- Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['0kg', '3l7', '48S', '45O', '7l0']\n- Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['2O', '2€', '2l', '1B', '2S']\n- Column 'reservation_status_date' contains values that do not match the expected format ['^\\\\d{4}-\\\\d{2}-\\\\d{2}$']: ['2015/07/01', '1431993600', '09/07/2015', '09-Jul-2015', '04-Jul-2015']\n- Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: [' ', 'unknown']\n\nSEMANTIC REVIEW FEEDBACK (from a second LLM inspecting your cleaned output for genuinely wrong values, not just formatting differences):\n\nColumn 'hotel':\n  - 'Reesort Hotel' is wrong: extra 'e' -> likely correct value: 'Resort Hotel'\n  - 'Resor tHotel' is wrong: missing 't' and misplaced space -> likely correct value: 'Resort Hotel'\n  - 'Resortt Hotel' is wrong: extra 't' -> likely correct value: 'Resort Hotel'\n  - 'esort Hotel' is wrong: missing leading 'R' -> likely correct value: 'Resort Hotel'\n  - 'Rsort Hotel' is wrong: missing 'e' after 'R' -> likely correct value: 'Resort Hotel'\n  - 'Reosrt Hotel' is wrong: transposed 'o' and 's' -> likely correct value: 'Resort Hotel'\n  - 'Resort Hoel' is wrong: missing 't' in 'Hoel' -> likely correct value: 'Resort Hotel'\n  - 'ResortHotel' is wrong: missing space -> likely correct value: 'Resort Hotel'\n  - 'Resort Hottel' is wrong: extra 't' -> likely correct value: 'Resort Hotel'\n  - 'Resort Hoteel' is wrong: extra 'e' -> likely correct value: 'Resort Hotel'\n  - 'Resort Htel' is wrong: missing 'o' -> likely correct value: 'Resort Hotel'\n  - 'Reort Hotel' is wrong: missing 's' -> likely correct value: 'Resort Hotel'\n  - 'Resort Hotl' is wrong: missing 'e' -> likely correct value: 'Resort Hotel'\n  - 'Resrot Hotel' is wrong: transposed 'r' and 'o' -> likely correct value: 'Resort Hotel'\n  - 'Ressort Hotel' is wrong: extra 's' -> likely correct value: 'Resort Hotel'\n  - 'Resort Hotle' is wrong: transposed 'l' and 'e' -> likely correct value: 'Resort Hotel'\n  - 'eRsort Hotel' is wrong: transposed leading 'e' and 'R' -> likely correct value: 'Resort Hotel'\n  - 'Resort otel' is wrong: missing 'H' -> likely correct value: 'Resort Hotel'\n  - 'RResort Hotel' is wrong: extra leading 'R' -> likely correct value: 'Resort Hotel'\n  - 'Resrt Hotel' is wrong: missing 'o' -> likely correct value: 'Resort Hotel'\n  - 'Rseort Hotel' is wrong: transposed 's' and 'e' -> likely correct value: 'Resort Hotel'\n  - 'Resort Hoetl' is wrong: transposed 'e' and 't' -> likely correct value: 'Resort Hotel'\n  - 'Resorrt Hotel' is wrong: extra 'r' -> likely correct value: 'Resort Hotel'\n  - 'Resotr Hotel' is wrong: transposed 't' and 'r' -> likely correct value: 'Resort Hotel'\n  - 'Resort Htoel' is wrong: transposed 't' and 'o' -> likely correct value: 'Resort Hotel'\n  - 'Resort Hootel' is wrong: extra 'o' -> likely correct value: 'Resort Hotel'\n  - 'Resoort Hotel' is wrong: extra 'o' -> likely correct value: 'Resort Hotel'\n  - 'Resor Hotel' is wrong: missing 't' -> likely correct value: 'Resort Hotel'\n  - 'Resot Hotel' is wrong: missing 'r' -> likely correct value: 'Resort Hotel'\n  - 'ResortH otel' is wrong: missing space between 'Resort' and 'H' -> likely correct value: 'Resort Hotel'\n  - 'Resort oHtel' is wrong: transposed 'o' and 'H' -> likely correct value: 'Resort Hotel'\n  - 'Resort  Hotel' is wrong: double space -> likely correct value: 'Resort Hotel'\n  - 'Resort HHotel' is wrong: extra 'H' -> likely correct value: 'Resort Hotel'\n  - 'City Hoel' is wrong: missing 't' -> likely correct value: 'City Hotel'\n  - 'Cit yHotel' is wrong: missing space and misplaced 'y' -> likely correct value: 'City Hotel'\n  - 'City Hotl' is wrong: missing 'e' -> likely correct value: 'City Hotel'\n  - 'Ciity Hotel' is wrong: extra 'i' -> likely correct value: 'City Hotel'\n  - 'City Hotle' is wrong: transposed 'l' and 'e' -> likely correct value: 'City Hotel'\n  - 'City Hoetl' is wrong: transposed 'e' and 't' -> likely correct value: 'City Hotel'\n  - 'City oHtel' is wrong: transposed 'o' and 'H' -> likely correct value: 'City Hotel'\n  - 'City  Hotel' is wrong: double space -> likely correct value: 'City Hotel'\n  - 'CityH otel' is wrong: missing space between 'City' and 'H' -> likely correct value: 'City Hotel'\n  - 'City otel' is wrong: missing 'H' -> likely correct value: 'City Hotel'\n  - 'CityHotel' is wrong: missing space -> likely correct value: 'City Hotel'\n  - 'Cityy Hotel' is wrong: extra 'y' -> likely correct value: 'City Hotel'\n  - 'Ciyt Hotel' is wrong: transposed 'y' and 't' -> likely correct value: 'City Hotel'\n  - 'City Hootel' is wrong: extra 'o' -> likely correct value: 'City Hotel'\n  - 'CCity Hotel' is wrong: extra leading 'C' -> likely correct value: 'City Hotel'\n  - 'Citty Hotel' is wrong: extra 't' -> likely correct value: 'City Hotel'\n  - 'City Htoel' is wrong: transposed 't' and 'o' -> likely correct value: 'City Hotel'\n  - 'iCty Hotel' is wrong: transposed leading 'i' and 'C' -> likely correct value: 'City Hotel'\n  - 'City HHotel' is wrong: extra 'H' -> likely correct value: 'City Hotel'\n  - 'City Hottel' is wrong: extra 't' -> likely correct value: 'City Hotel'\n  - 'ity Hotel' is wrong: missing leading 'C' -> likely correct value: 'City Hotel'\n  - 'Cty Hotel' is wrong: missing 'i' -> likely correct value: 'City Hotel'\n\nColumn 'adults':\n  - '55O' is wrong: contains non-digit characters -> likely correct value: '55'\n  - '4€' is wrong: contains non-digit characters -> likely correct value: '4'\n  - '4O' is wrong: contains non-digit characters -> likely correct value: '4'\n  - '0l' is wrong: contains non-digit characters -> likely correct value: '0'\n  - '0S' is wrong: contains non-digit characters -> likely correct value: '0'\n  - '0O' is wrong: contains non-digit characters -> likely correct value: '0'\n  - '0j' is wrong: contains non-digit characters -> likely correct value: '0'\n  - '0€' is wrong: contains non-digit characters -> likely correct value: '0'\n  - '0B' is wrong: contains non-digit characters -> likely correct value: '0'\n  - '0kg' is wrong: contains non-digit characters -> likely correct value: '0'\n  - 'O' is wrong: contains non-digit characters -> likely correct value: '0'\n  - '3j' is wrong: contains non-digit characters -> likely correct value: '3'\n  - '3l' is wrong: contains non-digit characters -> likely correct value: '3'\n  - '3B' is wrong: contains non-digit characters -> likely correct value: '3'\n  - '3kg' is wrong: contains non-digit characters -> likely correct value: '3'\n  - '3€' is wrong: contains non-digit characters -> likely correct value: '3'\n  - '3S' is wrong: contains non-digit characters -> likely correct value: '3'\n  - '1S' is wrong: contains non-digit characters -> likely correct value: '1'\n  - '1kg' is wrong: contains non-digit characters -> likely correct value: '1'\n  - '1j' is wrong: contains non-digit characters -> likely correct value: '1'\n  - '1B' is wrong: contains non-digit characters -> likely correct value: '1'\n  - '1€' is wrong: contains non-digit characters -> likely correct value: '1'\n  - '1l' is wrong: contains non-digit characters -> likely correct value: '1'\n  - '3O' is wrong: contains non-digit characters -> likely correct value: '3'\n  - '2kg' is wrong: contains non-digit characters -> likely correct value: '2'\n  - '2€' is wrong: contains non-digit characters -> likely correct value: '2'\n  - '2l' is wrong: contains non-digit characters -> likely correct value: '2'\n  - '2S' is wrong: contains non-digit characters -> likely correct value: '2'\n  - '2j' is wrong: contains non-digit characters -> likely correct value: '2'\n  - '2B' is wrong: contains non-digit characters -> likely correct value: '2'\n  - '1O' is wrong: contains non-digit characters -> likely correct value: '1'\n  - '2O' is wrong: contains non-digit characters -> likely correct value: '2'\n\nColumn 'children':\n  - ' ' is wrong: blank/missing marker -> this looks like a corrupted/disguised MISSING value marker, not a typo of one specific value — set this EXACT value to NaN directly (e.g. `df[col] = df[col].replace(' ', np.nan)`), then let your normal missing-value imputation handle it. Do NOT try to 'salvage' a partial value by stripping out the bad character(s) with a regex or .replace('x','') — a real, severe regression was caused by this exact mistake before: stripping a non-numeric character out of a corrupted key value (e.g. turning 'x0005' into '0005') silently changes it into a DIFFERENT, WRONG value instead of NaN, which is especially damaging if this column is used as a grouping key elsewhere in your script — it breaks that grouping for this row across every column that depends on it. Only two outcomes are acceptable here: NaN (preferred), or the literal correct value if you are genuinely confident what it originally was — never a mechanically-stripped fragment of the corrupted string.\n  - 'unknown' is wrong: missing/unknown marker -> this looks like a corrupted/disguised MISSING value marker, not a typo of one specific value — set this EXACT value to NaN directly (e.g. `df[col] = df[col].replace('unknown', np.nan)`), then let your normal missing-value imputation handle it. Do NOT try to 'salvage' a partial value by stripping out the bad character(s) with a regex or .replace('x','') — a real, severe regression was caused by this exact mistake before: stripping a non-numeric character out of a corrupted key value (e.g. turning 'x0005' into '0005') silently changes it into a DIFFERENT, WRONG value instead of NaN, which is especially damaging if this column is used as a grouping key elsewhere in your script — it breaks that grouping for this row across every column that depends on it. Only two outcomes are acceptable here: NaN (preferred), or the literal correct value if you are genuinely confident what it originally was — never a mechanically-stripped fragment of the corrupted string.\n\nColumn 'meal':\n  - 'unknown' is wrong: Not a valid meal code; appears as a missing/unknown marker -> this looks like a corrupted/disguised MISSING value marker, not a typo of one specific value — set this EXACT value to NaN directly (e.g. `df[col] = df[col].replace('unknown', np.nan)`), then let your normal missing-value imputation handle it. Do NOT try to 'salvage' a partial value by stripping out the bad character(s) with a regex or .replace('x','') — a real, severe regression was caused by this exact mistake before: stripping a non-numeric character out of a corrupted key value (e.g. turning 'x0005' into '0005') silently changes it into a DIFFERENT, WRONG value instead of NaN, which is especially damaging if this column is used as a grouping key elsewhere in your script — it breaks that grouping for this row across every column that depends on it. Only two outcomes are acceptable here: NaN (preferred), or the literal correct value if you are genuinely confident what it originally was — never a mechanically-stripped fragment of the corrupted string.\n  - ' ' is wrong: Empty/space value; appears as a missing marker -> this looks like a corrupted/disguised MISSING value marker, not a typo of one specific value — set this EXACT value to NaN directly (e.g. `df[col] = df[col].replace(' ', np.nan)`), then let your normal missing-value imputation handle it. Do NOT try to 'salvage' a partial value by stripping out the bad character(s) with a regex or .replace('x','') — a real, severe regression was caused by this exact mistake before: stripping a non-numeric character out of a corrupted key value (e.g. turning 'x0005' into '0005') silently changes it into a DIFFERENT, WRONG value instead of NaN, which is especially damaging if this column is used as a grouping key elsewhere in your script — it breaks that grouping for this row across every column that depends on it. Only two outcomes are acceptable here: NaN (preferred), or the literal correct value if you are genuinely confident what it originally was — never a mechanically-stripped fragment of the corrupted string.\n\nColumn 'country':\n  - 'TMP' is wrong: Not a valid ISO 3166-1 alpha-3 country code -> likely correct value: 'TLS'\n\nColumn 'market_segment':\n  - ' ' is wrong: Appears to be a blank/missing marker -> this looks like a corrupted/disguised MISSING value marker, not a typo of one specific value — set this EXACT value to NaN directly (e.g. `df[col] = df[col].replace(' ', np.nan)`), then let your normal missing-value imputation handle it. Do NOT try to 'salvage' a partial value by stripping out the bad character(s) with a regex or .replace('x','') — a real, severe regression was caused by this exact mistake before: stripping a non-numeric character out of a corrupted key value (e.g. turning 'x0005' into '0005') silently changes it into a DIFFERENT, WRONG value instead of NaN, which is especially damaging if this column is used as a grouping key elsewhere in your script — it breaks that grouping for this row across every column that depends on it. Only two outcomes are acceptable here: NaN (preferred), or the literal correct value if you are genuinely confident what it originally was — never a mechanically-stripped fragment of the corrupted string.\n  - 'unknown' is wrong: Placeholder for unknown/missing value -> this looks like a corrupted/disguised MISSING value marker, not a typo of one specific value — set this EXACT value to NaN directly (e.g. `df[col] = df[col].replace('unknown', np.nan)`), then let your normal missing-value imputation handle it. Do NOT try to 'salvage' a partial value by stripping out the bad character(s) with a regex or .replace('x','') — a real, severe regression was caused by this exact mistake before: stripping a non-numeric character out of a corrupted key value (e.g. turning 'x0005' into '0005') silently changes it into a DIFFERENT, WRONG value instead of NaN, which is especially damaging if this column is used as a grouping key elsewhere in your script — it breaks that grouping for this row across every column that depends on it. Only two outcomes are acceptable here: NaN (preferred), or the literal correct value if you are genuinely confident what it originally was — never a mechanically-stripped fragment of the corrupted string.\n\nThese are confirmed real errors (not stylistic variations, not abbreviations) — fix these specific values in your next version. Do NOT change any value not listed above; other values in these columns were reviewed and found acceptable, including abbreviations and alternate valid formats.",
+    "rule_based_percentage": 96.45,
+    "rule_based_breakdown": {
+      "date_validity": 98.74,
+      "semantic_correctness": 94.17
+    },
+    "reference_comparison_percentage": 96.8,
+    "reference_comparison_per_column": {
+      "hotel": 95.22,
+      "is_canceled": 100.0,
+      "lead_time": 92.0,
+      "arrival_date_year": 100.0,
+      "arrival_date_month": 100.0,
+      "arrival_date_week_number": 100.0,
+      "arrival_date_day_of_month": 100.0,
+      "stays_in_weekend_nights": 100.0,
+      "stays_in_week_nights": 98.0,
+      "adults": 92.0,
+      "children": 90.0,
+      "babies": 98.0,
+      "meal": 90.0,
+      "country": 90.02,
+      "market_segment": 90.0,
+      "distribution_channel": 100.0,
+      "is_repeated_guest": 100.0,
+      "previous_cancellations": 100.0,
+      "previous_bookings_not_canceled": 100.0,
+      "reserved_room_type": 100.0,
+      "assigned_room_type": 100.0,
+      "booking_changes": 100.0,
+      "deposit_type": 95.21,
+      "agent": 90.89,
+      "company": 100.0,
+      "days_in_waiting_list": 98.0,
+      "customer_type": 95.26,
+      "adr": 98.0,
+      "required_car_parking_spaces": 100.0,
+      "total_of_special_requests": 100.0,
+      "reservation_status": 100.0,
+      "reservation_status_date": 85.0
+    }
+  },
+  "cleaned_evaluation": {
+    "label": "CLEANED (apres nettoyage)",
+    "valid": false,
+    "rule_issues": [
+      "Column 'adults' should be numeric but contains non-numeric values: ['3kg', '55O', '0j', 'O', '0€']",
+      "Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'Resor Hotel', 'Resort Hottel', 'Resorrt Hotel', 'Reort Hotel']",
+      "Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['Nod Eposit', 'No Depoit', 'No Depsoit', 'N Deposit', 'No Deposti']",
+      "Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['Transiet', 'Tranisent', 'Trasnient', 'Tarnsient', 'Transeint']",
+      "Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['342.0', '737.0', '7.0', '13.0', '14.0']",
+      "Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['3kg', '55O', '0j', 'O', '0€']",
+      "Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: ['UNKNOWN']"
+    ],
+    "feedback_text": "DATA QUALITY REVIEW — rule-based checks found issues:\n- Column 'adults' should be numeric but contains non-numeric values: ['3kg', '55O', '0j', 'O', '0€']\n- Column 'hotel' contains values that do not match the expected format ['^(City Hotel|Resort Hotel)$']: ['Resoort Hotel', 'Resor Hotel', 'Resort Hottel', 'Resorrt Hotel', 'Reort Hotel']\n- Column 'deposit_type' contains values that do not match the expected format ['^(No Deposit|Non Refund|Refundable)$']: ['Nod Eposit', 'No Depoit', 'No Depsoit', 'N Deposit', 'No Deposti']\n- Column 'customer_type' contains values that do not match the expected format ['^(Contract|Group|Transient|Transient-Party)$']: ['Transiet', 'Tranisent', 'Trasnient', 'Tarnsient', 'Transeint']\n- Column 'lead_time' contains values that do not match the expected format ['^\\\\d+$']: ['342.0', '737.0', '7.0', '13.0', '14.0']\n- Column 'adults' contains values that do not match the expected format ['^\\\\d+$']: ['3kg', '55O', '0j', 'O', '0€']\n- Column 'country' contains values that do not match the expected format ['^[A-Z]{2,3}$']: ['UNKNOWN']\n\nSEMANTIC REVIEW FEEDBACK (from a second LLM inspecting your cleaned output for genuinely wrong values, not just formatting differences):\n\nColumn 'hotel':\n  - 'Reesort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resor Thotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resortt Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Esort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Rsort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Reosrt Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Hoel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resorthotel' is wrong: misspelling of Resort Hotel (missing space) -> likely correct value: 'Resort Hotel'\n  - 'Resort Hottel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Hoteel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Htel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Reort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Hotl' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resrot Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Ressort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Hotle' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Ersort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Otel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Rresort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resrt Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Rseort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Hoetl' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resorrt Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resotr Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Htoel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resoort Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resor Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resot Hotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resorth Otel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort Ohtel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'Resort  Hotel' is wrong: misspelling of Resort Hotel (extra space) -> likely correct value: 'Resort Hotel'\n  - 'Resort Hhotel' is wrong: misspelling of Resort Hotel -> likely correct value: 'Resort Hotel'\n  - 'City Hoel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Cit Yhotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Hotl' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Ciity Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Hotle' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Hoetl' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Ohtel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City  Hotel' is wrong: misspelling of City Hotel (extra space) -> likely correct value: 'City Hotel'\n  - 'Cityh Otel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Otel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Cityhotel' is wrong: misspelling of City Hotel (missing space) -> likely correct value: 'City Hotel'\n  - 'Cityy Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Ciyt Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Hootel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Ccity Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Citty Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Htoel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Icty Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Hhotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Hottel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Ity Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Cty Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Cit Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Ctiy Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'Ciy Hotel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Hoteel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n  - 'City Htel' is wrong: misspelling of City Hotel -> likely correct value: 'City Hotel'\n\nColumn 'adults':\n  - '55O' is wrong: Contains non-digit letter 'O'; not a plain integer -> likely correct value: '55'\n  - '0l' is wrong: Contains non-digit letter 'l'; not a plain integer -> likely correct value: '0'\n  - '0S' is wrong: Contains non-digit letter 'S'; not a plain integer -> likely correct value: '0'\n  - '0O' is wrong: Contains non-digit letter 'O'; not a plain integer -> likely correct value: '0'\n  - '0j' is wrong: Contains non-digit letter 'j'; not a plain integer -> likely correct value: '0'\n  - '0€' is wrong: Contains non-digit symbol '€'; not a plain integer -> likely correct value: '0'\n  - '0B' is wrong: Contains non-digit letter 'B'; not a plain integer -> likely correct value: '0'\n  - '0kg' is wrong: Contains non-digit suffix 'kg'; not a plain integer -> likely correct value: '0'\n  - 'O' is wrong: Consists only of letter 'O', not a digit; not a plain integer -> likely correct value: '0'\n  - '3kg' is wrong: Contains non-digit suffix 'kg'; not a plain integer -> likely correct value: '3'\n\nColumn 'country':\n  - 'TMP' is wrong: Not a valid ISO 3166-1 alpha-3 country code -> likely correct value: 'TLS'\n\nColumn 'deposit_type':\n  - 'Refundaable' is wrong: misspelling of 'Refundable' -> likely correct value: 'Refundable'\n  - 'Refundabel' is wrong: misspelling of 'Refundable' -> likely correct value: 'Refundable'\n  - 'Rfundable' is wrong: misspelling of 'Refundable' -> likely correct value: 'Refundable'\n  - 'Reffundable' is wrong: misspelling of 'Refundable' -> likely correct value: 'Refundable'\n  - 'Non Refuund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'No Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Nno Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'On Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Onn Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Nn Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Refnd' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Nonrefund' is wrong: misspelling of 'Non Refund' (missing space) -> likely correct value: 'Non Refund'\n  - 'Non Reefund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Noon Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Nonr Efund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Nnon Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Nonn Refund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Refunnd' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Rfeund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Refudn' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non  Refund' is wrong: misspelling of 'Non Refund' (extra space) -> likely correct value: 'Non Refund'\n  - 'Non Rfund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'No Nrefund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Reund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Refud' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Efund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Rrefund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Erfund' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Reufnd' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'Non Refnud' is wrong: misspelling of 'Non Refund' -> likely correct value: 'Non Refund'\n  - 'No Depposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Depsit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Depossit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Deosit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'O Deposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Deposiit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'Nod Eposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'On Deposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'Noo Deposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'N Odeposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Deopsit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Depoist' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Deposti' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Eposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Depoit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No  Deposit' is wrong: misspelling of 'No Deposit' (extra space) -> likely correct value: 'No Deposit'\n  - 'No Ddeposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Edposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'N Deposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Depost' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'Nno Deposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Dposit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'Nodeposit' is wrong: misspelling of 'No Deposit' (missing space) -> likely correct value: 'No Deposit'\n  - 'No Depsoit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n  - 'No Depoosit' is wrong: misspelling of 'No Deposit' -> likely correct value: 'No Deposit'\n\nColumn 'customer_type':\n  - 'Gorup' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Ggroup' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Rgoup' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Grop' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Goup' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Grup' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Gropu' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Gruop' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Grooup' is wrong: misspelling of Group -> likely correct value: 'Group'\n  - 'Ocntract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contrcat' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Conntract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Ccontract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Cnotract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contracct' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Cotract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contraact' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contact' is wrong: misspelling of Contract (missing 'r') -> likely correct value: 'Contract'\n  - 'Contrract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contratc' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Coontract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Cotnract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Conttract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contrct' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Conrtact' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contrat' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Conract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Ransient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Ontract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Cntract' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Contarct' is wrong: misspelling of Contract -> likely correct value: 'Contract'\n  - 'Trasnient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Trnasient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Pparty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transiient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transietn-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Parrty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Partty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Traansient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transsient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transientp-Arty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Tranient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transiennt-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transinet-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Pary' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transint-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Trransient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transent-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transientparty' is wrong: misspelling of Transient-Party (missing hyphen) -> likely correct value: 'Transient-Party'\n  - 'Transiet-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Paty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Praty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Patry' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Tarnsient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Paryt' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Ttransient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Trasient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transeint-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Tranisent-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Tansient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Paarty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transieent-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Trannsient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Rtansient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Arty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient--Party' is wrong: misspelling of Transient-Party (double hyphen) -> likely correct value: 'Transient-Party'\n  - 'Transient-Aprty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Trnsient-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transient-Prty' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n  - 'Transientt-Party' is wrong: misspelling of Transient-Party -> likely correct value: 'Transient-Party'\n\nThese are confirmed real errors (not stylistic variations, not abbreviations) — fix these specific values in your next version. Do NOT change any value not listed above; other values in these columns were reviewed and found acceptable, including abbreviations and alternate valid formats.",
+    "rule_based_percentage": 93.43,
+    "rule_based_breakdown": {
+      "data_loss": 100.0,
+      "column_preservation": 100.0,
+      "non_empty_columns": 100.0,
+      "date_validity": 96.36,
+      "numeric_validity": 95.0,
+      "format_compliance": 57.14,
+      "functional_dependencies": 100.0,
+      "semantic_correctness": 98.97
+    },
+    "reference_comparison_percentage": 94.99,
+    "reference_comparison_per_column": {
+      "hotel": 95.27,
+      "is_canceled": 100.0,
+      "lead_time": 99.49,
+      "arrival_date_year": 100.0,
+      "arrival_date_month": 100.0,
+      "arrival_date_week_number": 100.0,
+      "arrival_date_day_of_month": 100.0,
+      "stays_in_weekend_nights": 100.0,
+      "stays_in_week_nights": 98.0,
+      "adults": 99.92,
+      "children": 99.27,
+      "babies": 98.0,
+      "meal": 97.76,
+      "country": 92.36,
+      "market_segment": 94.74,
+      "distribution_channel": 100.0,
+      "is_repeated_guest": 100.0,
+      "previous_cancellations": 99.64,
+      "previous_bookings_not_canceled": 99.02,
+      "reserved_room_type": 100.0,
+      "assigned_room_type": 100.0,
+      "booking_changes": 99.46,
+      "deposit_type": 95.55,
+      "agent": 81.8,
+      "company": 5.69,
+      "days_in_waiting_list": 98.97,
+      "customer_type": 95.26,
+      "adr": 98.03,
+      "required_car_parking_spaces": 99.97,
+      "total_of_special_requests": 99.68,
+      "reservation_status": 100.0,
+      "reservation_status_date": 91.85
+    }
+  }
+}

@@ -31,7 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pandas as pd
 
-from app.services.agent_c import compute_cleanliness_percentages, validate
+from app.services.agent_c import compute_cleanliness_percentages
 from app.services.agent_c_dataset_hints import get_dataset_hints
 
 
@@ -58,18 +58,15 @@ def evaluate_file(label: str, df_original: pd.DataFrame, df_to_check: pd.DataFra
     print(f"[Agent C] Evaluation : {label}")
     print(f"{'=' * 60}")
 
-    result = validate(
-        df_original, df_to_check,
-        provider=provider, model=model,
-        skip_semantic_check=skip_semantic,
-        skip_before_after_checks=is_self_evaluation,
-        semantic_hints=semantic_hints, valid_values_map=valid_values_map,
-        format_patterns_map=format_patterns_map, sample_size=sample_size,
-    )
-    print(f"[Agent C] Valide (aucun probleme detecte) : {result['valid']}")
-    if result["feedback_text"]:
-        print(f"[Agent C] Problemes detectes :\n{result['feedback_text']}")
-
+    # IMPORTANT (bug corrige -- doublait le temps de calcul ET le nombre
+    # d'appels LLM) : validate() etait auparavant appelee ICI directement,
+    # PUIS une seconde fois a l'interieur de compute_cleanliness_percentages()
+    # (via compute_rule_based_cleanliness()) -- deux passes completes
+    # (controles regles + decouverte de dependances fonctionnelles + appel LLM
+    # semantique par colonne) pour un seul resultat. compute_cleanliness_
+    # percentages() expose maintenant valid/rule_issues/feedback_text
+    # directement (memes valeurs, calculees UNE SEULE fois), donc un seul
+    # appel suffit desormais.
     percentages = compute_cleanliness_percentages(
         df_original, df_to_check, df_reference_clean=df_reference,
         provider=provider, model=model, skip_semantic_check=skip_semantic,
@@ -77,6 +74,10 @@ def evaluate_file(label: str, df_original: pd.DataFrame, df_to_check: pd.DataFra
         semantic_hints=semantic_hints, valid_values_map=valid_values_map,
         format_patterns_map=format_patterns_map, sample_size=sample_size,
     )
+
+    print(f"[Agent C] Valide (aucun probleme detecte) : {percentages['valid']}")
+    if percentages["feedback_text"]:
+        print(f"[Agent C] Problemes detectes :\n{percentages['feedback_text']}")
 
     print(f"\nPourcentage 1 (respect des regles)      : {percentages['rule_based_percentage']}%")
     for cat, score in percentages["rule_based_breakdown"].items():
@@ -89,9 +90,9 @@ def evaluate_file(label: str, df_original: pd.DataFrame, df_to_check: pd.DataFra
 
     return {
         "label": label,
-        "valid": result["valid"],
-        "rule_issues": result["rule_issues"],
-        "feedback_text": result["feedback_text"],
+        "valid": percentages["valid"],
+        "rule_issues": percentages["rule_issues"],
+        "feedback_text": percentages["feedback_text"],
         "rule_based_percentage": percentages["rule_based_percentage"],
         "rule_based_breakdown": percentages["rule_based_breakdown"],
         "reference_comparison_percentage": percentages["reference_comparison_percentage"],

@@ -154,6 +154,24 @@ DATASET_HINTS = {
         },
         "valid_values_map": {
             "state": ["ak", "al"],
+            # CONSTANT column -- verified every one of the 1000 rows in
+            # clean.csv has exactly this one value (this dataset only covers
+            # acute-care hospitals, not the full CMS HospitalType universe).
+            # Previously only covered by a loose format_pattern
+            # (^[a-zA-Z\s&\-]{5,100}$) that a single-letter substitution like
+            # 'acute care hospitaxs' still matches (it's still all letters/
+            # spaces) -- a real detection gap, since the typo-injector DOES
+            # corrupt this column (verified in dirty.csv: 13 distinct values
+            # for what should be 1). A closed valid_values_map lets both the
+            # LLM check AND the tightened exact-match format_pattern below
+            # catch it.
+            "type": ["acute care hospitals"],
+            # Also genuinely constant in clean.csv (both columns) -- this
+            # dataset has no real secondary/tertiary address line, every one
+            # of the 1000 rows is literally the placeholder string 'empty'
+            # (same missing-value convention as score/sample above, not NaN).
+            "address_2": ["empty"],
+            "address_3": ["empty"],
             "owner": [
                 "government - federal",
                 "government - hospital district or authority",
@@ -319,7 +337,7 @@ DATASET_HINTS = {
             "zip": [r"^\d{5}$"],
             "county": [r"^[a-zA-Z\s]{2,50}$"],
             "phone": [r"^\d{10}$"],
-            "type": [r"^[a-zA-Z\s&\-]{5,100}$"],
+            "type": [r"^acute care hospitals$"],
             "owner": [r"^[a-zA-Z\s\-&]{5,100}$"],
             "emergency_service": [r"^(yes|no)$"],
             "condition": [r"^[a-zA-Z\s&\-',.()]{5,100}$"],
@@ -327,6 +345,8 @@ DATASET_HINTS = {
             "measure_name": [r"^[a-zA-Z0-9\s&\-',./()]{10,500}$"],
             "score": [r"^(\d{1,3}%|empty)$"],
             "sample": [r"^(\d+ patients|empty)$"],
+            "address_2": [r"^empty$"],
+            "address_3": [r"^empty$"],
             "state_average": [r"^[a-z]{2}_[a-z]{2,10}(-[a-z]+)?-\d+[a-z]?$"],
         },
     },
@@ -465,6 +485,38 @@ DATASET_HINTS = {
         },
     },
 }
+
+
+def _closed_vocab_pattern(values: list) -> list:
+    """Construit un pattern regex EXACT (alternation echappee) a partir d'une
+    liste de valeurs fermees -- reutilise valid_values_map comme SOURCE UNIQUE
+    DE VERITE pour le format_pattern correspondant, au lieu de dupliquer la
+    meme liste sous forme de regex approximative ecrite a la main.
+
+    IMPORTANT (bug reel corrige) : un pattern "large" du type
+    '^[a-zA-Z\\s&\\-]{5,100}$' pour une colonne a vocabulaire FERME laisse
+    passer un typo comme 'acute care hospitaxs' silencieusement, car il reste
+    compose uniquement de lettres/espaces -- trouve en pratique sur la
+    colonne 'type' d'hospital (13 valeurs distinctes dans dirty.csv pour 1
+    seule valeur legitime, aucune detectee par le rule-based check avant ce
+    correctif). Un pattern derive du vocabulaire fermee lui-meme n'a pas ce
+    trou : SEULE une valeur EXACTEMENT dans la liste passe."""
+    import re as _re
+    escaped = [_re.escape(v) for v in values]
+    return [r"^(" + "|".join(escaped) + r")$"]
+
+
+# Colonnes hospital a vocabulaire FERME (valid_values_map deja renseigne
+# ci-dessus) dont le format_pattern ecrit a la main etait trop LARGE pour
+# detecter un typo interne a la meme classe de caracteres (meme categorie de
+# bug que 'type', corrige ci-dessus) -- remplace par un pattern EXACT derive
+# directement de valid_values_map, pour que le controle RULE-BASED (sans LLM)
+# seul suffise a detecter la corruption sur ces colonnes aussi.
+for _col in ("name", "address_1", "city", "county", "condition", "measure_name",
+             "owner", "measure_code", "state_average"):
+    DATASET_HINTS["hospital"]["format_patterns"][_col] = _closed_vocab_pattern(
+        DATASET_HINTS["hospital"]["valid_values_map"][_col]
+    )
 
 
 def get_dataset_hints(dataset_name: str) -> dict:

@@ -52,6 +52,13 @@ _RETRYABLE_EXCEPTION_NAMES = (
                            # classe ci-dessus) -- toujours retryable en tant
                            # que server_error, jamais ambigu contrairement a
                            # SDKError.
+    "JSONDecodeError",  # crash reel observe avec OpenRouter + gros prompt
+                        # (--sample-size eleve) : le corps de la reponse HTTP
+                        # est tronque/corrompu en transit (pas du JSON valide
+                        # du tout), donc httpx echoue AVANT meme que le SDK
+                        # openai puisse construire une erreur propre. Purement
+                        # reseau, sans rapport avec le contenu du prompt --
+                        # retryable comme n'importe quelle coupure reseau.
     "SDKError",  # ex: mistralai.client.errors.sdkerror.SDKError -- son NOM seul ne
                  # dit rien sur la nature de l'erreur (un 503 transitoire ET un 403
                  # "tier non autorise" ont la MEME classe) -> on inspecte EN PLUS le
